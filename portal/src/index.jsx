@@ -9,6 +9,10 @@ import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux.js';
 
+// Asynchronously import the global dependencies that are used in the embedded
+// forms. Note that we deliberately do this as a const so that it should start
+// immediately without making the initial application load wait, but the
+// CoreForm component will wait for this to be loaded.
 const globals = import('./components/kinetic-form/globals.jsx');
 
 ReactDOM.createRoot(document.getElementById('root')).render(

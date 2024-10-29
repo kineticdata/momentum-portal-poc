@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { useCallback, useEffect } from 'react';
 
 /**
+ * Hook for calling a function when the route changes.
  *
  * @param {Function} callback - Function to call when the route changes, with
  *  the new pathname provided as a parameter to the function
@@ -10,6 +11,7 @@ import { useCallback, useEffect } from 'react';
 const useRouteChange = (callback, dependencies = []) => {
   const { pathname } = useLocation();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fn = useCallback(callback, dependencies);
 
   useEffect(() => {

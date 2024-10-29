@@ -1,6 +1,6 @@
 import t from 'prop-types';
 import { Tooltip as ArkTooltip } from '@ark-ui/react/tooltip';
-import { calcPlacement, getChildSlots } from '../helpers/index.js';
+import { calcPlacement, getChildSlots } from '../helpers/atoms.js';
 
 /**
  * A label that provides information on hover or focus.
@@ -16,7 +16,7 @@ import { calcPlacement, getChildSlots } from '../helpers/index.js';
  * @param {number} [props.openDelay=80] Delay before the tooltip opens.
  * @param {number} [props.closeDelay=0] Delay before the tooltip closes.
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
- *  available slots in the menu. Available slots are:
+ *  available slots in the tooltip. Available slots are:
  * - trigger: Component that toggles the tooltip open state when interacted with.
  * - content: Optional slot to render JSX content instead of a string inside the tooltip.
  */

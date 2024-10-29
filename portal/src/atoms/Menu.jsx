@@ -1,7 +1,7 @@
 import t from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Menu as ArkMenu } from '@ark-ui/react/menu';
-import { calcPlacement, getChildSlots } from '../helpers/index.js';
+import { calcPlacement, getChildSlots } from '../helpers/atoms.js';
 import { Icon } from './Icon.jsx';
 import clsx from 'clsx';
 

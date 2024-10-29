@@ -2,7 +2,7 @@ import t from 'prop-types';
 import { ark } from '@ark-ui/react/factory';
 import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
-import { getChildSlots } from '../helpers/index.js';
+import { getChildSlots } from '../helpers/atoms.js';
 import { Icon } from './Icon.jsx';
 
 /**

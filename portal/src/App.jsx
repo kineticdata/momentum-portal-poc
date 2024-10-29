@@ -1,19 +1,70 @@
+import t from 'prop-types';
 import { useEffect } from 'react';
-import { Loading } from './components/states/Loading.jsx';
-import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
+import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
+import { useSelector } from 'react-redux';
 import { regRedux } from './redux.js';
-import { Header } from './components/Header.jsx';
+import { Loading } from './components/states/Loading.jsx';
 import { Error } from './components/states/Error.js';
+import { Header } from './components/Header.jsx';
+import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
 import { PublicRoutes } from './pages/PublicRoutes.jsx';
 import { Login } from './pages/login/Login.jsx';
-import { useSelector } from 'react-redux';
+import useDataItem from './helpers/useDataItem.js';
+import { getAttributeValue } from './helpers/records.js';
+import { throttle } from 'lodash-es';
 
+// State for the current view size of the app
+const viewActions = regRedux(
+  'view',
+  { ...calcViewState() },
+  {
+    handleResize(state) {
+      calcViewState(state);
+    },
+  },
+);
+// Register a resize handler to update the view state
+window.addEventListener('resize', throttle(viewActions.handleResize, 200));
+
+// State for global app data
 const appActions = regRedux(
   'app',
-  { authenticated: false },
+  {
+    // Is the user authenticated
+    authenticated: false,
+    // Space record
+    space: null,
+    // Slug of the kapp to use for the catalog
+    kappSlug: null,
+    // Catalog kapp record
+    kapp: null,
+    // Profile record
+    profile: null,
+    // Error from fetching any app data
+    error: null,
+  },
   {
     setAuthenticated(state, payload) {
       state.authenticated = payload;
+    },
+    setSpace(state, { error, data }) {
+      if (error) state.error = error;
+      else {
+        state.space = data;
+        state.kappSlug = getAttributeValue(
+          data,
+          'Catalog Kapp Slug',
+          'catalog',
+        );
+      }
+    },
+    setKapp(state, { error, data }) {
+      if (error) state.error = state.error || error;
+      else state.kapp = data;
+    },
+    setProfile(state, { error, data }) {
+      if (error) state.error = state.error || error;
+      else state.profile = data;
     },
   },
 );
@@ -25,30 +76,85 @@ export const App = ({
   timedOut,
   serverError,
 }) => {
+  // Get redux app state
+  const { authenticated, kappSlug, error, space, kapp, profile } = useSelector(
+    state => state.app,
+  );
+
   // Set an `authenticated` flag in global state that is synced to the loggedIn
   // prop, and can be used in the app to determine if the user is authenticated
-  const authenticated = useSelector(state => state.app.authenticated);
   useEffect(() => {
     if (authenticated !== loggedIn) {
       appActions.setAuthenticated(loggedIn);
     }
   }, [authenticated, loggedIn]);
 
+  // Fetch space data
+  const [spaceData] = useDataItem(
+    fetchSpace,
+    initialized && [
+      loggedIn
+        ? { include: 'attributesMap,kapps' }
+        : { public: true, include: 'attributesMap,kapps' },
+    ],
+    response => response.space,
+  );
+  // Set the space data into redux
+  useEffect(() => {
+    if (spaceData.initialized && !spaceData.loading) {
+      appActions.setSpace(spaceData);
+    }
+  }, [spaceData]);
+
+  // Fetch profile data
+  const [profileData] = useDataItem(
+    fetchProfile,
+    initialized &&
+      loggedIn && [{ include: 'profileAttributesMap,attributesMap' }],
+    response => response.profile,
+  );
+  // Set the profile data into redux
+  useEffect(() => {
+    if (profileData.initialized && !profileData.loading) {
+      appActions.setProfile(profileData);
+    }
+  }, [profileData]);
+
+  // Fetch kapp data
+  const [kappData] = useDataItem(
+    fetchKapp,
+    initialized &&
+      loggedIn &&
+      kappSlug && [{ kappSlug, include: 'attributesMap,categorizations' }],
+    response => response.kapp,
+  );
+  // Set the space data into redux
+  useEffect(() => {
+    if (kappData.initialized && !kappData.loading) {
+      appActions.setKapp(kappData);
+    }
+  }, [kappData]);
+
   return (
     <div className="flex flex-col flex-auto">
       {loggedIn && <Header></Header>}
       <div className="flex flex-auto">
-        {serverError ? (
-          <Error error={serverError} />
-        ) : !initialized ? (
+        {serverError || error ? (
+          // If an error occurred during auth or fetching app data, show an
+          // error screen
+          <Error error={serverError || error} />
+        ) : !initialized || !space ? (
+          // If auth isn't initialized or space record isn't fetched, show a
+          // loading screen
           <Loading />
         ) : !loggedIn ? (
           // If the user is not logged in, render the public routes, which will
           // default to rendering the login page for all unmatched routes
           <PublicRoutes loginProps={loginProps} />
-        ) : (
-          // If the user is logged in, render the private routes, and render the
-          // Login component in a modal if auth times out
+        ) : // If the user is logged in and kapp and profile data has been
+        // fetched, render the private routes, and render the Login component
+        // in a modal if auth times out
+        kapp && profile ? (
           <>
             <PrivateRoutes />
             {timedOut && (
@@ -57,8 +163,44 @@ export const App = ({
               </dialog>
             )}
           </>
+        ) : (
+          <Loading />
         )}
       </div>
     </div>
   );
+};
+
+/**
+ * Function that updates a state object with the latest view data
+ * @param {Object} state
+ * @returns {Object}
+ */
+function calcViewState(state = {}) {
+  state.width = window.innerWidth;
+  if (window.innerWidth < 640) {
+    state.size = 'xs';
+  } else if (window.innerWidth < 768) {
+    state.size = 'sm';
+  } else if (window.innerWidth < 1024) {
+    state.size = 'md';
+  } else if (window.innerWidth < 1280) {
+    state.size = 'lg';
+  } else if (window.innerWidth < 1536) {
+    state.size = 'xl';
+  } else {
+    state.size = '2xl';
+  }
+  state.mobile = ['xs', 'sm'].includes(state.size);
+  state.tablet = ['md', 'lg'].includes(state.size);
+  state.desktop = ['xl', '2xl'].includes(state.size);
+  return state;
+}
+
+App.propTypes = {
+  initialized: t.bool,
+  loggedIn: t.bool,
+  loginProps: t.object,
+  timedOut: t.bool,
+  serverError: t.object,
 };

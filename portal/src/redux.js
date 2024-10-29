@@ -1,7 +1,6 @@
 import { configureStore, combineSlices, createSlice } from '@reduxjs/toolkit';
 
-// An init redux state with a reducer that we can trigger each time we inject
-// a new slice
+// Init state with a reducer that we can trigger each time we inject a new slice
 const init = createSlice({
   name: 'init',
   initialState: false,
@@ -16,12 +15,20 @@ const rootReducer = combineSlices(init);
 // because the state of an injected slice is undefined until any action is fired
 const injectSlice = slice => {
   rootReducer.inject(slice, { overrideExisting: true });
-  console.log('inject slice', slice);
   store.dispatch(init.actions.regRedux());
 };
 
 // Configure the redux store
-export const store = configureStore({ reducer: rootReducer });
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      // Disable warning for passing event object into reducer
+      serializableCheck: {
+        ignoredActions: ['view/handleResize'],
+      },
+    }),
+});
 
 /**
  * Helper function for registering redux state. Wraps the `createSlice`
