@@ -3,7 +3,7 @@ export const Placeholder = ({ title, children }) => {
     <div>
       <h1 className="mb-4">Placeholder</h1>
       <h2>{title}</h2>
-      <p>{children}</p>
+      <div>{children}</div>
     </div>
   );
 };

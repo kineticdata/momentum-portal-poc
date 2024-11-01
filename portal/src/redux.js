@@ -7,7 +7,8 @@ const init = createSlice({
   reducers: { regRedux: () => true },
 });
 
-// Root reducer that we'll inject slices into
+// Root reducer that we'll inject slices into as they get added by the regRedux
+// function defined below
 const rootReducer = combineSlices(init);
 
 // Create a function to inject a slice into the root reducer and trigger the
@@ -31,8 +32,25 @@ export const store = configureStore({
 });
 
 /**
- * Helper function for registering redux state. Wraps the `createSlice`
- * function and injects the reducer into the redux store config.
+ * @name ReducerFn
+ * @function
+ * @desc Function that should mutate the state based on the payload. This
+ *  function uses the `immer` library to allow safe mutations of `state`.
+ * @param {*} state - The state value when this reducer is triggered.
+ * @param {*} [payload] - The payload provided when this reducer is triggered.
+ */
+
+/**
+ * @name ActionFn
+ * @function
+ * @desc Function that dispatches the corresponding action to trigger the
+ *  reducer.
+ * @param {*} [payload] - The payload to provide to the corresponding reducer.
+ */
+
+/**
+ * Helper function for registering global redux state. Allows for setting an
+ * initial state and creating functions to modify that state.
  *
  * @param {String} name - The property name used in the redux store.
  * @param {*} initialState - The initial state.
@@ -62,17 +80,3 @@ export const regRedux = (name, initialState, reducers) => {
     ]),
   );
 };
-
-/**
- * @typedef {function} ReducerFn
- *   Function that should mutate the state based on the payload. This function
- *   uses the `immer` library to allow safe mutations of `state`.
- * @param {*} state - The state value when this reducer is triggered.
- * @param {*} [payload] - The payload provided when this reducer is triggered.
- */
-
-/**
- * @typedef {function} ActionFn
- *  Function that dispatches the corresponding action to trigger the reducer.
- * @param {*} [payload] - The payload to provide to the corresponding reducer.
- */

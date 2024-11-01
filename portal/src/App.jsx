@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { regRedux } from './redux.js';
 import { Loading } from './components/states/Loading.jsx';
 import { Error } from './components/states/Error.js';
-import { Header } from './components/Header.jsx';
 import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
 import { PublicRoutes } from './pages/PublicRoutes.jsx';
 import { Login } from './pages/login/Login.jsx';
@@ -34,9 +33,9 @@ const appActions = regRedux(
     authenticated: false,
     // Space record
     space: null,
-    // Slug of the kapp to use for the catalog
+    // Slug of the kapp to use for the service portal
     kappSlug: null,
-    // Catalog kapp record
+    // Service portal kapp record
     kapp: null,
     // Profile record
     profile: null,
@@ -53,8 +52,8 @@ const appActions = regRedux(
         state.space = data;
         state.kappSlug = getAttributeValue(
           data,
-          'Catalog Kapp Slug',
-          'catalog',
+          'Service Portal Kapp Slug',
+          'service-portal',
         );
       }
     },
@@ -89,7 +88,8 @@ export const App = ({
     }
   }, [authenticated, loggedIn]);
 
-  // Fetch space data
+  // Fetch space data. We'll assume that the space record is available publicly
+  // so we can get the config data stored in space attributes
   const [spaceData] = useDataItem(
     fetchSpace,
     initialized && [
@@ -106,7 +106,7 @@ export const App = ({
     }
   }, [spaceData]);
 
-  // Fetch profile data
+  // Fetch profile data once the user is logged in
   const [profileData] = useDataItem(
     fetchProfile,
     initialized &&
@@ -120,7 +120,8 @@ export const App = ({
     }
   }, [profileData]);
 
-  // Fetch kapp data
+  // Fetch kapp data once the user is logged in and a kapp slug is set, which
+  // happens after the space is retrieved
   const [kappData] = useDataItem(
     fetchKapp,
     initialized &&
@@ -136,38 +137,48 @@ export const App = ({
   }, [kappData]);
 
   return (
-    <div className="flex flex-col flex-auto">
-      {loggedIn && <Header></Header>}
-      <div className="flex flex-auto">
-        {serverError || error ? (
-          // If an error occurred during auth or fetching app data, show an
-          // error screen
-          <Error error={serverError || error} />
-        ) : !initialized || !space ? (
-          // If auth isn't initialized or space record isn't fetched, show a
-          // loading screen
-          <Loading />
-        ) : !loggedIn ? (
-          // If the user is not logged in, render the public routes, which will
-          // default to rendering the login page for all unmatched routes
-          <PublicRoutes loginProps={loginProps} />
-        ) : // If the user is logged in and kapp and profile data has been
-        // fetched, render the private routes, and render the Login component
-        // in a modal if auth times out
-        kapp && profile ? (
-          <>
-            <PrivateRoutes />
-            {timedOut && (
-              <dialog open>
-                <Login {...loginProps} />
-              </dialog>
-            )}
-          </>
-        ) : (
-          <Loading />
-        )}
+    <>
+      <div className="flex flex-col flex-auto overflow-auto">
+        {/* Header element where we will render headers via a portal */}
+        <header id="app-header" />
+
+        <main id="app-main" className="flex flex-col flex-auto overflow-auto">
+          {serverError || error ? (
+            // If an error occurred during auth or fetching app data, show an
+            // error screen
+            <Error error={serverError || error} />
+          ) : !initialized || !space ? (
+            // If auth isn't initialized or space record isn't fetched, show a
+            // loading screen
+            <Loading />
+          ) : !loggedIn ? (
+            // If the user is not logged in, render the public routes, which
+            // will default to rendering the login page for all unmatched routes
+            <PublicRoutes loginProps={loginProps} />
+          ) : kapp && profile ? (
+            // If the user is logged in and kapp and profile data has been
+            // fetched, render the private routes, and render the Login
+            // component in a modal if auth times out
+            <>
+              <PrivateRoutes />
+              {timedOut && (
+                <dialog open>
+                  <Login {...loginProps} />
+                </dialog>
+              )}
+            </>
+          ) : (
+            <Loading />
+          )}
+        </main>
+
+        {/* Footer element where we will render footers via a portal */}
+        <footer id="app-footer" />
       </div>
-    </div>
+
+      {/* Panels element where we will render panels via a portal */}
+      <div id="app-panels" />
+    </>
   );
 };
 

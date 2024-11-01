@@ -6,12 +6,10 @@ import { ResetPassword } from './login/ResetPassword.jsx';
 export const PublicRoutes = ({ loginProps }) => {
   return (
     <Routes>
-      <Route
-        path="/public/*"
-        element={<Placeholder title="Public App"></Placeholder>}
-      ></Route>
-      <Route path="/reset-password/:token?" element={<ResetPassword />}></Route>
-      <Route path="/*" element={<Login {...loginProps} />}></Route>
+      <Route path="/public/*" element={<Placeholder title="Public App" />} />
+      <Route path="/reset-password/:token?" element={<ResetPassword />} />
+      <Route path="/login" element={<Login {...loginProps} />} />
+      <Route path="/*" element={<Login {...loginProps} />} />
     </Routes>
   );
 };

@@ -1,23 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import 'layout.css';
+@import 'panels.css';
 
 @layer base {
-  html {
-    font-size: 16px !important;
-  }
-
-  body,
-  html {
-    height: 100vh;
-  }
-
-  #root {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
+  /* Apply header styles to the header tags. */
   h1 {
     @apply h1;
   }

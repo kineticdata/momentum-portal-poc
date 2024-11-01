@@ -20,12 +20,12 @@ import { Icon } from './Icon.jsx';
  *  The function is passed one parameter, which is an object with an `open`
  *  property defining what the new state of the component is or should be.
  * @param {string} props.title The title text for the modal.
- * @param {boolean} [props.closeOnEscape=true] Should the modal close when the escape
- *  key is pressed.
- * @param {boolean} [props.closeOnInteractOutside=true] Should the modal close when
- *  the user interacts with the area outside the modal.
+ * @param {boolean} [props.closeOnEscape=true] Should the modal close when the
+ *  escape key is pressed.
+ * @param {boolean} [props.closeOnInteractOutside=true] Should the modal close
+ *  when the user interacts with the area outside the modal.
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
- *  available slots in the menu. Available slots are:
+ *  available slots in the modal. Available slots are:
  *  - trigger: Component that toggles the modal open state when interacted with.
  *  - description: Inner content of the modal that is syntactically a
  *      descriptor of the modal content.

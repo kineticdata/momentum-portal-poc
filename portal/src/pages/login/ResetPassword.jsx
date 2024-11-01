@@ -6,12 +6,11 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import { createSubmission, getCsrfToken } from '@kineticdata/react';
+import { useSelector } from 'react-redux';
 
 export const ResetPassword = () => {
   let { token } = useParams();
   let [searchParams] = useSearchParams();
-
-  console.log('reset', token, location, searchParams.get('u'));
 
   return (
     <div className="flex-auto flex justify-center items-center">
@@ -28,6 +27,8 @@ export const ResetPassword = () => {
 };
 
 const ResetPasswordRequestForm = () => {
+  const kappSlug = useSelector(state => state.app.kappSlug);
+
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
@@ -42,8 +43,8 @@ const ResetPasswordRequestForm = () => {
     async e => {
       e.preventDefault();
       const { error } = await createSubmission({
-        kappSlug: 'catalog',
-        formSlug: 'account-password-reset',
+        kappSlug,
+        formSlug: 'password-reset',
         values: { Username: username },
         public: true,
       });
@@ -54,7 +55,7 @@ const ResetPasswordRequestForm = () => {
         setSubmitted(true);
       }
     },
-    [username],
+    [username, kappSlug],
   );
 
   return (
@@ -146,7 +147,6 @@ const ResetPasswordChangeForm = ({ token, username }) => {
       if (response.status === 302) {
         navigate('/');
         // TODO toast password reset success
-        console.log('Password successfully reset.');
       } else {
         try {
           const json = await response.json();

@@ -1,0 +1,58 @@
+/******************************************************************************
+ * LAYOUT
+ *
+ * Styling for the general layout of the application. Includes styling for the
+ * root elements and wrapper elements.
+ *
+ * Custom Properties:
+ *  --gutter-size
+ *    Amount of padding applied to the wrapper elements.
+ *  --gutter-inv-size
+ *    Negative value of the amount of padding applied to the wrapper elements.
+ *
+ * Custom Classes:
+ *  .stretch
+ *    Stretches the margin and padding of inner elements to the edge of the
+ *    screen.
+ ******************************************************************************/
+
+@layer base {
+  html {
+    font-size: 16px !important;
+  }
+  body,
+  html {
+    @apply h-screen;
+  }
+
+  #root {
+    @apply flex h-full bg-gray-200;
+    /*
+     * For mobile screens, set the flex direction to column so that panels
+     * render at the bottom instead of on the right.
+     */
+    @media (max-width: 767px) {
+      @apply flex-col;
+    }
+  }
+
+  /* Style the main wrapper elements. */
+  #app-header,
+  #app-main,
+  #app-footer {
+    /* Adjust gutter size based on screen size. */
+    --gutter-size: 1.5rem;
+    --gutter-inv-size: -1.5rem;
+    @media (min-width: 768px) {
+      --gutter-size: 6rem;
+      --gutter-inv-size: -6rem;
+    }
+
+    /* Set the gutter widths for the design on the wrapper elements. */
+    @apply px-[--gutter-size];
+
+    .stretch {
+      @apply mx-[--gutter-inv-size] px-[--gutter-size];
+    }
+  }
+}
