@@ -1,0 +1,17 @@
+@layer components {
+  .field {
+    @apply block;
+  }
+
+  .field label {
+    @apply block font-semibold text-gray-900 leading-4 mb-2;
+  }
+
+  input[type='text'],
+  input[type='password'] {
+    @apply block py-2.25 px-4 border rounded-2.5xl outline-0 w-full font-medium;
+    @apply text-primary-900 bg-white border-primary-400;
+    @apply focus-visible:ring focus-visible:ring-secondary-400;
+    @apply disabled:text-gray-900 disabled:bg-gray-100 disabled:border-gray-200;
+  }
+}

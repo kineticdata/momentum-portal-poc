@@ -5,7 +5,7 @@ import { Requests } from './requests/Requests.jsx';
 import { Services } from './services/Services.jsx';
 import { Profile } from './profile/Profile.js';
 import { useSelector } from 'react-redux';
-import { DesktopHeader } from '../components/header/DesktopHeader.js';
+import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
 import { MobileFooter } from '../components/footer/MobileFooter.jsx';
 
 export const PrivateRoutes = () => {

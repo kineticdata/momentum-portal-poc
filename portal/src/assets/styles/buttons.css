@@ -1,0 +1,26 @@
+@layer components {
+  .btn-primary {
+    @apply inline-block py-2.25 px-4 border rounded-2.5xl outline-0 font-medium text-center;
+    @apply text-primary-900 bg-secondary-400 border-primary-500;
+    @apply hover:bg-secondary-100;
+    @apply focus-visible:text-primary-200 focus-visible:bg-primary-900;
+    @apply disabled:text-gray-900 disabled:bg-gray-200 disabled:border-primary-300;
+  }
+
+  .btn,
+  .btn-secondary {
+    @apply inline-block py-2.25 px-4 border rounded-2.5xl outline-0 font-semibold text-center;
+    @apply text-primary-900 bg-white border-primary-300;
+    @apply hover:bg-primary-100;
+    @apply focus-visible:bg-secondary-400 focus-visible:border-primary-500;
+    @apply disabled:text-gray-900 disabled:bg-gray-100 disabled:border-primary-300;
+  }
+
+  .btn-tertiary {
+    @apply inline-block py-2.25 px-4 border rounded-2.5xl outline-0 font-semibold text-center;
+    @apply bg-transparent border-transparent;
+    @apply hover:bg-primary-100 hover:underline;
+    @apply focus-visible:bg-secondary-400 focus-visible:underline;
+    @apply disabled:text-gray-900 disabled:bg-transparent disabled:no-underline;
+  }
+}

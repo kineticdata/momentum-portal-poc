@@ -2,9 +2,47 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    colors: {
+      transparent: 'transparent',
+      currentColor: 'currentColor',
+      white: 'hsl(0, 0%, 100%)',
+      black: 'hsl(0, 0%, 0%)',
+      primary: {
+        100: 'hsl(var(--primary-100))',
+        200: 'hsl(var(--primary-200))',
+        300: 'hsl(var(--primary-300))',
+        400: 'hsl(var(--primary-400))',
+        500: 'hsl(var(--primary-500))',
+        900: 'hsl(var(--primary-900))',
+      },
+      secondary: {
+        100: 'hsl(var(--secondary-100))',
+        400: 'hsl(var(--secondary-400))',
+        500: 'hsl(var(--secondary-500))',
+      },
+      gray: {
+        100: 'hsl(var(--gray-100))',
+        200: 'hsl(var(--gray-200))',
+        500: 'hsl(var(--gray-500))',
+        900: 'hsl(var(--gray-900))',
+      },
+      warning: {
+        200: 'hsl(var(--warning-200))',
+        500: 'hsl(var(--warning-500))',
+      },
+      success: {
+        200: 'hsl(var(--success-200))',
+        400: 'hsl(var(--success-400))',
+        500: 'hsl(var(--success-500))',
+      },
+    },
+
     extend: {
-      colors: {
-        foo: 'var(--color-foo)',
+      borderRadius: {
+        '2.5xl': '1.25rem',
+      },
+      fontFamily: {
+        sans: ['"Mona Sans Expanded"'],
       },
       fontSize: {
         h4: ['1.125rem', '1.75rem'] /* 18px, 28px */,

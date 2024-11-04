@@ -1,0 +1,64 @@
+@layer base {
+  /* Apply header styles to the header tags. */
+  h1 {
+    @apply h1;
+  }
+  h2 {
+    @apply h2;
+  }
+  h3 {
+    @apply h3;
+  }
+  h4 {
+    @apply h4;
+  }
+  h5 {
+    @apply h5;
+  }
+  h6 {
+    @apply h6;
+  }
+  body {
+    @apply body;
+  }
+  small {
+    @apply small;
+  }
+}
+
+@layer utilities {
+  /* Display and Header classes, combining font size with font weight */
+  .d1 {
+    @apply text-d1 font-extrabold;
+  }
+  .d2 {
+    @apply text-d2 font-extrabold;
+  }
+  .h1 {
+    @apply text-h1 font-extrabold;
+  }
+  .h2 {
+    @apply text-h2 font-semibold;
+  }
+  .h3 {
+    @apply text-h3 font-semibold;
+  }
+  .h4 {
+    @apply text-h4 font-semibold;
+  }
+  .h5 {
+    @apply text-h4 font-medium;
+  }
+  .h6 {
+    @apply text-base font-bold;
+  }
+  .body {
+    @apply text-base;
+  }
+  .small {
+    @apply text-sm;
+  }
+  .tiny {
+    @apply text-xs;
+  }
+}

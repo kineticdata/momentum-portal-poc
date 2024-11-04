@@ -1,19 +1,26 @@
 import { useCallback, useState } from 'react';
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { createSubmission, getCsrfToken } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
+import { LoginHeader } from './Login.jsx';
+import { Button } from '../../atoms/Button.js';
 
 export const ResetPassword = () => {
   let { token } = useParams();
   let [searchParams] = useSearchParams();
 
   return (
-    <div className="flex-auto flex justify-center items-center">
+    <>
+      <LoginHeader>
+        <Button
+          link
+          variant="tertiary"
+          inverse
+          icon="arrow-left"
+          to="/login"
+          aria-label="Return to Login"
+        />
+      </LoginHeader>
       {token ? (
         <ResetPasswordChangeForm
           token={token}
@@ -22,7 +29,7 @@ export const ResetPassword = () => {
       ) : (
         <ResetPasswordRequestForm />
       )}
-    </div>
+    </>
   );
 };
 
@@ -59,11 +66,10 @@ const ResetPasswordRequestForm = () => {
   );
 
   return (
-    <form className="border border-gray-600 rounded p-6">
+    <form className="self-center flex flex-col gap-5 items-stretch w-full max-w-96">
       <div className="field">
         <label htmlFor="username">Username</label>
         <input
-          className="form-control"
           id="email"
           type="text"
           name="username"
@@ -80,18 +86,14 @@ const ResetPasswordRequestForm = () => {
           password reset link shortly.
         </p>
       )}
-      {error && <p>{error}</p>}
-      <button
-        className="btn"
+      {error && <p className="text-warning-500">{error}</p>}
+      <Button
         type="submit"
         onClick={submitRequest}
         disabled={!username || submitted}
       >
-        Request Password Reset
-      </button>
-      <Link className="btn" to="/login">
-        Back to login
-      </Link>
+        Reset Password
+      </Button>
     </form>
   );
 };
@@ -162,7 +164,7 @@ const ResetPasswordChangeForm = ({ token, username }) => {
   );
 
   return (
-    <form className="border border-gray-600 rounded p-6">
+    <form className="self-center flex flex-col gap-5 items-stretch w-full max-w-96">
       {!token || !username ? (
         <>The reset password link is invalid.</>
       ) : (
@@ -170,7 +172,6 @@ const ResetPasswordChangeForm = ({ token, username }) => {
           <div className="field">
             <label htmlFor="username">Username</label>
             <input
-              className="form-control"
               id="email"
               type="text"
               name="username"
@@ -182,7 +183,6 @@ const ResetPasswordChangeForm = ({ token, username }) => {
           <div className="field">
             <label htmlFor="password">New Password</label>
             <input
-              className="form-control"
               id="password"
               type="password"
               name="password"
@@ -196,7 +196,6 @@ const ResetPasswordChangeForm = ({ token, username }) => {
           <div className="field">
             <label htmlFor="passwordConfirmation">Confirm Password</label>
             <input
-              className="form-control"
               id="passwordConfirmation"
               type="password"
               name="passwordConfirmation"
@@ -207,20 +206,20 @@ const ResetPasswordChangeForm = ({ token, username }) => {
               onBlur={onBlurPasswordField}
             />
           </div>
-          {passwordMismatch && <p>Passwords must match.</p>}
-          {error && <p>{error}</p>}
+          {passwordMismatch && (
+            <p className="text-warning-500">Passwords must match.</p>
+          )}
+          {error && <p className="text-warning-500">{error}</p>}
 
-          <button
-            className="btn"
+          <Button
             type="submit"
             onClick={submitRequest}
-            disabled={submitted || !password || passwordMismatch}
+            disabled={
+              submitted || !password || !confirmPassword || passwordMismatch
+            }
           >
             Reset Password
-          </button>
-          <Link className="btn" to="/login">
-            Back to login
-          </Link>
+          </Button>
         </>
       )}
     </form>

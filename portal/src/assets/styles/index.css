@@ -1,75 +1,12 @@
 @import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
+@import 'font.css';
+@import 'colors.css';
 @import 'layout.css';
 @import 'panels.css';
 
-@layer base {
-  /* Apply header styles to the header tags. */
-  h1 {
-    @apply h1;
-  }
-  h2 {
-    @apply h2;
-  }
-  h3 {
-    @apply h3;
-  }
-  h4 {
-    @apply h4;
-  }
-  h5 {
-    @apply h5;
-  }
-  h6 {
-    @apply h6;
-  }
-}
+@import 'tailwindcss/components';
+@import 'buttons.css';
+@import 'forms.css';
 
-@layer components {
-  .btn {
-    @apply inline-block py-1.75 px-4 border border-gray-600 rounded-full disabled:text-gray-500 disabled:border-gray-400;
-  }
-
-  .field {
-    @apply block mb-4;
-  }
-
-  .field label {
-    @apply block font-medium;
-  }
-
-  input[type='text'],
-  input[type='password'] {
-    @apply block py-1.75 px-4 border border-gray-600 rounded;
-  }
-}
-
-@layer utilities {
-  /* Display and Header classes, combining font size with font weight */
-  .d1 {
-    @apply text-d1 font-extrabold;
-  }
-  .d2 {
-    @apply text-d2 font-extrabold;
-  }
-  .h1 {
-    @apply text-h1 font-extrabold;
-  }
-  .h2 {
-    @apply text-h2 font-semibold;
-  }
-  .h3 {
-    @apply text-h3 font-semibold;
-  }
-  .h4 {
-    @apply text-h4 font-semibold;
-  }
-  .h5 {
-    @apply text-h4 font-medium;
-  }
-  .h6 {
-    @apply text-base font-bold;
-  }
-}
+@import 'tailwindcss/utilities';
+@import 'typography.css';

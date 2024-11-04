@@ -26,7 +26,7 @@
   }
 
   #root {
-    @apply flex h-full bg-gray-200;
+    @apply flex h-full bg-gray-100 text-primary-900;
     /*
      * For mobile screens, set the flex direction to column so that panels
      * render at the bottom instead of on the right.
@@ -43,7 +43,11 @@
     /* Adjust gutter size based on screen size. */
     --gutter-size: 1.5rem;
     --gutter-inv-size: -1.5rem;
-    @media (min-width: 768px) {
+    @media (min-width: 768px) and (max-width: 1279px) {
+      --gutter-size: 3rem;
+      --gutter-inv-size: -3rem;
+    }
+    @media (min-width: 1280px) {
       --gutter-size: 6rem;
       --gutter-inv-size: -6rem;
     }

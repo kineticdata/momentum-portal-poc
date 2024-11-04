@@ -30,7 +30,7 @@
       @apply fixed inset-0 flex justify-end items-end;
 
       /*
-       * If the panel is open and has a sibling panel after it that's also open, 
+       * If the panel is open and has a sibling panel after it that's also open,
        * resize this panel a little so it sticks out behind the top one.
        */
       &:has([data-part='content'][data-state='open']):has(
@@ -45,9 +45,8 @@
 
     /* Style each panel content element. */
     [data-scope='dialog'][data-part='content'] {
-      /* Mobile styles for sizing */
       @apply max-md:w-full max-md:h-[--panel-height] max-md:rounded-t-[2.5rem];
-      @apply md:h-full md:w-[--panel-width] md:max-w-[--panel-max-width] md:rounded-l-[2.5rem];
+      @apply md:h-full md:w-[--panel-width] md:max-w-[--panel-max-width];
       box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
 
       /* Add slide in and out animations to the dialog component of the panel. */

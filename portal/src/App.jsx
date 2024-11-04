@@ -11,6 +11,7 @@ import { Login } from './pages/login/Login.jsx';
 import useDataItem from './helpers/useDataItem.js';
 import { getAttributeValue } from './helpers/records.js';
 import { throttle } from 'lodash-es';
+import { calculateThemeState, themeState } from './helpers/theme.js';
 
 // State for the current view size of the app
 const viewActions = regRedux(
@@ -24,6 +25,17 @@ const viewActions = regRedux(
 );
 // Register a resize handler to update the view state
 window.addEventListener('resize', throttle(viewActions.handleResize, 200));
+
+// State for the customized theme
+const themeActions = regRedux(
+  'theme',
+  { ...themeState },
+  {
+    setTheme(state, space) {
+      calculateThemeState(state, getAttributeValue(space.data, 'Theme'));
+    },
+  },
+);
 
 // State for global app data
 const appActions = regRedux(
@@ -75,6 +87,19 @@ export const App = ({
   timedOut,
   serverError,
 }) => {
+  // Get redux theme state
+  const themeCSS = useSelector(state => state.theme.css);
+  // Update the styles if there is a theme set
+  useEffect(() => {
+    if (themeCSS) {
+      // If themeCSS exists, create a stylesheet and set themeCSS as the content
+      const csssheet = new CSSStyleSheet();
+      csssheet.replace(themeCSS);
+      // Set this new constructed stylesheet to be used by the page
+      document.adoptedStyleSheets = [csssheet];
+    }
+  }, [themeCSS]);
+
   // Get redux app state
   const { authenticated, kappSlug, error, space, kapp, profile } = useSelector(
     state => state.app,
@@ -103,6 +128,7 @@ export const App = ({
   useEffect(() => {
     if (spaceData.initialized && !spaceData.loading) {
       appActions.setSpace(spaceData);
+      themeActions.setTheme(spaceData);
     }
   }, [spaceData]);
 
