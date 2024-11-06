@@ -1,9 +1,9 @@
-import { Placeholder } from '../Placeholder.jsx';
+import { Placeholder } from '../../Placeholder.jsx';
 import { Link } from 'react-router-dom';
 
-export const RequestDetail = () => {
+export const ActionDetail = () => {
   return (
-    <Placeholder title="Request Detail">
+    <Placeholder title="Action Detail">
       <Link to=".." className="btn">
         Back
       </Link>

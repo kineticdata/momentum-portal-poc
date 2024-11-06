@@ -62,7 +62,10 @@ The following list summarizes the different libraries that have been used to cre
 [Ark UI](https://ark-ui.com/): Headless component library.  
 [Tailwind CSS](https://tailwindcss.com/): Utility-first CSS framework.  
 [Tabler Icons](https://tabler.io/icons): Icon library.  
-[@kineticdata/react](https://components.kineticdata.com/apis): Kinetic API helpers, authentication, form rendering, and i18n.
+[@kineticdata/react](https://components.kineticdata.com/apis): Kinetic API helpers, authentication, form rendering, and i18n.  
+[date-fns](https://date-fns.org/): Date utility library.  
+[immer](https://immerjs.github.io/immer/): Immutable data helper.  
+[clsx](https://github.com/lukeed/clsx): Class name helper.
 
 ## Project Structure
 

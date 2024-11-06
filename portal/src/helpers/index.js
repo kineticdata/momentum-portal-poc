@@ -1,3 +1,5 @@
+import { formatDistance } from 'date-fns';
+
 /******************************************************************************
  * General helper functions
  ******************************************************************************/
@@ -42,3 +44,6 @@ export const valuesFromQueryParams = queryParams => {
     {},
   );
 };
+
+export const timeAgo = date =>
+  formatDistance(date, new Date(), { addSuffix: true });

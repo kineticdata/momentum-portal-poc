@@ -4,7 +4,7 @@ import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
 import { regRedux } from './redux.js';
 import { Loading } from './components/states/Loading.jsx';
-import { Error } from './components/states/Error.js';
+import { Error } from './components/states/Error.jsx';
 import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
 import { PublicRoutes } from './pages/PublicRoutes.jsx';
 import { Login } from './pages/login/Login.jsx';
@@ -93,10 +93,10 @@ export const App = ({
   useEffect(() => {
     if (themeCSS) {
       // If themeCSS exists, create a stylesheet and set themeCSS as the content
-      const csssheet = new CSSStyleSheet();
-      csssheet.replace(themeCSS);
+      const cssSheet = new CSSStyleSheet();
+      cssSheet.replace(themeCSS);
       // Set this new constructed stylesheet to be used by the page
-      document.adoptedStyleSheets = [csssheet];
+      document.adoptedStyleSheets = [cssSheet];
     }
   }, [themeCSS]);
 
@@ -136,7 +136,9 @@ export const App = ({
   const [profileData] = useDataItem(
     fetchProfile,
     initialized &&
-      loggedIn && [{ include: 'profileAttributesMap,attributesMap' }],
+      loggedIn && [
+        { include: 'profileAttributesMap,attributesMap,memberships' },
+      ],
     response => response.profile,
   );
   // Set the profile data into redux

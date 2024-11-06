@@ -5,7 +5,7 @@ import tablerIcons from '@tabler/icons-react/dist/esm/dynamic-imports.mjs';
 // Import function to create tabler icons so we can create pending and missing icons
 import createTablerIcon from '@tabler/icons-react/dist/esm/createReactComponent.mjs';
 // Map to store loaded icons so React.lazy doesn't try reloading the same ones
-const loadedIcons = [];
+const loadedIcons = {};
 
 // An empty icon to show while the actual icon is being loaded
 const Pending = createTablerIcon('outline', 'icon-pending', 'IconPending', []);

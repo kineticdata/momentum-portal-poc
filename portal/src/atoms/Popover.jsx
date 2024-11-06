@@ -1,7 +1,8 @@
 import t from 'prop-types';
 import { Popover as ArkPopover } from '@ark-ui/react/popover';
-import { calcPlacement, getChildSlots } from '../helpers/index.js';
+import { calcPlacement, getChildSlots } from '../helpers/atoms.js';
 import clsx from 'clsx';
+import { ark } from '@ark-ui/react/factory';
 
 /**
  * An overlay that displays additional information or options when triggered.
@@ -39,12 +40,12 @@ export const Popover = ({
       positioning={{ placement }}
     >
       {slots.trigger && (
-        <ArkPopover.Trigger asChild className="btn">
-          {slots.trigger}
-        </ArkPopover.Trigger>
+        <ArkPopover.Trigger asChild>{slots.trigger}</ArkPopover.Trigger>
       )}
       <ArkPopover.Positioner>
-        <ArkPopover.Content>{slots.content}</ArkPopover.Content>
+        <ArkPopover.Content className="p-5 bg-white rounded-[40px] shadow-card w-[30rem] max-w-[calc(100vw-3rem)] z-20">
+          {slots.content}
+        </ArkPopover.Content>
       </ArkPopover.Positioner>
     </ArkPopover.Root>
   );

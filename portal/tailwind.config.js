@@ -41,6 +41,11 @@ export default {
       borderRadius: {
         '2.5xl': '1.25rem',
       },
+      boxShadow: {
+        card: '-2px 8px 17px 4px rgba(123, 119, 119, 0.15)',
+        footer: '0px -5px 30px 0px rgba(54, 41, 183, 0.07)',
+        icon: '0px 3.5px 21px 0px rgba(0, 0, 0, 0.05)',
+      },
       fontFamily: {
         sans: ['"Mona Sans Expanded"'],
       },

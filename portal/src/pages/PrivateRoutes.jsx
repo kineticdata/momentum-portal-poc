@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Home } from './home/Home.jsx';
-import { Actions } from './actions/Actions.jsx';
-import { Requests } from './requests/Requests.jsx';
+import { Actions } from './tickets/actions/Actions.jsx';
+import { Requests } from './tickets/requests/Requests.jsx';
 import { Services } from './services/Services.jsx';
 import { Profile } from './profile/Profile.js';
 import { useSelector } from 'react-redux';

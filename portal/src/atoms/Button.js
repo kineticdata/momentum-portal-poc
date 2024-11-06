@@ -2,17 +2,19 @@ import t from 'prop-types';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { Icon } from './Icon.jsx';
-import { ark } from '@ark-ui/react/factory';
+import { useSelector } from 'react-redux';
 
 /**
  * Component for rendering a styled button or link.
  *
  * @param {string} [className]
- * @param {('primary'|'secondary'|'tertiary')} [variant=primary] The styled
- *  look of the button.
+ * @param {('primary'|'secondary'|'tertiary'|'custom')} [variant=primary]
+ *  The styled look of the button.
  * @param {('sm'|'md'|'lg')} [size=lg] The size of the button.
  * @param {boolean} [inverse] If true, the button will invert the colors to
  *  work on a reverse color background. Only available for tertiary variant.
+ * @param {boolean} [underline] If true, the button's text will be underlined
+ *  on hover, focus, and active.
  * @param {string} [icon] The name of an icon to render at the start of the
  *  button.
  * @param {string} [iconEnd] The name of an icon to render at the end of the
@@ -28,6 +30,7 @@ export const Button = ({
   variant = 'primary',
   size = 'lg',
   inverse,
+  underline,
   icon,
   iconEnd,
   link,
@@ -41,9 +44,9 @@ export const Button = ({
     // Primary
     variant === 'primary' && [
       // Text
-      'text-primary-900 focus-visible:text-primary-200 active:text-primary-200 disabled:text-gray-900 font-medium',
+      'text-primary-900 focus-visible:text-primary-200 data-[state=open]:text-primary-200 disabled:text-gray-900 font-medium',
       // Background
-      'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 active:bg-primary-900 disabled:bg-gray-200',
+      'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 data-[state=open]:bg-primary-900 disabled:bg-gray-200',
       // Border
       'border-primary-500 disabled:border-primary-300',
     ],
@@ -53,7 +56,7 @@ export const Button = ({
       // Text
       'text-primary-900 disabled:text-gray-900 font-semibold',
       // Background
-      'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 active:bg-secondary-400 disabled:bg-gray-100',
+      'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
       // Border
       'border-primary-300',
     ],
@@ -64,15 +67,20 @@ export const Button = ({
       'font-semibold',
       {
         'text-primary-900 disabled:text-gray-900': !inverse,
-        'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 active:text-primary-900 disabled:text-gray-900':
+        'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 data-[state=open]:text-primary-900 disabled:text-gray-900':
           inverse,
       },
-      'hover:underline focus-visible:underline active:underline disabled:no-underline',
       // Background
-      'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 active:bg-secondary-400 disabled:bg-gray-100',
+      'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
       // Border
       'border-transparent',
     ],
+
+    // Underline
+    {
+      'hover:underline focus-visible:underline data-[state=open]:underline disabled:no-underline':
+        underline,
+    },
 
     // Sizing and radius
     {
@@ -92,21 +100,167 @@ export const Button = ({
 
   return (
     <Tag className={styledClassName} {...passThroughProps}>
-      {icon && <Icon name={icon} className="flex-none" />}
+      {icon && (
+        <Icon
+          name={icon}
+          size={size === 'sm' ? 20 : 24}
+          className="flex-none"
+        />
+      )}
       {children}
-      {iconEnd && <Icon name={iconEnd} className="flex-none" />}
+      {iconEnd && (
+        <Icon
+          name={iconEnd}
+          size={size === 'sm' ? 20 : 24}
+          className="flex-none"
+        />
+      )}
     </Tag>
   );
 };
 
 Button.propTypes = {
   className: t.string,
-  variant: t.oneOf(['primary', 'secondary', 'tertiary']),
+  variant: t.oneOf(['primary', 'secondary', 'tertiary', 'custom']),
   size: t.oneOf(['sm', 'md', 'lg']),
   inverse: t.bool,
+  underline: t.bool,
   icon: t.string,
   iconEnd: t.string,
-  label: t.string,
+  link: t.bool,
+  children: t.node,
+};
+
+/**
+ * Component for rendering a chip style button.
+ *
+ * @param {string} [className]
+ * @param {boolean} [active] Is the chip in an active state.
+ * @param {string} [icon] Icon to render at the end of the chip.
+ * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
+ * @param {Object} [passThroughProps] Any additional props will we passed
+ *  through to the component.
+ */
+export const ChipButton = ({
+  className,
+  active,
+  icon,
+  children,
+  ...passThroughProps
+}) => {
+  const mobile = useSelector(state => state.view.mobile);
+  return (
+    <button
+      className={clsx(
+        // Common styles
+        'inline-flex gap-2 justify-center items-center text-center border outline-0 max-md:text-xs',
+        // Active
+        active && [
+          // Text
+          'text-primary-200 font-medium',
+          // Background
+          'bg-primary-900 hover:bg-gray-900 focus-visible:bg-gray-900 disabled:bg-gray-900',
+          // Border
+          'border-transparent',
+        ],
+
+        // Not active
+        !active && [
+          // Text
+          'text-primary-900 font-medium',
+          // Background
+          'bg-white hover:bg-primary-100 focus-visible:bg-primary-100 disabled:bg-gray-200',
+          // Border
+          'border-gray-900',
+        ],
+
+        // Sizing and radius
+        'rounded-2.5xl px-2 md:px-3 py-0.75 md:py-1.25',
+        className,
+      )}
+      {...passThroughProps}
+    >
+      {children}
+      {icon && (
+        <Icon name={icon} size={mobile ? 12 : 20} className="flex-none" />
+      )}
+    </button>
+  );
+};
+
+ChipButton.propTypes = {
+  className: t.string,
+  active: t.bool,
+  icon: t.string,
+  children: t.node,
+};
+
+/**
+ * Component for rendering a tab style button.
+ *
+ * @param {string} [className]
+ * @param {boolean} [active] Is the tab in an active state.
+ * @param {string} [icon] Icon to render at the start of the tab.
+ * @param {string} [iconEnd] Icon to render at the end of the tab.
+ * @param {boolean} [link] If true, this component will render a Link instead
+ *  of a button, but with tab button styles.
+ * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
+ * @param {Object} [passThroughProps] Any additional props will we passed
+ *  through to the component.
+ */
+export const TabButton = ({
+  className,
+  active,
+  icon,
+  iconEnd,
+  link,
+  children,
+  ...passThroughProps
+}) => {
+  const styledClassName = clsx(
+    // Common styles
+    'inline-flex gap-2 justify-center items-center text-center border outline-0 max-md:text-sm',
+    // Active
+    active && [
+      // Text
+      'text-primary-200 font-medium',
+      // Background
+      'bg-primary-900 disabled:bg-gray-900',
+      // Border
+      'border-transparent',
+    ],
+
+    // Not active
+    !active && [
+      // Text
+      'text-primary-900 font-medium',
+      // Background
+      'bg-transparent hover:bg-white focus-visible:bg-white disabled:bg-transparent',
+      // Border
+      'border-transparent',
+    ],
+
+    // Sizing and radius
+    'rounded-2.5xl px-3 py-1.75 md:py-1.25',
+    className,
+  );
+
+  const Tag = !link ? 'button' : Link;
+
+  return (
+    <Tag className={styledClassName} {...passThroughProps}>
+      {icon && <Icon name={icon} size={20} className="flex-none" />}
+      {children}
+      {iconEnd && <Icon name={iconEnd} size={20} className="flex-none" />}
+    </Tag>
+  );
+};
+
+TabButton.propTypes = {
+  className: t.string,
+  active: t.bool,
+  icon: t.string,
+  iconEnd: t.string,
   link: t.bool,
   children: t.node,
 };
@@ -133,9 +287,9 @@ export const CloseButton = ({
       'inline-flex gap-1 justify-center items-center',
       // Text
       {
-        'text-gray-900 hover:text-primary-900 focus-visible:text-primary-900 active:text-primary-900 disabled:text-gray-900':
+        'text-gray-900 hover:text-primary-900 focus-visible:text-primary-900 disabled:text-gray-900':
           !inverse,
-        'text-gray-200 hover:text-primary-300 focus-visible:text-primary-300 active:text-primary-300 disabled:text-gray-200':
+        'text-gray-200 hover:text-primary-300 focus-visible:text-primary-300 disabled:text-gray-200':
           inverse,
       },
       // Background
@@ -161,5 +315,4 @@ CloseButton.propTypes = {
   className: t.string,
   size: t.oneOf(['sm', 'md', 'lg']),
   inverse: t.bool,
-  label: t.string,
 };

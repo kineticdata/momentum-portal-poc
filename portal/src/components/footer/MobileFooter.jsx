@@ -5,7 +5,7 @@ import { Icon } from '../../atoms/Icon.jsx';
 export const MobileFooter = props => {
   return (
     <FooterPortal>
-      <div className="stretch py-2 flex justify-between items-center bg-white text-xs">
+      <div className="stretch py-2 flex justify-between items-center bg-white text-xs shadow-footer">
         <Link
           to="/"
           className="flex flex-col justify-center items-center gap-1 ml-4"

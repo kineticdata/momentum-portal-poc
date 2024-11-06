@@ -177,11 +177,11 @@ const useDataList = (apiFunction, parameters, transform) => {
   }, [fetch, state, memoizedParameters]);
 
   // Trigger the fetch function with the provided parameters whenever the
-  // parameters change, and only if they exist. If the parameters are falsy,
-  // reset the state to make the list uninitialized.
+  // parameters change, and only if they exist. Reset the state whenever the
+  // parameters change, because we're now doing a new query.
   useEffect(() => {
     if (memoizedParameters) {
-      fetch(memoizedParameters);
+      fetch(memoizedParameters, initialState);
     } else {
       setState({ ...initialState });
     }

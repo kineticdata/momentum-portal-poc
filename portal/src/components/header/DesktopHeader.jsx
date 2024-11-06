@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useMatch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/images/logo-dark.svg';
 import { HeaderPortal } from './HeaderPortal.jsx';
@@ -6,6 +6,7 @@ import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.js';
 
 export const DesktopHeader = props => {
+  const matchesHome = useMatch('/');
   const username = useSelector(state => state.app.profile?.username);
 
   return (
@@ -18,10 +19,14 @@ export const DesktopHeader = props => {
           Tickets
         </Button>
         <div className="mx-auto" />
-        <Button variant="tertiary" icon="search" aria-label="Search" />
-        <Button link variant="secondary" icon="file-plus" to="services">
-          New Request
-        </Button>
+        {!matchesHome && (
+          <>
+            <Button variant="tertiary" icon="search" aria-label="Search" />
+            <Button link variant="secondary" icon="file-plus" to="services">
+              New Request
+            </Button>
+          </>
+        )}
         <Link to="/profile" className="flex-none" aria-label="Profile">
           <Avatar username={username} size="lg" />
         </Link>
