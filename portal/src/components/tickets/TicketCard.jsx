@@ -6,18 +6,38 @@ import { StatusPill } from './StatusPill.jsx';
 import { timeAgo } from '../../helpers/index.js';
 
 const getMetaData = submission => {
-  switch (submission.coreState) {
-    case 'Submitted':
-    case 'Closed':
-      return {
-        status: 'Closed',
-        dateString: `Closed ${timeAgo(submission.submittedAt)}`,
-      };
-    default:
-      return {
-        status: 'Open',
-        dateString: `Opened ${timeAgo(submission.createdAt)}`,
-      };
+  if (['Approval', 'Task'].includes(submission.type)) {
+    switch (submission.coreState) {
+      case 'Submitted':
+      case 'Closed':
+        return {
+          status: 'Closed',
+          dateString: `Closed ${timeAgo(submission.submittedAt)}`,
+        };
+      default:
+        return {
+          status: 'Open',
+          dateString: `Opened ${timeAgo(submission.createdAt)}`,
+        };
+    }
+  } else if (['Service'].includes(submission.type)) {
+    switch (submission.coreState) {
+      case 'Draft':
+        return {
+          status: 'Draft',
+          dateString: `Created ${timeAgo(submission.createdAt)}`,
+        };
+      case 'Closed':
+        return {
+          status: 'Closed',
+          dateString: `Closed ${timeAgo(submission.closedAt)}`,
+        };
+      default:
+        return {
+          status: 'Open',
+          dateString: `Submitted ${timeAgo(submission.submittedAt)}`,
+        };
+    }
   }
 };
 
