@@ -59,7 +59,7 @@ export const Panel = ({
       <Portal container={ref}>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content className="p-6 bg-white" asChild>
+          <Dialog.Content className="p-6 bg-white overflow-auto scrollbar-white" asChild>
             {slots.content}
           </Dialog.Content>
         </Dialog.Positioner>

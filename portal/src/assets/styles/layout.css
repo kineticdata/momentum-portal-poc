@@ -14,6 +14,9 @@
  *  .stretch
  *    Stretches the margin and padding of inner elements to the edge of the
  *    screen.
+ *  .stretch-wide
+ *    Stretches the margin of inner elements to the edge of the
+ *    screen.
  ******************************************************************************/
 
 @layer base {
@@ -22,11 +25,11 @@
   }
   body,
   html {
-    @apply h-screen;
+    @apply h-screen overflow-hidden;
   }
 
   #root {
-    @apply flex h-full bg-gray-100 text-primary-900;
+    @apply flex h-full bg-gray-100 text-primary-900 overflow-hidden;
     /*
      * For mobile screens, set the flex direction to column so that panels
      * render at the bottom instead of on the right.
@@ -55,8 +58,14 @@
     /* Set the gutter widths for the design on the wrapper elements. */
     @apply px-[--gutter-size];
 
+    .stretch-wide {
+      @apply mx-[--gutter-inv-size];
+    }
     .stretch {
       @apply mx-[--gutter-inv-size] px-[--gutter-size];
+    }
+    .w-stretch {
+      width: calc(100% + var(--gutter-size) * 2);
     }
   }
 }

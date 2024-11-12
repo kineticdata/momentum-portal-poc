@@ -9,4 +9,5 @@
 @import 'forms.css';
 
 @import 'tailwindcss/utilities';
+@import 'scrollbar.css';
 @import 'typography.css';

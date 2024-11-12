@@ -2,14 +2,21 @@ import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { TicketsTabs } from '../../../components/tickets/TicketsTabs.jsx';
 import {
+  EmptyCard,
   MobileTicketCard,
   TicketCard,
 } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
 import { Button } from '../../../atoms/Button.js';
+import { TicketFilters } from '../../../components/tickets/TicketFilters.jsx';
 
-export const RequestsList = ({ listData, listActions }) => {
+export const RequestsList = ({
+  listData,
+  listActions,
+  filters,
+  setFilters,
+}) => {
   const mobile = useSelector(state => state.view.mobile);
 
   const { initialized, error, loading, data, pageNumber } = listData;
@@ -28,6 +35,11 @@ export const RequestsList = ({ listData, listActions }) => {
         )}
       >
         <TicketsTabs active="requests" />
+        <TicketFilters
+          type="requests"
+          filters={filters}
+          setFilters={setFilters}
+        ></TicketFilters>
       </div>
 
       {initialized && (
@@ -53,6 +65,9 @@ export const RequestsList = ({ listData, listActions }) => {
                 data.map(submission => (
                   <CardComponent key={submission.id} submission={submission} />
                 ))}
+              {!loading && data.length === 0 && (
+                <EmptyCard>There are no requests to show.</EmptyCard>
+              )}
               {mobile && nextPage && (
                 <Button
                   variant="tertiary"

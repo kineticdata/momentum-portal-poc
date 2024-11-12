@@ -13,7 +13,9 @@
  *  there are multiple, or the `defaultValue` if no value is found.
  */
 export const getAttributeValue = (record, attributeName, defaultValue) =>
-  (record?.attributesMap
-    ? record.attributesMap?.[attributeName]?.[0]
-    : record.attributes?.find(attribute => attribute.name === attributeName)
-        ?.values?.[0]) || defaultValue;
+  (record &&
+    (record.attributesMap
+      ? record.attributesMap?.[attributeName]?.[0]
+      : record.attributes?.find(attribute => attribute.name === attributeName)
+          ?.values?.[0])) ||
+  defaultValue;

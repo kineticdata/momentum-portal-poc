@@ -1,5 +1,5 @@
 import t from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { Icon } from './Icon.jsx';
 import { useSelector } from 'react-redux';
@@ -96,10 +96,15 @@ export const Button = ({
     className,
   );
 
+  const location = useLocation();
+
   const Tag = !link ? 'button' : Link;
+  const additionalProps = !link
+    ? {}
+    : { state: { backPath: location.pathname } };
 
   return (
-    <Tag className={styledClassName} {...passThroughProps}>
+    <Tag className={styledClassName} {...additionalProps} {...passThroughProps}>
       {icon && (
         <Icon
           name={icon}

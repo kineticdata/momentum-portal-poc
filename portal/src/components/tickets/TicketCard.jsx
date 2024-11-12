@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getAttributeValue } from '../../helpers/records.js';
 import { Icon } from '../../atoms/Icon.jsx';
 import { StatusPill } from './StatusPill.jsx';
@@ -41,7 +41,17 @@ const getMetaData = submission => {
   }
 };
 
+/**
+ * Build the link path for the submission. If it is a draft request, render the
+ * submission form. Otherwise, render the details route.
+ */
+const getToPath = submission =>
+  ['Service'].includes(submission.type) && submission.coreState === 'Draft'
+    ? `${submission.id}/edit`
+    : submission.id;
+
 export const MobileTicketCard = ({ submission }) => {
+  const location = useLocation();
   const icon = getAttributeValue(submission?.form, 'Icon', 'checklist');
   const meta = getMetaData(submission);
 
@@ -57,7 +67,8 @@ export const MobileTicketCard = ({ submission }) => {
       <div className="flex flex-col gap-1 min-w-0">
         <Link
           className="text-sm font-medium leading-4 line-clamp-2 after:absolute after:inset-0"
-          to={submission.id}
+          to={getToPath(submission)}
+          state={{ backPath: location.pathname }}
         >
           {submission.label}
         </Link>
@@ -69,6 +80,7 @@ export const MobileTicketCard = ({ submission }) => {
 };
 
 export const TicketCard = ({ submission }) => {
+  const location = useLocation();
   const icon = getAttributeValue(submission?.form, 'Icon', 'checklist');
   const meta = getMetaData(submission);
 
@@ -83,7 +95,8 @@ export const TicketCard = ({ submission }) => {
       </div>
       <Link
         className="font-medium leading-5 line-clamp-2 after:absolute after:inset-0"
-        to={submission.id}
+        to={getToPath(submission)}
+        state={{ backPath: location.pathname }}
       >
         {submission.label}
       </Link>
@@ -92,3 +105,13 @@ export const TicketCard = ({ submission }) => {
     </div>
   );
 };
+
+export const EmptyCard = ({ children }) => (
+  <div
+    className={clsx(
+      'relative p-1 md:py-3 md:px-6 bg-white rounded-xl shadow-card min-h-16 max-md:flex md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] gap-3 items-center italic text-gray-900',
+    )}
+  >
+    {children}
+  </div>
+);

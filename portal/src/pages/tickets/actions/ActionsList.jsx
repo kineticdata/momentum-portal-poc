@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { TicketsTabs } from '../../../components/tickets/TicketsTabs.jsx';
 import { TicketFilters } from '../../../components/tickets/TicketFilters.jsx';
 import {
+  EmptyCard,
   MobileTicketCard,
   TicketCard,
 } from '../../../components/tickets/TicketCard.jsx';
@@ -59,6 +60,9 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
                 data.map(submission => (
                   <CardComponent key={submission.id} submission={submission} />
                 ))}
+              {!loading && data.length === 0 && (
+                <EmptyCard>There are no actions to show.</EmptyCard>
+              )}
               {mobile && nextPage && (
                 <Button
                   variant="tertiary"

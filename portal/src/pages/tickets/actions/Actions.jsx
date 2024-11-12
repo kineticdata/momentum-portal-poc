@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
 import { ActionsList } from './ActionsList.jsx';
-import { ActionDetail } from './ActionDetail.jsx';
+import { ActionForm } from './ActionForm.jsx';
 import useDataList from '../../../helpers/useDataList.js';
 import { useMemo, useState } from 'react';
 
@@ -71,9 +71,9 @@ export const Actions = () => {
   return (
     <Routes>
       <Route
-        path=":id"
-        element={<ActionDetail listActions={listActions} />}
-      ></Route>
+        path=":submissionId"
+        element={<ActionForm listActions={listActions} />}
+      />
       <Route
         path="*"
         element={
@@ -84,7 +84,7 @@ export const Actions = () => {
             setFilters={setFilters}
           />
         }
-      ></Route>
+      />
     </Routes>
   );
 };

@@ -74,4 +74,5 @@ export default {
     },
   },
   plugins: [],
+  safelist: ['sr-only', 'embedded-core-form'],
 };

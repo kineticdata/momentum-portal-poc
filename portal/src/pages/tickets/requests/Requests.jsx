@@ -1,9 +1,10 @@
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { RequestsList } from './RequestsList.jsx';
 import { RequestDetail } from './RequestDetail.jsx';
 import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
-import { useSelector } from 'react-redux';
-import { useMemo, useState } from 'react';
+import { Form } from '../../forms/Form.jsx';
 import useDataList from '../../../helpers/useDataList.js';
 
 const buildMyRequestsSearch = (profile, filters) => {
@@ -64,7 +65,12 @@ export const Requests = () => {
 
   return (
     <Routes>
-      <Route path=":id" element={<RequestDetail listActions={listActions} />} />
+      <Route
+        path=":submissionId"
+        element={<RequestDetail listActions={listActions} />}
+      />
+      <Route path=":submissionId/edit" element={<Form />} />
+      <Route path=":submissionId/review" element={<Form review={true} />} />
       <Route
         path="*"
         element={

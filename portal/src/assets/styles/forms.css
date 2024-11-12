@@ -1,17 +1,284 @@
+/******************************************************************************
+ * FORMS
+ *
+ * Styling for form elements and the Kinetic form.
+ *
+ * Custom Classes:
+ *  .empty-label
+ *    Use on a checkbox field element when you have a required checkbox without
+ *    a label to move the asterisk to be on the same line as the checkbox.
+ *  .vertical
+ *    Use on a checkbox or radio field element when you want the options to
+ *    be stacked vertically.
+ *    Use on a section with buttons when you want the children to be stacked
+ *    vertically.
+ *    Children will be set to full width.
+ *  .cols-2, .cols-3, .cols-4
+ *    Use on a section to align its children into 2, 3, or 4 columns.
+ *    Use on a checkbox or radio field element to align its options into 2, 3,
+ *    or 4 columns.
+ *    These classes don't work if you also use the vertical class on the same
+ *    element.
+ *  .align-right
+ *    Use on a section to align its children to the right.
+ *    Use on a button to align it and any buttons after it to the right.
+ *    This class only works if the relevant elements aren't full width, and is
+ *    mainly useful for buttons.
+ ******************************************************************************/
+
 @layer components {
   .field {
     @apply block;
+
+    label {
+      @apply block text-sm font-semibold text-gray-900 leading-4 pb-2;
+    }
+
+    input[type='text'],
+    input[type='password'] {
+      @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
+      @apply text-primary-900 bg-white border-primary-400;
+      @apply hover:bg-primary-100;
+      @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
+      @apply disabled:text-gray-900 disabled:bg-gray-100;
+    }
   }
 
-  .field label {
-    @apply block font-semibold text-gray-900 leading-4 mb-2;
-  }
+  .embedded-core-form form {
+    > .errors {
+      @apply w-full text-warning-500;
+      > p {
+        @apply font-semibold;
+      }
+    }
 
-  input[type='text'],
-  input[type='password'] {
-    @apply block py-2.25 px-4 border rounded-2.5xl outline-0 w-full font-medium;
-    @apply text-primary-900 bg-white border-primary-400;
-    @apply focus-visible:ring focus-visible:ring-secondary-400;
-    @apply disabled:text-gray-900 disabled:bg-gray-100 disabled:border-gray-200;
+    &,
+    [data-element-type='section'] {
+      @apply flex flex-wrap justify-start content-start items-stretch gap-5 w-full;
+
+      > [data-element-type='content'] {
+        @apply block w-full;
+      }
+
+      > [data-element-type='button'] {
+        @apply max-md:block max-md:w-full self-start flex-none;
+
+        &.align-right {
+          @apply ml-auto;
+        }
+      }
+
+      &.vertical {
+        @apply flex-col items-stretch;
+        > [data-element-type='button'] {
+          @apply self-auto;
+        }
+      }
+
+      &:not(.vertical) {
+        &.cols-2 {
+          > [data-element-type] {
+            @media (min-width: 768px) {
+              flex: 0 0 calc((100% - 1.25rem) / 2);
+            }
+          }
+        }
+        &.cols-3 {
+          > [data-element-type] {
+            @media (min-width: 768px) {
+              flex: 0 0 calc((100% - 1.25rem * 2) / 3);
+            }
+          }
+        }
+        &.cols-4 {
+          > [data-element-type] {
+            @media (min-width: 768px) {
+              flex: 0 0 calc((100% - 1.25rem * 3) / 4);
+            }
+          }
+        }
+      }
+
+      &.align-right {
+        @apply justify-end;
+      }
+    }
+
+    [data-element-type='section'] {
+      > .section-title {
+        @apply h3 block w-full;
+      }
+      > [data-element-type='section'] > .section-title {
+        @apply h4;
+      }
+    }
+
+    [data-element-type='wrapper'] {
+      &.form-group {
+        @apply block w-full;
+
+        .field-label {
+          @apply block w-full text-sm font-semibold text-gray-900 leading-4 pb-2;
+        }
+
+        input[type='text'],
+        input[type='password'],
+        textarea,
+        select {
+          @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
+          @apply text-primary-900 bg-white border-primary-400;
+          @apply hover:bg-primary-100;
+          @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
+          @apply disabled:text-gray-900 disabled:bg-gray-100;
+        }
+        select {
+          @apply appearance-none bg-no-repeat pr-11 md:pr-12;
+          background-image: url(./icons/chevron-down.svg);
+          &:disabled {
+            background-image: url(./icons/chevron-down_disabled.svg);
+          }
+          background-position: right 1.25rem center;
+          @media (min-width: 768px) {
+            background-position: right 1.5rem center;
+          }
+          background-size: 1.5rem;
+        }
+        textarea {
+          @apply md:rounded-br-md;
+        }
+
+        /* Attachments */
+        .fileinput-button {
+          @apply btn-secondary border-dashed border-primary-900 bg-no-repeat pl-11 focus-within:bg-secondary-400;
+          background-image: url(./icons/file-plus.svg);
+          background-position: left 1rem center;
+          background-size: 1.5rem;
+        }
+        .file-table {
+          @apply table;
+          .file-header {
+            @apply table-header-group;
+            .file-row {
+              @apply table-row;
+              span {
+                @apply pr-5 py-1 table-cell text-gray-900 font-semibold text-xs md:text-sm;
+              }
+            }
+          }
+          .file-container {
+            @apply table-row-group;
+            .file-row {
+              @apply table-row;
+              span {
+                @apply pr-5 py-1 table-cell text-primary-900 max-md:text-sm;
+                &:first-child {
+                  overflow-wrap: anywhere;
+                }
+                a {
+                  @apply text-gray-900 font-medium italic hover:underline hover:text-primary-900 focus-visible:underline focus-visible:text-primary-900;
+                }
+              }
+            }
+          }
+
+          + .empty-message {
+            @apply text-gray-900 italic font-medium text-xs md:text-sm;
+          }
+        }
+        &.empty .file-table {
+          display: none;
+        }
+      }
+
+      &.radio,
+      &.checkbox {
+        @apply flex justify-start content-start items-start flex-wrap gap-3 w-full max-md:flex-col;
+
+        .field-label {
+          @apply flex-none block text-sm font-semibold text-gray-900 leading-4 pb-2 empty:hidden w-full -mb-3;
+        }
+
+        label:not(.field-label) {
+          @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
+          @apply text-primary-900 bg-white border-primary-400;
+          @apply hover:bg-primary-100;
+          @apply focus-within:bg-white focus-within:ring focus-within:ring-secondary-400;
+          overflow-wrap: anywhere;
+
+          input[type='checkbox'],
+          input[type='radio'] {
+            @apply flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat;
+          }
+          input[type='checkbox'] {
+            @apply rounded;
+            background-size: 1.125rem;
+            &:checked {
+              background-image: url(icons/checkbox-checked.svg);
+              &:disabled {
+                background-image: url(icons/checkbox-checked_disabled.svg);
+              }
+            }
+          }
+          input[type='radio'] {
+            @apply rounded-full;
+            background-size: 0.75rem;
+            &:checked {
+              background-image: url(./icons/radio-checked.svg);
+              &:disabled {
+                background-image: url(./icons/radio-checked_disabled.svg);
+              }
+            }
+          }
+
+          &:has(input[disabled]) {
+            @apply text-gray-900 bg-gray-100;
+          }
+        }
+
+        &.vertical {
+          @apply flex-col items-stretch;
+        }
+
+        &:not(.vertical) {
+          @media (min-width: 768px) {
+            &.cols-2 {
+              > label:not(.field-label) {
+                flex: 0 0 calc((100% - 0.75rem) / 2);
+              }
+            }
+            &.cols-3 {
+              > label:not(.field-label) {
+                flex: 0 0 calc((100% - 0.75rem * 2) / 3);
+              }
+            }
+            &.cols-4 {
+              > label:not(.field-label) {
+                flex: 0 0 calc((100% - 0.75rem * 3) / 4);
+              }
+            }
+          }
+        }
+      }
+
+      &.required {
+        .field-label {
+          @apply after:text-warning-500 after:font-bold;
+          &:after {
+            content: ' *';
+          }
+        }
+      }
+      &.empty-label {
+        .field-label {
+          @apply hidden;
+        }
+        &.required {
+          @apply after:text-warning-500 after:font-bold relative after:absolute after:-top-1 after:-left-0;
+          &:after {
+            content: ' *';
+          }
+        }
+      }
+    }
   }
 }

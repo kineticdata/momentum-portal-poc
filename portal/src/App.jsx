@@ -166,11 +166,14 @@ export const App = ({
 
   return (
     <>
-      <div className="flex flex-col flex-auto overflow-auto">
+      <div className="flex flex-col flex-auto">
         {/* Header element where we will render headers via a portal */}
         <header id="app-header" />
 
-        <main id="app-main" className="flex flex-col flex-auto overflow-auto">
+        <main
+          id="app-main"
+          className="flex flex-col flex-auto relative overflow-auto scrollbar"
+        >
           {serverError || error ? (
             // If an error occurred during auth or fetching app data, show an
             // error screen

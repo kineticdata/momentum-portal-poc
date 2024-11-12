@@ -1,0 +1,10 @@
+@layer utilities {
+  .scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--gray-500)) hsl(var(--gray-100));
+  }
+  .scrollbar-white {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--gray-500)) white;
+  }
+}

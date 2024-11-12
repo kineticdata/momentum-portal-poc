@@ -4,11 +4,9 @@ import { Suspense, lazy } from 'react';
 import tablerIcons from '@tabler/icons-react/dist/esm/dynamic-imports.mjs';
 // Import function to create tabler icons so we can create pending and missing icons
 import createTablerIcon from '@tabler/icons-react/dist/esm/createReactComponent.mjs';
-// Map to store loaded icons so React.lazy doesn't try reloading the same ones
-const loadedIcons = {};
 
 // An empty icon to show while the actual icon is being loaded
-const Pending = createTablerIcon('outline', 'icon-pending', 'IconPending', []);
+const Blank = createTablerIcon('outline', 'icon-blank', 'IconBlank', []);
 
 // An icon to show if an icon with the provided name doesn't exist
 const Missing = createTablerIcon('outline', 'icon-missing', 'IconMissing', [
@@ -24,6 +22,10 @@ const Missing = createTablerIcon('outline', 'icon-missing', 'IconMissing', [
   ['path', { d: 'M17 7v4a1 1 0 0 0 1 1h3M21 7v10', key: 'svg-3' }],
   ['path', { d: 'M3 21h18', key: 'svg-4', stroke: 'red' }],
 ]);
+
+// Map to store loaded icons so React.lazy doesn't try reloading the same ones.
+// Prepopulate the map with any custom icons we want
+const loadedIcons = { blank: Blank };
 
 /**
  * Renders an icon from the Tabler Icons library.
@@ -62,9 +64,7 @@ export const Icon = ({ name, filled, size, ...passThroughProps }) => {
 
     // Render the icon, with a fallback while it's loading
     return (
-      <Suspense
-        fallback={<Pending size={size} {...passThroughProps}></Pending>}
-      >
+      <Suspense fallback={<Blank size={size} {...passThroughProps}></Blank>}>
         <IconComponent size={size} {...passThroughProps}></IconComponent>
       </Suspense>
     );

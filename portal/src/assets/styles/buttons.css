@@ -1,26 +1,47 @@
+/******************************************************************************
+ * Buttons
+ *
+ * Styling for button elements and the Kinetic form.
+ ******************************************************************************/
+
 @layer components {
-  .btn-primary {
-    @apply inline-block py-2.25 px-4 border rounded-2.5xl outline-0 font-medium text-center;
-    @apply text-primary-900 bg-secondary-400 border-primary-500;
-    @apply hover:bg-secondary-100;
-    @apply focus-visible:text-primary-200 focus-visible:bg-primary-900;
-    @apply disabled:text-gray-900 disabled:bg-gray-200 disabled:border-primary-300;
+  .btn {
+    @apply inline-flex gap-1 justify-center items-center text-center py-2.25 px-4 border outline-0 rounded-2.5xl;
   }
 
-  .btn,
+  .btn-primary {
+    @apply btn;
+    @apply text-primary-900 focus-visible:text-primary-200 disabled:text-gray-900 font-medium;
+    @apply bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 disabled:bg-gray-200;
+    @apply border-primary-500 disabled:border-primary-300;
+  }
+
   .btn-secondary {
-    @apply inline-block py-2.25 px-4 border rounded-2.5xl outline-0 font-semibold text-center;
-    @apply text-primary-900 bg-white border-primary-300;
-    @apply hover:bg-primary-100;
-    @apply focus-visible:bg-secondary-400 focus-visible:border-primary-500;
-    @apply disabled:text-gray-900 disabled:bg-gray-100 disabled:border-primary-300;
+    @apply btn;
+    @apply text-primary-900 disabled:text-gray-900 font-semibold;
+    @apply bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
+    @apply border-primary-300;
   }
 
   .btn-tertiary {
-    @apply inline-block py-2.25 px-4 border rounded-2.5xl outline-0 font-semibold text-center;
-    @apply bg-transparent border-transparent;
-    @apply hover:bg-primary-100 hover:underline;
-    @apply focus-visible:bg-secondary-400 focus-visible:underline;
-    @apply disabled:text-gray-900 disabled:bg-transparent disabled:no-underline;
+    @apply btn;
+    @apply text-primary-900 disabled:text-gray-900 font-semibold;
+    @apply bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
+    @apply border-transparent;
+  }
+
+  .btn-underline {
+    @apply hover:underline focus-visible:underline disabled:no-underline;
+  }
+
+  .embedded-core-form form {
+    [data-element-type='button'] {
+      &[data-button-type='submit-page'] {
+        @apply btn-primary;
+      }
+      &:not([data-button-type='submit-page']) {
+        @apply btn-secondary;
+      }
+    }
   }
 }
