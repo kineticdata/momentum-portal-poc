@@ -154,7 +154,12 @@ export const App = ({
     fetchKapp,
     initialized &&
       loggedIn &&
-      kappSlug && [{ kappSlug, include: 'attributesMap,categorizations' }],
+      kappSlug && [
+        {
+          kappSlug,
+          include: 'attributesMap,categories,categories.attributesMap',
+        },
+      ],
     response => response.kapp,
   );
   // Set the space data into redux
@@ -166,7 +171,7 @@ export const App = ({
 
   return (
     <>
-      <div className="flex flex-col flex-auto">
+      <div className="flex flex-col flex-auto overflow-auto">
         {/* Header element where we will render headers via a portal */}
         <header id="app-header" />
 

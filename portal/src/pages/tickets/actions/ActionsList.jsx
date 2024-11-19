@@ -4,7 +4,6 @@ import { TicketsTabs } from '../../../components/tickets/TicketsTabs.jsx';
 import { TicketFilters } from '../../../components/tickets/TicketFilters.jsx';
 import {
   EmptyCard,
-  MobileTicketCard,
   TicketCard,
 } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
@@ -16,8 +15,6 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
 
   const { initialized, error, loading, data, pageNumber } = listData;
   const { nextPage, previousPage } = listActions;
-
-  const CardComponent = mobile ? MobileTicketCard : TicketCard;
 
   return (
     <>
@@ -58,7 +55,7 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
               )}
               {!loading &&
                 data.map(submission => (
-                  <CardComponent key={submission.id} submission={submission} />
+                  <TicketCard key={submission.id} submission={submission} />
                 ))}
               {!loading && data.length === 0 && (
                 <EmptyCard>There are no actions to show.</EmptyCard>

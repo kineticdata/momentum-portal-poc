@@ -18,6 +18,8 @@ import { getChildSlots } from '../helpers/atoms.js';
  *  a callback that is triggered whenever the open state changes.
  *  The function is passed one parameter, which is an object with an `open`
  *  property defining what the new state of the component is or should be.
+ * @param {Function} [props.onExitComplete] Function to call after the panel
+ *  finishes closing.
  * @param {boolean} [props.closeOnEscape=true] Should the panel close when the
  *  escape key is pressed.
  * @param {boolean} [props.closeOnInteractOutside=true] Should the panel close
@@ -30,6 +32,7 @@ import { getChildSlots } from '../helpers/atoms.js';
 export const Panel = ({
   open,
   onOpenChange,
+  onExitComplete,
   closeOnEscape,
   closeOnInteractOutside,
   children,
@@ -46,20 +49,22 @@ export const Panel = ({
     <Dialog.Root
       open={open}
       onOpenChange={onOpenChange}
+      onExitComplete={onExitComplete}
       closeOnEscape={closeOnEscape}
       closeOnInteractOutside={closeOnInteractOutside}
       lazyMount
       unmountOnExit
     >
       {slots.trigger && (
-        <Dialog.Trigger asChild className="btn">
-          {slots.trigger}
-        </Dialog.Trigger>
+        <Dialog.Trigger asChild>{slots.trigger}</Dialog.Trigger>
       )}
       <Portal container={ref}>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content className="p-6 bg-white overflow-auto scrollbar-white" asChild>
+          <Dialog.Content
+            className="p-6 md:py-8 md:px-10 bg-white overflow-auto scrollbar-white"
+            asChild
+          >
             {slots.content}
           </Dialog.Content>
         </Dialog.Positioner>
@@ -71,6 +76,7 @@ export const Panel = ({
 Panel.propTypes = {
   open: t.bool,
   onOpenChange: t.func,
+  onExitComplete: t.func,
   closeOnEscape: t.bool,
   closeOnInteractOutside: t.bool,
   children: t.node,

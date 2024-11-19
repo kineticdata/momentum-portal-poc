@@ -1,9 +1,11 @@
 import { Link, useMatch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/images/logo-dark.svg';
-import { HeaderPortal } from './HeaderPortal.jsx';
 import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.js';
+import { HeaderPortal } from './HeaderPortal.jsx';
+import { ServicesPanel } from '../services/ServicesPanel.jsx';
+import { SearchModal } from '../search/SearchModal.jsx';
 
 export const DesktopHeader = props => {
   const matchesHome = useMatch('/');
@@ -15,21 +17,33 @@ export const DesktopHeader = props => {
         <Link to="/" className="flex-none" aria-label="Home">
           <img src={logo} alt="Logo" className="h-12" />
         </Link>
-        <Button link variant="tertiary" to="requests">
+        <Button variant="tertiary" to="requests">
           Tickets
         </Button>
         <div className="mx-auto" />
         {!matchesHome && (
           <>
-            <Button variant="tertiary" icon="search" aria-label="Search" />
-            <Button link variant="secondary" icon="file-plus" to="services">
-              New Request
-            </Button>
+            <SearchModal>
+              <Button
+                variant="tertiary"
+                icon="search"
+                aria-label="Open Search"
+              />
+            </SearchModal>
+            <ServicesPanel>
+              <Button variant="secondary" icon="file-plus">
+                New Request
+              </Button>
+            </ServicesPanel>
           </>
         )}
-        <Link to="/profile" className="flex-none" aria-label="Profile">
-          <Avatar username={username} size="lg" />
-        </Link>
+        <Avatar
+          username={username}
+          size="xl"
+          to="/profile"
+          className="flex-none"
+          aria-label="Profile"
+        />
       </nav>
     </HeaderPortal>
   );

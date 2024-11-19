@@ -5,6 +5,32 @@ import { Icon } from './Icon.jsx';
 import { useSelector } from 'react-redux';
 
 /**
+ * Renders either a button or a link.
+ *
+ * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
+ * @param {Object} [passThroughProps] Any additional props will we passed
+ *  through to the component.
+ */
+const ButtonOrLink = ({ children, ...passThroughProps }) => {
+  const location = useLocation();
+  const isLink = !!passThroughProps.to;
+  const Tag = !isLink ? 'button' : Link;
+  const additionalProps = !isLink
+    ? { type: 'button' }
+    : { state: { backPath: location.pathname } };
+
+  return (
+    <Tag {...additionalProps} {...passThroughProps}>
+      {children}
+    </Tag>
+  );
+};
+
+ButtonOrLink.propTypes = {
+  children: t.node,
+};
+
+/**
  * Component for rendering a styled button or link.
  *
  * @param {string} [className]
@@ -19,8 +45,6 @@ import { useSelector } from 'react-redux';
  *  button.
  * @param {string} [iconEnd] The name of an icon to render at the end of the
  *  button.
- * @param {boolean} [link] If true, this component will render a Link instead
- *  of a button, but with button styles.
  * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
@@ -33,13 +57,14 @@ export const Button = ({
   underline,
   icon,
   iconEnd,
-  link,
   children,
   ...passThroughProps
 }) => {
   const styledClassName = clsx(
     // Common styles for all buttons
-    'inline-flex gap-1 justify-center items-center text-center border outline-0',
+    'border outline-0 transition',
+    variant !== 'custom' &&
+      'inline-flex gap-1 justify-center items-center text-center',
 
     // Primary
     variant === 'primary' && [
@@ -96,15 +121,8 @@ export const Button = ({
     className,
   );
 
-  const location = useLocation();
-
-  const Tag = !link ? 'button' : Link;
-  const additionalProps = !link
-    ? {}
-    : { state: { backPath: location.pathname } };
-
   return (
-    <Tag className={styledClassName} {...additionalProps} {...passThroughProps}>
+    <ButtonOrLink className={styledClassName} {...passThroughProps}>
       {icon && (
         <Icon
           name={icon}
@@ -120,7 +138,7 @@ export const Button = ({
           className="flex-none"
         />
       )}
-    </Tag>
+    </ButtonOrLink>
   );
 };
 
@@ -132,7 +150,6 @@ Button.propTypes = {
   underline: t.bool,
   icon: t.string,
   iconEnd: t.string,
-  link: t.bool,
   children: t.node,
 };
 
@@ -156,9 +173,10 @@ export const ChipButton = ({
   const mobile = useSelector(state => state.view.mobile);
   return (
     <button
+      type="button"
       className={clsx(
         // Common styles
-        'inline-flex gap-2 justify-center items-center text-center border outline-0 max-md:text-xs',
+        'inline-flex gap-2 justify-center items-center text-center border outline-0 transition max-md:text-xs',
         // Active
         active && [
           // Text
@@ -201,14 +219,12 @@ ChipButton.propTypes = {
 };
 
 /**
- * Component for rendering a tab style button.
+ * Component for rendering a tab style button or link.
  *
  * @param {string} [className]
  * @param {boolean} [active] Is the tab in an active state.
  * @param {string} [icon] Icon to render at the start of the tab.
  * @param {string} [iconEnd] Icon to render at the end of the tab.
- * @param {boolean} [link] If true, this component will render a Link instead
- *  of a button, but with tab button styles.
  * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
@@ -218,17 +234,16 @@ export const TabButton = ({
   active,
   icon,
   iconEnd,
-  link,
   children,
   ...passThroughProps
 }) => {
   const styledClassName = clsx(
     // Common styles
-    'inline-flex gap-2 justify-center items-center text-center border outline-0 max-md:text-sm',
+    'inline-flex gap-2 justify-center items-center text-center border outline-0 max-md:text-sm transition',
     // Active
     active && [
       // Text
-      'text-primary-200 font-medium',
+      'text-primary-100 font-medium',
       // Background
       'bg-primary-900 disabled:bg-gray-900',
       // Border
@@ -238,7 +253,7 @@ export const TabButton = ({
     // Not active
     !active && [
       // Text
-      'text-primary-900 font-medium',
+      'text-gray-900 font-medium',
       // Background
       'bg-transparent hover:bg-white focus-visible:bg-white disabled:bg-transparent',
       // Border
@@ -250,14 +265,12 @@ export const TabButton = ({
     className,
   );
 
-  const Tag = !link ? 'button' : Link;
-
   return (
-    <Tag className={styledClassName} {...passThroughProps}>
+    <ButtonOrLink className={styledClassName} {...passThroughProps}>
       {icon && <Icon name={icon} size={20} className="flex-none" />}
       {children}
       {iconEnd && <Icon name={iconEnd} size={20} className="flex-none" />}
-    </Tag>
+    </ButtonOrLink>
   );
 };
 
@@ -266,7 +279,6 @@ TabButton.propTypes = {
   active: t.bool,
   icon: t.string,
   iconEnd: t.string,
-  link: t.bool,
   children: t.node,
 };
 
@@ -287,9 +299,10 @@ export const CloseButton = ({
   ...passThroughProps
 }) => (
   <button
+    type="button"
     className={clsx(
       // Common styles
-      'inline-flex gap-1 justify-center items-center',
+      'inline-flex gap-1 justify-center items-center transition',
       // Text
       {
         'text-gray-900 hover:text-primary-900 focus-visible:text-primary-900 disabled:text-gray-900':
@@ -320,4 +333,243 @@ CloseButton.propTypes = {
   className: t.string,
   size: t.oneOf(['sm', 'md', 'lg']),
   inverse: t.bool,
+};
+
+/**
+ * Component for rendering a styled category button or link.
+ *
+ * @param {string} [className]
+ * @param {number} [index] The index of the button in a list, used to pick one
+ *  of several styles for the button.
+ * @param {string} [icon] The name of an icon to render in the button.
+ * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
+ * @param {Object} [passThroughProps] Any additional props will we passed
+ *  through to the component.
+ */
+export const CategoryButton = ({
+  className,
+  index = 0,
+  icon = 'category',
+  children,
+  ...passThroughProps
+}) => (
+  <ButtonOrLink
+    className={clsx(
+      className,
+      'group inline-flex flex-col items-center text-sm outline-0',
+    )}
+    {...passThroughProps}
+  >
+    <span
+      className={clsx(
+        'flex-none flex justify-center items-center transition',
+        'h-[4.75rem] w-[4.75rem] rounded-2.5xl rotate-45 m-4 p-0.5',
+        'bg-glassmorphism-border [--glassmorphism-angle:55deg] shadow-category',
+        'group-hover:bg-none group-hover:border group-hover:border-primary-500 group-hover:shadow-category-hover',
+        'group-focus-visible:bg-none group-focus-visible:border group-focus-visible:border-primary-500 group-focus-visible:shadow-category-hover',
+        {
+          'bg-primary-200': [0, 5].includes(index % 8),
+          'bg-secondary-400': [1, 4].includes(index % 8),
+          'bg-warning-200': [2, 7].includes(index % 8),
+          'bg-primary-300': [3, 6].includes(index % 8),
+        },
+      )}
+    >
+      <span
+        className={clsx(
+          'flex-none flex justify-center items-center',
+          'h-full w-full rounded-[1.125rem]',
+          {
+            'bg-primary-200': [0, 5].includes(index % 8),
+            'bg-secondary-400': [1, 4].includes(index % 8),
+            'bg-warning-200': [2, 7].includes(index % 8),
+            'bg-primary-300': [3, 6].includes(index % 8),
+          },
+        )}
+      >
+        <span
+          className={clsx(
+            'flex-none flex justify-center items-center',
+            'h-[3.25rem] w-[3.25rem] rounded-full -rotate-45 p-0.5 bg-glassmorphism-border [--glassmorphism-angle:135deg]',
+            {
+              'bg-gray-900': [0, 5].includes(index % 8),
+              'bg-primary-900': [1, 4].includes(index % 8),
+              'bg-warning-400': [2, 7].includes(index % 8),
+              'bg-primary-200': [3, 6].includes(index % 8),
+            },
+          )}
+        >
+          <span
+            className={clsx(
+              'flex-none flex justify-center items-center',
+              'h-full w-full rounded-full',
+              {
+                'bg-gray-900': [0, 5].includes(index % 8),
+                'bg-primary-900': [1, 4].includes(index % 8),
+                'bg-warning-400': [2, 7].includes(index % 8),
+                'bg-primary-200': [3, 6].includes(index % 8),
+              },
+            )}
+          >
+            <Icon
+              name={icon}
+              size={34}
+              className={clsx({
+                'text-gray-900': [3, 6].includes(index % 8),
+                'text-white': ![3, 6].includes(index % 8),
+              })}
+            />
+          </span>
+        </span>
+      </span>
+    </span>
+    <span>{children}</span>
+  </ButtonOrLink>
+);
+
+CategoryButton.propTypes = {
+  className: t.string,
+  index: t.number,
+  icon: t.string,
+  children: t.node,
+};
+
+/**
+ * Component for rendering a styled popular service button or link.
+ *
+ * @param {string} [className]
+ * @param {number} [index] The index of the button in a list, used to pick one
+ *  of several styles for the button.
+ * @param {string} [icon] The name of an icon to render in the button.
+ * @param {string} [category] The name of the category the service is in.
+ * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
+ * @param {Object} [passThroughProps] Any additional props will we passed
+ *  through to the component.
+ */
+export const PopularServiceButton = ({
+  className,
+  index = 0,
+  icon = 'forms',
+  category,
+  children,
+  ...passThroughProps
+}) => {
+  const mobile = useSelector(state => state.view.mobile);
+  return mobile ? (
+    <ButtonOrLink
+      className={clsx(
+        className,
+        'group inline-flex flex-col items-center gap-1 text-xs outline-0 transition',
+      )}
+      {...passThroughProps}
+    >
+      <span
+        className={clsx(
+          'flex-none flex justify-center items-center transition',
+          'h-[4.25rem] w-[4.25rem] rounded-full p-0.5',
+          'bg-gray-500 bg-glassmorphism-border [--glassmorphism-angle:135deg] shadow-icon',
+          'group-hover:p-0 group-hover:border group-hover:border-primary-500',
+          'group-focus-visible:p-0 group-focus-visible:border group-focus-visible:border-primary-500',
+        )}
+      >
+        <span
+          className={clsx(
+            'flex-none flex justify-center items-center',
+            'h-full w-full rounded-full',
+            'bg-gray-500 bg-glassmorphism-linear',
+          )}
+        >
+          <Icon name={icon} size={34} className={clsx('text-primary-200')} />
+        </span>
+      </span>
+      <span className="text-center line-clamp-2">{children}</span>
+      {category && (
+        <span className="px-2 py-0.5 rounded-lg bg-secondary-100 text-gray-900 text-center line-clamp-1 mt-auto">
+          {category}
+        </span>
+      )}
+    </ButtonOrLink>
+  ) : (
+    <ButtonOrLink
+      className={clsx(
+        className,
+        'group inline-flex items-stretch outline-0 transition rounded-2xl p-0.5 min-h-[10.75rem]',
+        'bg-glassmorphism-border [--glassmorphism-angle:155deg] shadow-card',
+        {
+          'bg-secondary-400': index % 4 === 0,
+          'bg-gray-500': index % 4 === 1,
+          'bg-primary-900': index % 4 === 2,
+          'bg-primary-400': index % 4 === 3,
+        },
+        {
+          'text-primary-900': [0, 3].includes(index % 4),
+          'text-white': [1, 2].includes(index % 4),
+        },
+        'hover:scale-[1.02]',
+        'focus:scale-[1.02]',
+      )}
+      {...passThroughProps}
+    >
+      <div
+        className={clsx(
+          'flex-auto max-w-full flex flex-col gap-1 rounded-[0.875rem] px-5.5 py-4',
+          'bg-glassmorphism-circular',
+          {
+            'bg-secondary-400': index % 4 === 0,
+            'bg-gray-500': index % 4 === 1,
+            'bg-primary-900': index % 4 === 2,
+            'bg-primary-400': index % 4 === 3,
+          },
+        )}
+      >
+        <div className="flex items-start gap-8">
+          {category && (
+            <span
+              className={clsx(
+                'px-3 py-1.75 text-h3 font-medium rounded-full border line-clamp-1',
+                {
+                  'border-primary-900': [0, 3].includes(index % 4),
+                  'border-white': [1, 2].includes(index % 4),
+                },
+              )}
+            >
+              {category}
+            </span>
+          )}
+          <span
+            className={clsx(
+              'flex-none flex justify-center items-center transition',
+              'h-[4.25rem] w-[4.25rem] rounded-full p-0.5 ms-auto',
+              'bg-gray-500 bg-glassmorphism-border [--glassmorphism-angle:135deg] shadow-icon',
+            )}
+          >
+            <span
+              className={clsx(
+                'flex-none flex justify-center items-center',
+                'h-full w-full rounded-full',
+                'bg-gray-500 bg-glassmorphism-linear',
+              )}
+            >
+              <Icon
+                name={icon}
+                size={34}
+                className={clsx('text-primary-200')}
+              />
+            </span>
+          </span>
+        </div>
+        <div className="text-left text-h2 font-medium line-clamp-2">
+          {children}
+        </div>
+      </div>
+    </ButtonOrLink>
+  );
+};
+
+PopularServiceButton.propTypes = {
+  className: t.string,
+  index: t.number,
+  icon: t.string,
+  category: t.string,
+  children: t.node,
 };

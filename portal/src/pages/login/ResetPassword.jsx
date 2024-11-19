@@ -13,7 +13,6 @@ export const ResetPassword = () => {
     <>
       <LoginHeader>
         <Button
-          link
           variant="tertiary"
           inverse
           icon="arrow-left"

@@ -11,7 +11,6 @@ export const RequestDetail = () => {
         <div className="flex justify-between items-center gap-3">
           <div className="flex items-center gap-3">
             <Button
-              link
               variant="tertiary"
               icon="arrow-left"
               to=".."
@@ -21,7 +20,7 @@ export const RequestDetail = () => {
             <span>Status</span>
           </div>
           {!mobile && (
-            <Button link variant="tertiary" icon="file-check" to="review">
+            <Button variant="tertiary" icon="file-check" to="review">
               View Request
             </Button>
           )}
@@ -34,7 +33,7 @@ export const RequestDetail = () => {
 
       {mobile && (
         <div className="flex justify-center py-6 mt-auto">
-          <Button link variant="secondary" icon="file-check" to="review">
+          <Button variant="secondary" icon="file-check" to="review">
             View Request
           </Button>
         </div>

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { TicketsTabs } from '../../../components/tickets/TicketsTabs.jsx';
 import {
   EmptyCard,
-  MobileTicketCard,
   TicketCard,
 } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
@@ -21,8 +20,6 @@ export const RequestsList = ({
 
   const { initialized, error, loading, data, pageNumber } = listData;
   const { nextPage, previousPage } = listActions;
-
-  const CardComponent = mobile ? MobileTicketCard : TicketCard;
 
   return (
     <>
@@ -63,7 +60,7 @@ export const RequestsList = ({
               )}
               {!loading &&
                 data.map(submission => (
-                  <CardComponent key={submission.id} submission={submission} />
+                  <TicketCard key={submission.id} submission={submission} />
                 ))}
               {!loading && data.length === 0 && (
                 <EmptyCard>There are no requests to show.</EmptyCard>

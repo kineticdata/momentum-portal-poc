@@ -35,7 +35,7 @@ export const ActionForm = ({ listActions: { reload } }) => {
   const { submissionId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const backPath = location.state?.backPath;
+  const backTo = location.state?.backPath || '/actions';
 
   // Fetch the action submission
   const [actionData] = useDataItem(
@@ -53,14 +53,18 @@ export const ActionForm = ({ listActions: { reload } }) => {
 
   // Generate the layout for the form
   const Layout = useMemo(
-    () => generateFormLayout({ headingComponent: ViewParentButton }),
-    [ViewParentButton],
+    () =>
+      generateFormLayout({
+        headingComponent: ViewParentButton,
+        backTo,
+      }),
+    [ViewParentButton, backTo],
   );
 
   const handleCompleted = useCallback(() => {
-    navigate(backPath || '/actions');
+    navigate(backTo);
     reload();
-  }, [navigate, backPath, reload]);
+  }, [navigate, backTo, reload]);
 
   return actionData.data ? (
     <KineticForm

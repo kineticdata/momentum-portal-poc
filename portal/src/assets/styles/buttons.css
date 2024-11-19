@@ -45,3 +45,34 @@
     }
   }
 }
+
+@layer utilities {
+  .bg-glassmorphism-border {
+    --glassmorphism-angle: 100deg;
+    background-image: linear-gradient(
+      var(--glassmorphism-angle),
+      white 0%,
+      transparent 54%,
+      rgba(255, 255, 255, 77%) 100%
+    );
+    background-blend-mode: overlay;
+  }
+  .bg-glassmorphism-linear {
+    --glassmorphism-angle: 122deg;
+    background-image: linear-gradient(
+      var(--glassmorphism-angle),
+      rgba(255, 255, 255, 50%) 12%,
+      transparent 61%
+    );
+    background-blend-mode: overlay;
+  }
+  .bg-glassmorphism-circular {
+    background-image: radial-gradient(
+      164% 148% at -5% 9%,
+      rgba(0, 0, 0, 10%) 18%,
+      rgba(255, 255, 255, 15%) 62%,
+      rgba(0, 0, 0, 20%) 96%
+    );
+    background-blend-mode: overlay;
+  }
+}

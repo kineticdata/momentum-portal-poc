@@ -1,9 +1,10 @@
 import t from 'prop-types';
+import clsx from 'clsx';
 import { ark } from '@ark-ui/react/factory';
 import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
 import { getChildSlots } from '../helpers/atoms.js';
-import { Icon } from './Icon.jsx';
+import { CloseButton } from './Button.js';
 
 /**
  * A modal.
@@ -19,7 +20,10 @@ import { Icon } from './Icon.jsx';
  *  a callback that is triggered whenever the open state changes.
  *  The function is passed one parameter, which is an object with an `open`
  *  property defining what the new state of the component is or should be.
+ * @param {Function} [props.onExitComplete] Function to call after the modal
+ *  finishes closing.
  * @param {string} props.title The title text for the modal.
+ * @param {('sm'|'md'|'lg'|'xl')} [size=sm] The size of the modal
  * @param {boolean} [props.closeOnEscape=true] Should the modal close when the
  *  escape key is pressed.
  * @param {boolean} [props.closeOnInteractOutside=true] Should the modal close
@@ -27,6 +31,7 @@ import { Icon } from './Icon.jsx';
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
  *  available slots in the modal. Available slots are:
  *  - trigger: Component that toggles the modal open state when interacted with.
+ *  - title: Component to render in the header instead of the title.
  *  - description: Inner content of the modal that is syntactically a
  *      descriptor of the modal content.
  *  - body: Main content of the modal if the description isn't enough.
@@ -35,7 +40,9 @@ import { Icon } from './Icon.jsx';
 export const Modal = ({
   open,
   onOpenChange,
+  onExitComplete,
   title,
+  size,
   closeOnEscape,
   closeOnInteractOutside,
   children,
@@ -43,29 +50,47 @@ export const Modal = ({
   const slots = getChildSlots(children, {
     componentName: 'Modal',
     requiredSlots: [],
-    optionalSlots: ['trigger', 'description', 'body', 'footer'],
+    optionalSlots: ['trigger', 'title', 'description', 'body', 'footer'],
   });
 
   return (
     <Dialog.Root
       open={open}
       onOpenChange={onOpenChange}
+      onExitComplete={onExitComplete}
       closeOnEscape={closeOnEscape}
       closeOnInteractOutside={closeOnInteractOutside}
+      lazyMount
+      unmountOnExit
     >
       {slots.trigger && (
-        <Dialog.Trigger asChild className="btn">
-          {slots.trigger}
-        </Dialog.Trigger>
+        <Dialog.Trigger asChild>{slots.trigger}</Dialog.Trigger>
       )}
       <Portal>
         <Dialog.Backdrop className="fixed inset-0 bg-black bg-opacity-20" />
-        <Dialog.Positioner className="fixed inset-0 flex justify-center items-center">
-          <Dialog.Content className="p-6 bg-white rounded shadow-lg">
-            <div className="flex justify-between gap-2 mb-6">
-              <Dialog.Title>{title}</Dialog.Title>
-              <Dialog.CloseTrigger>
-                <Icon name="x" />
+        <Dialog.Positioner className="fixed inset-0 flex flex-col justify-around items-center">
+          <Dialog.Content
+            className={clsx(
+              // Common styles
+              'data-[state=open]:flex flex-col items-stretch gap-6 p-6 bg-white',
+              // Mobile first styles
+              'max-md:w-screen max-md:h-screen',
+              // Non mobile styles
+              'md:max-w-[calc(100vw-3rem)] md:max-h-[calc(100vh-3rem)] md:rounded md:shadow-lg',
+              {
+                'md:w-screen-sm': size === 'sm',
+                'md:w-screen-md': size === 'md',
+                'md:w-screen-lg': size === 'lg',
+                'md:w-screen': size === 'xl',
+              },
+            )}
+          >
+            <div className="flex justify-between gap-2">
+              <Dialog.Title className="flex-auto" asChild={!!slots.title}>
+                {slots.title || title}
+              </Dialog.Title>
+              <Dialog.CloseTrigger asChild>
+                <CloseButton />
               </Dialog.CloseTrigger>
             </div>
             {slots.description && (
@@ -73,16 +98,23 @@ export const Modal = ({
                 {slots.description}
               </Dialog.Description>
             )}
-            {slots.body && <ark.div asChild>{slots.body}</ark.div>}
+            {slots.body && (
+              <ark.div asChild className="overflow-auto scrollbar-white">
+                {slots.body}
+              </ark.div>
+            )}
             {slots.footer && (
               <ark.div
                 asChild
-                className="flex justify-start flex-row-reverse gap-2 mt-6"
+                className="flex justify-start flex-row-reverse gap-2"
               >
                 {slots.footer}
               </ark.div>
             )}
           </Dialog.Content>
+
+          {/* This div is used to position the modal higher up on the screen */}
+          <div className="-mt-6" />
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>
@@ -92,8 +124,10 @@ export const Modal = ({
 Modal.propTypes = {
   open: t.bool,
   onOpenChange: t.func,
+  onExitComplete: t.func,
   closeOnEscape: t.bool,
   closeOnInteractOutside: t.bool,
   title: t.string.isRequired,
+  size: t.string,
   children: t.node,
 };

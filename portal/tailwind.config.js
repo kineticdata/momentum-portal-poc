@@ -28,6 +28,7 @@ export default {
       },
       warning: {
         200: 'hsl(var(--warning-200))',
+        400: 'hsl(var(--warning-400))',
         500: 'hsl(var(--warning-500))',
       },
       success: {
@@ -43,8 +44,15 @@ export default {
       },
       boxShadow: {
         card: '-2px 8px 17px 4px rgba(123, 119, 119, 0.15)',
+        'card-hover': '-2px 4px 8px 3px rgba(123, 119, 119, 0.15)',
         footer: '0px -5px 30px 0px rgba(54, 41, 183, 0.07)',
         icon: '0px 3.5px 21px 0px rgba(0, 0, 0, 0.05)',
+        category: '4px 4px 22px 0 rgba(0, 0, 0, 0.13)',
+        'category-hover': '25px 25px 11px -15px rgba(0, 0, 0, 0.13)',
+      },
+      dropShadow: {
+        card: '-2px 13px 19px rgba(53, 51, 51, 0.14)',
+        'card-hover': '-2px 6px 9px rgba(53, 51, 51, 0.14)',
       },
       fontFamily: {
         sans: ['"Mona Sans Expanded"'],
@@ -70,6 +78,12 @@ export default {
         5.5: '1.375rem',
         6.5: '1.525rem',
         7.5: '1.875rem',
+      },
+      width: {
+        'screen-sm': '640px',
+        'screen-md': '768px',
+        'screen-lg': '1024px',
+        'screen-xl': '1280px',
       },
     },
   },

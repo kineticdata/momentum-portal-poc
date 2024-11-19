@@ -77,7 +77,7 @@ export const LoginForm = loginProps => {
           </Button>
         </>
       )}
-      <Button link variant="tertiary" underline to="/reset-password">
+      <Button variant="tertiary" underline to="/reset-password">
         Forgot your password?
       </Button>
     </form>
