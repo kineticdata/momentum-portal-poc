@@ -42,6 +42,26 @@
       @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
       @apply disabled:text-gray-900 disabled:bg-gray-100;
     }
+
+    &.has-error {
+      label {
+        @apply text-warning-500;
+      }
+
+      input {
+        @apply hover:bg-transparent;
+        @apply border-4 border-warning-200;
+        @apply hover:bg-white;
+        @apply focus-visible:bg-white focus-visible:ring-transparent;
+      }
+
+      p{
+        @apply text-warning-500 text-sm;
+      }
+      span{
+        @apply text-sm;
+      }
+    }
   }
 
   .embedded-core-form form {

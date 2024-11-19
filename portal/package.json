@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@ark-ui/react": "^4.1.2",
-    "@kineticdata/react": "6.0.5",
+    "@kineticdata/react": "^6.0.5",
     "@reduxjs/toolkit": "^2.3.0",
     "@tabler/icons-react": "^3.19.0",
     "@toast-ui/react-editor": "^3.2.3",

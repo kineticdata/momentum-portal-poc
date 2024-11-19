@@ -503,7 +503,7 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@kineticdata/react@6.0.5":
+"@kineticdata/react@^6.0.5":
   version "6.0.5"
   resolved "https://registry.yarnpkg.com/@kineticdata/react/-/react-6.0.5.tgz#3ebbd144a5f6645dedf8ddc628222b8c87cc81ee"
   integrity sha512-JEYKgHXo7yhicGY2tzG42mUE7S5Yok3ARDR3Ec76Pg9+WHL8QIOTiIGrM6RU+ZcWF8LrxcHMjVzLMe3g1i14tg==
