@@ -115,7 +115,7 @@ export const Profile = () => {
       </div>
       <form className="self-center flex flex-col gap-5 items-stretch w-full max-w-lg">
         <div className="flex justify-center items-center mb-5 mt-8">
-          <Avatar username={profile.displayName} size="lg" />
+          <Avatar username={profile.displayName} size="xxl" />
         </div>
         <div
           className={clsx('field', { 'has-error': validationErrors.newEmail })}
@@ -184,7 +184,7 @@ export const Profile = () => {
               <Button
                 type="button"
                 variant="tertiary"
-                className="font-semibold text-sm pl-0 py-0 !justify-start"
+                className="font-semibold text-sm pl-0 !py-1 !justify-start !bg-transparent"
                 onClick={() => setShowChangedPassword(false)}
               >
                 Cancel
@@ -196,7 +196,7 @@ export const Profile = () => {
           <Button
             type="button"
             variant="tertiary"
-            className="font-semibold text-sm text-left mt-4 pl-0 !justify-start"
+            className="font-semibold text-sm text-left pl-0 !justify-start !bg-transparent"
             onClick={() => setShowChangedPassword(true)}
           >
             Change password
