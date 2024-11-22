@@ -4,6 +4,7 @@ import { TicketsSection } from '../../components/home/TicketsSection.jsx';
 import { ShortcutsSection } from '../../components/home/ShortcutsSection.jsx';
 import { WelcomeSection } from '../../components/home/WelcomeSection.jsx';
 import { PopularServicesSection } from '../../components/home/PopularServicesSection.jsx';
+import { NewsSection } from '../../components/home/NewsSection.jsx';
 
 export const Home = () => {
   const { mobile, tablet, desktop } = useSelector(state => state.view);
@@ -16,7 +17,8 @@ export const Home = () => {
             <WelcomeSection />
             <TicketsSection />
           </div>
-          <div className="flex-1 xl:basis-[60%] flex flex-col gap-6">
+          <div className="flex-1 xl:basis-[60%] min-w-0 flex flex-col gap-6">
+            <NewsSection />
             <PopularServicesSection />
             <ShortcutsSection />
           </div>
@@ -26,6 +28,7 @@ export const Home = () => {
         <div className="flex flex-col items-stretch gap-10">
           <WelcomeSection />
           <PopularServicesSection />
+          <NewsSection />
           <TicketsSection />
           <ShortcutsSection />
         </div>

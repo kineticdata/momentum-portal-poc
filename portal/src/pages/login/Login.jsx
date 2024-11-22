@@ -1,5 +1,6 @@
 import logo from '../../assets/images/logo-light.svg';
 import { Button } from '../../atoms/Button.jsx';
+import { useSelector } from 'react-redux';
 
 export const Login = loginProps => (
   <>
@@ -8,12 +9,20 @@ export const Login = loginProps => (
   </>
 );
 
-export const LoginHeader = ({ children }) => (
-  <div className="stretch flex flex-col justify-center gap-8 pt-4 pb-14 mb-16 rounded-b-[3.75rem] bg-primary-900">
-    <div className="h-11 w-full">{children}</div>
-    <img src={logo} alt="Logo" className="h-12" />
-  </div>
-);
+export const LoginHeader = ({ children }) => {
+  const themeLogo = useSelector(state => state.theme.inverseLogo);
+
+  return (
+    <div className="stretch flex flex-col justify-center items-center gap-8 pt-4 pb-14 mb-16 rounded-b-[3.75rem] bg-primary-900">
+      <div className="h-11 w-full">{children}</div>
+      <img
+        src={themeLogo || logo}
+        alt="Logo"
+        className="h-12 max-w-80 object-contain"
+      />
+    </div>
+  );
+};
 
 export const LoginForm = loginProps => {
   const {

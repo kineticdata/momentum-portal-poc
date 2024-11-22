@@ -37,7 +37,7 @@ ButtonOrLink.propTypes = {
  * @param {string} [className]
  * @param {('primary'|'secondary'|'tertiary'|'custom')} [variant=primary]
  *  The styled look of the button.
- * @param {('sm'|'md'|'lg')} [size=lg] The size of the button.
+ * @param {('sm'|'md'|'lg'|'custom')} [size=lg] The size of the button.
  * @param {boolean} [inverse] If true, the button will invert the colors to
  *  work on a reverse color background. Only available for tertiary variant.
  * @param {boolean} [underline] If true, the button's text will be underlined
@@ -113,7 +113,7 @@ export const Button = forwardRef(
       },
 
       // Sizing and radius
-      {
+      size !== 'custom' && {
         'px-4 rounded-2.5xl': !!children,
         'rounded-full': !children,
         'py-1.25': size === 'sm',
@@ -151,7 +151,7 @@ export const Button = forwardRef(
 Button.propTypes = {
   className: t.string,
   variant: t.oneOf(['primary', 'secondary', 'tertiary', 'custom']),
-  size: t.oneOf(['sm', 'md', 'lg']),
+  size: t.oneOf(['sm', 'md', 'lg', 'custom']),
   inverse: t.bool,
   underline: t.bool,
   icon: t.string,

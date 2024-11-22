@@ -4,6 +4,9 @@
 export const themeState = {
   // A string of css variable overrides to alter the theme
   css: null,
+  // URLs to logo images
+  logo: null,
+  inverseLogo: null,
   // The parsed Theme space attribute value
   parsed: {},
 };
@@ -22,6 +25,10 @@ export const calculateThemeState = (state, themeConfig) => {
     // Parse the provided attribute value
     const config = JSON.parse(themeConfig);
     state.parsed = config;
+
+    // Set logos into state
+    state.logo = config?.logo?.standard;
+    state.inverseLogo = config?.logo?.inverse;
 
     // Create an array to store any css variable overrides
     const cssVars = [];
@@ -47,6 +54,17 @@ export const calculateThemeState = (state, themeConfig) => {
       cssVars.push(`--secondary-100: ${h} ${s} 91%;`);
       cssVars.push(`--secondary-400: ${h} ${s} 75%;`);
       cssVars.push(`--secondary-500: ${h} ${s} 32%;`);
+    }
+
+    // If a gray color is set in the theme attribute
+    if (isHexColor(config?.colors?.gray)) {
+      // Convert the hex color into HSL so we can use the hue and saturation to
+      // create multiple variations of this color
+      const [h, s] = hexColorToHsl(config.colors.gray);
+      cssVars.push(`--gray-100: ${h} ${s} 97.65%;`);
+      cssVars.push(`--gray-200: ${h} ${s} 91%;`);
+      cssVars.push(`--gray-500: ${h} ${s} 53%;`);
+      cssVars.push(`--gray-900: ${h} ${s} 42%;`);
     }
 
     // Concatenate all of the css variable overrides into a single string that

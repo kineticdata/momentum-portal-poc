@@ -49,12 +49,29 @@ export const timeAgo = date =>
   formatDistance(date, new Date(), { addSuffix: true });
 
 /**
- * validates email address using regex.
+ * Validates email address using regex.
  */
-export const validateEmail = (email) => {
+export const validateEmail = email => {
   return String(email)
     .toLowerCase()
     .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     );
+};
+
+/**
+ * Creates a comparison function for sorting by a value of an object, with the
+ * value accessed by key or using the provided function.
+ *
+ * @param {string|Function} key Property name of objects to be sorted that you
+ *  want to sort by, or a function that takes the object to be sorted and
+ *  returns a value to sort on.
+ */
+export const sortBy = key => (a, b) => {
+  if (typeof key === 'function') {
+    const va = key(a);
+    const vb = key(b);
+    return va < vb ? -1 : va > vb ? 1 : 0;
+  }
+  return a?.[key] < b?.[key] ? -1 : a?.[key] > b?.[key] ? 1 : 0;
 };

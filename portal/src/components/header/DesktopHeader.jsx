@@ -7,15 +7,21 @@ import { HeaderPortal } from './HeaderPortal.jsx';
 import { ServicesPanel } from '../services/ServicesPanel.jsx';
 import { SearchModal } from '../search/SearchModal.jsx';
 
-export const DesktopHeader = props => {
+export const DesktopHeader = () => {
   const matchesHome = useMatch('/');
   const username = useSelector(state => state.app.profile?.username);
+
+  const themeLogo = useSelector(state => state.theme.logo);
 
   return (
     <HeaderPortal>
       <nav className="stretch py-3 flex items-center gap-5 lg:gap-10 bg-white">
         <Link to="/" className="flex-none" aria-label="Home">
-          <img src={logo} alt="Logo" className="h-12" />
+          <img
+            src={themeLogo || logo}
+            alt="Logo"
+            className="h-12 max-w-80 object-contain"
+          />
         </Link>
         <Button variant="tertiary" to="requests">
           Tickets
