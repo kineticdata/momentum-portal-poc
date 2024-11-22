@@ -25,43 +25,27 @@ export const Profile = () => {
   });
 
   const validateForm = () => {
-    let isValid = true;
+    // Validate the fields
+    const newValidationErrors = produce(validationErrors, o => {
+      o.newEmail =
+        newEmail.length <= 0
+          ? 'Email is required'
+          : !validateEmail(newEmail)
+            ? 'Invalid email format'
+            : '';
+      o.newDisplayName =
+        newDisplayName.length <= 0 ? 'Display Name is required.' : '';
+      o.newPassword =
+        showChangedPassword && newPassword.length <= 0
+          ? 'Password is required.'
+          : '';
+    });
 
-    if (newEmail.length <= 0) {
-      isValid = false;
-      setValidationErrors(prevErrors =>
-        produce(prevErrors, o => {
-          o.newEmail = 'Email is required';
-        }),
-      );
-    } else if (!validateEmail(newEmail)) {
-      isValid = false;
-      setValidationErrors(prevErrors =>
-        produce(prevErrors, o => {
-          o.newEmail = 'Invalid email format';
-        }),
-      );
-    }
+    // Update the validations state
+    setValidationErrors(newValidationErrors);
 
-    if (newDisplayName.length <= 0) {
-      isValid = false;
-      setValidationErrors(prevErrors =>
-        produce(prevErrors, o => {
-          o.newDisplayName = 'Display Name is required.';
-        }),
-      );
-    }
-
-    if (showChangedPassword && newPassword.length <= 0) {
-      isValid = false;
-      setValidationErrors(prevErrors =>
-        produce(prevErrors, o => {
-          o.newPassword = 'Password is required.';
-        }),
-      );
-    }
-
-    return isValid;
+    // Return true if none of the fields have errors
+    return Object.values(newValidationErrors).every(o => !o);
   };
 
   const saveProfile = useCallback(
@@ -178,20 +162,20 @@ export const Profile = () => {
                 className="absolute w-5 h-5 top-3 right-2.5 mr-3 flex items-center justify-center"
                 onClick={() => setShowPassword(prev => !prev)}
               />
-              {validationErrors.newPassword && (
-                <span className="text-warning-500 mr-4">
-                  {validationErrors.newPassword}
-                </span>
-              )}
-              <Button
-                type="button"
-                variant="tertiary"
-                className="font-semibold text-sm pl-0 !py-1 !justify-start !bg-transparent"
-                onClick={() => setShowChangedPassword(false)}
-              >
-                Cancel
-              </Button>
             </div>
+            {validationErrors.newPassword && (
+              <span className="text-warning-500 mr-4">
+                {validationErrors.newPassword}
+              </span>
+            )}
+            <Button
+              type="button"
+              variant="tertiary"
+              className="block font-semibold text-sm pl-0 !py-1 !justify-start !bg-transparent"
+              onClick={() => setShowChangedPassword(false)}
+            >
+              Cancel
+            </Button>
           </div>
         )}
         {showChangedPassword === false && (
@@ -205,7 +189,16 @@ export const Profile = () => {
           </Button>
         )}
 
-        <Button type="submit" onClick={saveProfile} className="mt-7">
+        <Button
+          type="submit"
+          onClick={saveProfile}
+          className="mt-7"
+          disabled={
+            profile.email === newEmail &&
+            profile.displayName === newDisplayName &&
+            !showChangedPassword
+          }
+        >
           Save
         </Button>
         <div className="flex items-center justify-center">

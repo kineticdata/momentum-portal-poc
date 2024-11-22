@@ -38,7 +38,7 @@ export const SearchModal = ({ children }) => {
       ? [
           {
             kappSlug,
-            q: `type = "Service" AND name =* "${query}"`,
+            q: `type = "Service" AND name *=* "${query}"`,
             limit: 10,
           },
         ]
@@ -71,10 +71,7 @@ export const SearchModal = ({ children }) => {
           onChange={handleInputChange}
         />
       </div>
-      <div
-        slot="body"
-        className="flex flex-col items-stretch gap-3 shadow-none"
-      >
+      <div slot="body" className="flex flex-col items-stretch gap-3">
         {searchResults.initialized &&
           (searchResults.loading ? (
             <Loading />
@@ -82,17 +79,21 @@ export const SearchModal = ({ children }) => {
             <Error error={searchResults.error} />
           ) : searchResults.data?.length > 0 ? (
             searchResults.data.map(form => (
-              <ServiceCard key={form.slug} form={form} />
+              <ServiceCard
+                key={form.slug}
+                form={form}
+                className="!shadow-none !border-gray-200"
+                onClick={() => setOpen(false)}
+              />
             ))
           ) : inputValue.length > 0 ? (
             <p className="text-gray-900 text-center italic">
               No results found.
             </p>
           ) : null)}
-      </div>
-      <div slot="footer" className="flex flex-col items-stretch">
-        {searchResults.data?.length > 0 && (
-          <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-white rounded-xl shadow-card min-h-16">
+
+        {(searchActions.previousPage || searchActions.nextPage) && (
+          <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-white rounded-xl min-h-16">
             <Button
               variant="secondary"
               onClick={searchActions.previousPage}

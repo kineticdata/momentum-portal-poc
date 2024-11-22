@@ -8,10 +8,11 @@ import { Icon } from '../../atoms/Icon.jsx';
  * Renders a card representing a Kientic service form, with a link to the form.
  *
  * @param {Object} form Kinetic form record.
+ * @param {string} className
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the Link component.
  */
-export const ServiceCard = ({ form, ...passThroughProps }) => {
+export const ServiceCard = ({ form, className, ...passThroughProps }) => {
   const location = useLocation();
   const icon = getAttributeValue(form, 'Icon', 'forms');
 
@@ -22,6 +23,7 @@ export const ServiceCard = ({ form, ...passThroughProps }) => {
         'bg-white shadow-card border border-transparent transition',
         'hover:border-primary-500 hover:bg-gray-100 hover:shadow-card-hover',
         'focus-within:border-primary-500 focus-within:bg-gray-100 focus-within:shadow-card-hover',
+        className,
       )}
     >
       <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
@@ -44,4 +46,4 @@ export const ServiceCard = ({ form, ...passThroughProps }) => {
   );
 };
 
-ServiceCard.propTypes = { form: t.object };
+ServiceCard.propTypes = { form: t.object, className: t.string };

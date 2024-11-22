@@ -49,16 +49,13 @@
       }
 
       input {
-        @apply hover:bg-transparent;
-        @apply border-4 border-warning-200;
-        @apply hover:bg-white;
-        @apply focus-visible:bg-white focus-visible:ring-transparent;
+        @apply ring ring-warning-200;
       }
 
-      p{
+      p {
         @apply text-warning-500 text-sm;
       }
-      span{
+      span {
         @apply text-sm;
       }
     }
