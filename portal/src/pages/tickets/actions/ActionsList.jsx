@@ -8,7 +8,7 @@ import {
 } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
-import { Button } from '../../../atoms/Button.js';
+import { Button } from '../../../atoms/Button.jsx';
 
 export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
   const mobile = useSelector(state => state.view.mobile);

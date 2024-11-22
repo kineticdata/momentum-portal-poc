@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CoreForm } from '@kineticdata/react';
 import { valuesFromQueryParams } from '../../helpers/index.js';
+import { toastSuccess } from '../../helpers/toasts.js';
 import { Loading as Pending } from '../states/Loading.jsx';
 
 export const KineticForm = ({
@@ -24,11 +25,21 @@ export const KineticForm = ({
         response.submission.coreState !== 'Submitted' ||
         response.submission?.displayedPage?.type === 'confirmation'
       ) {
-        navigate(response.submission.id);
+        navigate(response.submission.id, { state: { persistToasts: true } });
+      }
+
+      if (response.submission.coreState === 'Draft') {
+        toastSuccess({ title: 'Saved successfully.' });
       }
     },
     [navigate],
   );
+
+  const handleUpdated = useCallback(response => {
+    if (response.submission.coreState === 'Draft') {
+      toastSuccess({ title: 'Saved successfully.' });
+    }
+  }, []);
 
   return (
     <CoreForm
@@ -38,6 +49,7 @@ export const KineticForm = ({
       values={values || paramFieldValues}
       components={{ Pending, ...components }}
       created={handleCreated}
+      updated={handleUpdated}
       {...props}
     />
   );

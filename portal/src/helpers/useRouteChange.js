@@ -9,14 +9,14 @@ import { useCallback, useEffect } from 'react';
  * @param {*[]} [dependencies] - Dependency array for the `callback` function
  */
 const useRouteChange = (callback, dependencies = []) => {
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fn = useCallback(callback, dependencies);
 
   useEffect(() => {
-    fn(pathname);
-  }, [pathname, fn]);
+    fn(pathname, state);
+  }, [pathname, state, fn]);
 };
 
 export default useRouteChange;

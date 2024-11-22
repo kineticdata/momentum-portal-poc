@@ -3,7 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { createSubmission, getCsrfToken } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
 import { LoginHeader } from './Login.jsx';
-import { Button } from '../../atoms/Button.js';
+import { Button } from '../../atoms/Button.jsx';
 
 export const ResetPassword = () => {
   let { token } = useParams();

@@ -7,7 +7,7 @@ import {
 } from '../../../components/tickets/TicketCard.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
-import { Button } from '../../../atoms/Button.js';
+import { Button } from '../../../atoms/Button.jsx';
 import { TicketFilters } from '../../../components/tickets/TicketFilters.jsx';
 
 export const RequestsList = ({

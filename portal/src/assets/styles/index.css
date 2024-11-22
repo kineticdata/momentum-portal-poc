@@ -3,6 +3,7 @@
 @import 'colors.css';
 @import 'layout.css';
 @import 'panels.css';
+@import 'toasts.css';
 
 @import 'tailwindcss/components';
 @import 'buttons.css';

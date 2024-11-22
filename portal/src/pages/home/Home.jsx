@@ -6,23 +6,23 @@ import { WelcomeSection } from '../../components/home/WelcomeSection.jsx';
 import { PopularServicesSection } from '../../components/home/PopularServicesSection.jsx';
 
 export const Home = () => {
-  const mobile = useSelector(state => state.view.mobile);
+  const { mobile, tablet, desktop } = useSelector(state => state.view);
 
   return (
-    <div className={clsx('py-6 md:flex md:gap-14')}>
-      {!mobile && (
+    <div className={clsx('py-6 xl:flex xl:gap-14')}>
+      {desktop && (
         <>
-          <div className="flex-none basis-[36%] min-w-0 flex flex-col gap-6">
+          <div className="flex-1 xl:basis-[36%] min-w-0 flex flex-col gap-6">
             <WelcomeSection />
             <TicketsSection />
           </div>
-          <div className="flex-1 basis-[60%] flex flex-col gap-6">
+          <div className="flex-1 xl:basis-[60%] flex flex-col gap-6">
             <PopularServicesSection />
             <ShortcutsSection />
           </div>
         </>
       )}
-      {mobile && (
+      {(mobile || tablet) && (
         <div className="flex flex-col items-stretch gap-10">
           <WelcomeSection />
           <PopularServicesSection />

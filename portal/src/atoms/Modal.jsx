@@ -4,7 +4,7 @@ import { ark } from '@ark-ui/react/factory';
 import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
 import { getChildSlots } from '../helpers/atoms.js';
-import { CloseButton } from './Button.js';
+import { CloseButton } from './Button.jsx';
 
 /**
  * A modal.
@@ -42,7 +42,7 @@ export const Modal = ({
   onOpenChange,
   onExitComplete,
   title,
-  size,
+  size = 'sm',
   closeOnEscape,
   closeOnInteractOutside,
   children,
@@ -72,20 +72,20 @@ export const Modal = ({
           <Dialog.Content
             className={clsx(
               // Common styles
-              'data-[state=open]:flex flex-col items-stretch gap-6 p-6 bg-white',
+              'data-[state=open]:flex flex-col items-stretch py-3 bg-white',
               // Mobile first styles
               'max-md:w-screen max-md:h-screen',
               // Non mobile styles
               'md:max-w-[calc(100vw-3rem)] md:max-h-[calc(100vh-3rem)] md:rounded md:shadow-lg',
               {
-                'md:w-screen-sm': size === 'sm',
-                'md:w-screen-md': size === 'md',
-                'md:w-screen-lg': size === 'lg',
+                'md:w-screen-sm md:max-h-[60vh]': size === 'sm',
+                'md:w-screen-md md:max-h-[70vh]': size === 'md',
+                'md:w-screen-lg md:max-h-[80vh]': size === 'lg',
                 'md:w-screen': size === 'xl',
               },
             )}
           >
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between items-center gap-2 py-3 px-6">
               <Dialog.Title className="flex-auto" asChild={!!slots.title}>
                 {slots.title || title}
               </Dialog.Title>
@@ -99,14 +99,17 @@ export const Modal = ({
               </Dialog.Description>
             )}
             {slots.body && (
-              <ark.div asChild className="overflow-auto scrollbar-white">
+              <ark.div
+                asChild
+                className="overflow-auto scrollbar-white py-3 px-6"
+              >
                 {slots.body}
               </ark.div>
             )}
             {slots.footer && (
               <ark.div
                 asChild
-                className="flex justify-start flex-row-reverse gap-2"
+                className="flex justify-start flex-row-reverse gap-2 py-3 px-6"
               >
                 {slots.footer}
               </ark.div>
@@ -114,7 +117,7 @@ export const Modal = ({
           </Dialog.Content>
 
           {/* This div is used to position the modal higher up on the screen */}
-          <div className="-mt-6" />
+          <div className="md:-mt-6" />
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>

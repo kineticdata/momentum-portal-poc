@@ -1,5 +1,5 @@
 import logo from '../../assets/images/logo-light.svg';
-import { Button } from '../../atoms/Button.js';
+import { Button } from '../../atoms/Button.jsx';
 
 export const Login = loginProps => (
   <>

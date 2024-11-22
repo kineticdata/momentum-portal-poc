@@ -9,7 +9,7 @@ import {
   CategoryButton,
   CloseButton,
   PopularServiceButton,
-} from '../../atoms/Button.js';
+} from '../../atoms/Button.jsx';
 import useDataItem from '../../helpers/useDataItem.js';
 import { getAttributeValue } from '../../helpers/records.js';
 import { Loading } from '../states/Loading.jsx';
@@ -179,6 +179,7 @@ export const ServicesPanel = ({ children }) => {
                               c => c.category.slug !== 'popular-services',
                             )?.category?.name
                           }
+                          small={true}
                           className="flex-none w-[calc(100%/3-0.75rem/2)]"
                           to={`/forms/${popularForm.slug}`}
                           onClick={() => setOpen(false)}

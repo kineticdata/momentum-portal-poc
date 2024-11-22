@@ -1,5 +1,5 @@
 import t from 'prop-types';
-import { TabButton } from '../../atoms/Button.js';
+import { TabButton } from '../../atoms/Button.jsx';
 import clsx from 'clsx';
 
 export const TicketsTabs = ({

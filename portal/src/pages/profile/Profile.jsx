@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux';
 import { useState, useCallback } from 'react';
-import { Button } from '../../atoms/Button.js';
-import { Avatar } from '../../atoms/Avatar.jsx';
 import clsx from 'clsx';
 import { produce } from 'immer';
 import { updateProfile } from '@kineticdata/react';
-import { validateEmail } from '../../helpers/index.js';
+import { Avatar } from '../../atoms/Avatar.jsx';
+import { Button } from '../../atoms/Button.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
+import { validateEmail } from '../../helpers/index.js';
+import { appActions } from '../../helpers/state.js';
+import { toastError, toastSuccess } from '../../helpers/toasts.js';
 
 export const Profile = () => {
   const mobile = useSelector(state => state.view.mobile);
@@ -16,7 +18,6 @@ export const Profile = () => {
   const [showChangedPassword, setShowChangedPassword] = useState(false);
   const [newEmail, setNewEmail] = useState(profile.email);
   const [newDisplayName, setNewDisplayName] = useState(profile.displayName);
-  const [error, setError] = useState(null);
   const [validationErrors, setValidationErrors] = useState({
     newEmail: '',
     newDisplayName: '',
@@ -84,11 +85,13 @@ export const Profile = () => {
         profile: newProfileData,
       }).then(({ error, profile }) => {
         if (!error) {
-          //todo: update global state
-          //todo: add toast
-          console.log('success:', profile);
+          toastSuccess({ title: 'Your profile has been updated.' });
+          appActions.updateProfile(profile);
         } else {
-          setError(error);
+          toastError({
+            title: 'Profile update failed.',
+            description: error.message,
+          });
         }
       });
     },
@@ -98,24 +101,23 @@ export const Profile = () => {
   return (
     <>
       <div
-        className={clsx('flex items-center mt-8', {
-          'relative justify-start': mobile,
+        className={clsx('relative flex gap-3 items-center mt-8', {
+          'justify-start': mobile,
           'justify-center': !mobile,
         })}
       >
         <Button
-          link
           variant="tertiary"
           icon="arrow-left"
           to=".."
           aria-label="Back"
-          className={`${!mobile ? 'absolute left-24' : ''}`}
+          className={clsx(!mobile && 'absolute left-0')}
         />
         <span className="text-xl font-semibold text-center">My Profile</span>
       </div>
       <form className="self-center flex flex-col gap-5 items-stretch w-full max-w-lg">
         <div className="flex justify-center items-center mb-5 mt-8">
-          <Avatar username={profile.displayName} size="xxl" />
+          <Avatar username={profile.username} size="xxl" />
         </div>
         <div
           className={clsx('field', { 'has-error': validationErrors.newEmail })}
@@ -213,7 +215,6 @@ export const Profile = () => {
           </a>
         </div>
       </form>
-      {error ? <div>{error}</div> : null}
     </>
   );
 };

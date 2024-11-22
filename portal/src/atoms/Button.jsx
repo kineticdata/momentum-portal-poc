@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { Icon } from './Icon.jsx';
 import { useSelector } from 'react-redux';
+import { forwardRef } from 'react';
 
 /**
  * Renders either a button or a link.
@@ -11,7 +12,7 @@ import { useSelector } from 'react-redux';
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
  */
-const ButtonOrLink = ({ children, ...passThroughProps }) => {
+const ButtonOrLink = forwardRef(({ children, ...passThroughProps }, ref) => {
   const location = useLocation();
   const isLink = !!passThroughProps.to;
   const Tag = !isLink ? 'button' : Link;
@@ -20,11 +21,11 @@ const ButtonOrLink = ({ children, ...passThroughProps }) => {
     : { state: { backPath: location.pathname } };
 
   return (
-    <Tag {...additionalProps} {...passThroughProps}>
+    <Tag ref={ref} {...additionalProps} {...passThroughProps}>
       {children}
     </Tag>
   );
-};
+});
 
 ButtonOrLink.propTypes = {
   children: t.node,
@@ -49,98 +50,103 @@ ButtonOrLink.propTypes = {
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
  */
-export const Button = ({
-  className,
-  variant = 'primary',
-  size = 'lg',
-  inverse,
-  underline,
-  icon,
-  iconEnd,
-  children,
-  ...passThroughProps
-}) => {
-  const styledClassName = clsx(
-    // Common styles for all buttons
-    'border outline-0 transition',
-    variant !== 'custom' &&
-      'inline-flex gap-1 justify-center items-center text-center',
+export const Button = forwardRef(
+  (
+    {
+      className,
+      variant = 'primary',
+      size = 'lg',
+      inverse,
+      underline,
+      icon,
+      iconEnd,
+      children,
+      ...passThroughProps
+    },
+    ref,
+  ) => {
+    const styledClassName = clsx(
+      // Common styles for all buttons
+      'border outline-0 transition',
+      variant !== 'custom' &&
+        'inline-flex gap-1 justify-center items-center text-center',
 
-    // Primary
-    variant === 'primary' && [
-      // Text
-      'text-primary-900 focus-visible:text-primary-200 data-[state=open]:text-primary-200 disabled:text-gray-900 font-medium',
-      // Background
-      'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 data-[state=open]:bg-primary-900 disabled:bg-gray-200',
-      // Border
-      'border-primary-500 disabled:border-primary-300',
-    ],
+      // Primary
+      variant === 'primary' && [
+        // Text
+        'text-primary-900 focus-visible:text-primary-200 data-[state=open]:text-primary-200 disabled:text-gray-900 font-medium',
+        // Background
+        'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 data-[state=open]:bg-primary-900 disabled:bg-gray-200',
+        // Border
+        'border-primary-500 disabled:border-primary-300',
+      ],
 
-    // Secondary
-    variant === 'secondary' && [
-      // Text
-      'text-primary-900 disabled:text-gray-900 font-semibold',
-      // Background
-      'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
-      // Border
-      'border-primary-300',
-    ],
+      // Secondary
+      variant === 'secondary' && [
+        // Text
+        'text-primary-900 disabled:text-gray-900 font-semibold',
+        // Background
+        'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
+        // Border
+        'border-primary-300',
+      ],
 
-    // Tertiary
-    variant === 'tertiary' && [
-      // Text
-      'font-semibold',
+      // Tertiary
+      variant === 'tertiary' && [
+        // Text
+        'font-semibold',
+        {
+          'text-primary-900 disabled:text-gray-900': !inverse,
+          'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 data-[state=open]:text-primary-900 disabled:text-gray-900':
+            inverse,
+        },
+        // Background
+        'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
+        // Border
+        'border-transparent',
+      ],
+
+      // Underline
       {
-        'text-primary-900 disabled:text-gray-900': !inverse,
-        'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 data-[state=open]:text-primary-900 disabled:text-gray-900':
-          inverse,
+        'hover:underline focus-visible:underline data-[state=open]:underline disabled:no-underline':
+          underline,
       },
-      // Background
-      'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
-      // Border
-      'border-transparent',
-    ],
 
-    // Underline
-    {
-      'hover:underline focus-visible:underline data-[state=open]:underline disabled:no-underline':
-        underline,
-    },
+      // Sizing and radius
+      {
+        'px-4 rounded-2.5xl': !!children,
+        'rounded-full': !children,
+        'py-1.25': size === 'sm',
+        'px-1.25': size === 'sm' && !children,
+        'py-1.75': size === 'md',
+        'px-1.75': size === 'md' && !children,
+        'py-2.25': size === 'lg',
+        'px-2.25': size === 'lg' && !children,
+      },
+      className,
+    );
 
-    // Sizing and radius
-    {
-      'px-4 rounded-2.5xl': !!children,
-      'rounded-full': !children,
-      'py-1.25': size === 'sm',
-      'px-1.25': size === 'sm' && !children,
-      'py-1.75': size === 'md',
-      'px-1.75': size === 'md' && !children,
-      'py-2.25': size === 'lg',
-      'px-2.25': size === 'lg' && !children,
-    },
-    className,
-  );
-
-  return (
-    <ButtonOrLink className={styledClassName} {...passThroughProps}>
-      {icon && (
-        <Icon
-          name={icon}
-          size={size === 'sm' ? 20 : 24}
-          className="flex-none"
-        />
-      )}
-      {children}
-      {iconEnd && (
-        <Icon
-          name={iconEnd}
-          size={size === 'sm' ? 20 : 24}
-          className="flex-none"
-        />
-      )}
-    </ButtonOrLink>
-  );
-};
+    return (
+      <ButtonOrLink ref={ref} className={styledClassName} {...passThroughProps}>
+        {icon && (
+          <Icon
+            name={icon}
+            size={size === 'sm' ? 20 : 24}
+            className="flex-none"
+          />
+        )}
+        {children}
+        {iconEnd && (
+          <Icon
+            name={iconEnd}
+            size={size === 'sm' ? 20 : 24}
+            className="flex-none"
+          />
+        )}
+      </ButtonOrLink>
+    );
+  },
+);
 
 Button.propTypes = {
   className: t.string,
@@ -442,6 +448,7 @@ CategoryButton.propTypes = {
  *  of several styles for the button.
  * @param {string} [icon] The name of an icon to render in the button.
  * @param {string} [category] The name of the category the service is in.
+ * @param {boolean} [small] Should the button use the small design.
  * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
@@ -451,11 +458,11 @@ export const PopularServiceButton = ({
   index = 0,
   icon = 'forms',
   category,
+  small = false,
   children,
   ...passThroughProps
 }) => {
-  const mobile = useSelector(state => state.view.mobile);
-  return mobile ? (
+  return small ? (
     <ButtonOrLink
       className={clsx(
         className,
@@ -571,5 +578,6 @@ PopularServiceButton.propTypes = {
   index: t.number,
   icon: t.string,
   category: t.string,
+  small: t.bool,
   children: t.node,
 };

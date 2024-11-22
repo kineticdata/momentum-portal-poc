@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { Avatar } from '../../atoms/Avatar.jsx';
-import { Button } from '../../atoms/Button.js';
+import { Button } from '../../atoms/Button.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
 import { SearchModal } from '../search/SearchModal.jsx';
 

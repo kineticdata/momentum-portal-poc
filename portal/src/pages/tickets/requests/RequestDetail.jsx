@@ -1,5 +1,5 @@
 import { Placeholder } from '../../Placeholder.jsx';
-import { Button } from '../../../atoms/Button.js';
+import { Button } from '../../../atoms/Button.jsx';
 import { useSelector } from 'react-redux';
 
 export const RequestDetail = () => {

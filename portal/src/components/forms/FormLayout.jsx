@@ -2,7 +2,7 @@ import t from 'prop-types';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { getAttributeValue } from '../../helpers/records.js';
-import { Button } from '../../atoms/Button.js';
+import { Button } from '../../atoms/Button.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
 
 /**

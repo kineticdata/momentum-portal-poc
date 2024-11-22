@@ -24,9 +24,19 @@ export const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
-      // Disable warning for passing event object into reducer
+      // Disable warning for passing non-serializable data into reducer
       serializableCheck: {
-        ignoredActions: ['view/handleResize'],
+        ignoredActions: [
+          // Event object
+          'view/handleResize',
+          // Callback functions for confirmation modal
+          'confirm/open',
+        ],
+        ignoredPaths: [
+          // Callback functions for confirmation modal
+          'confirm.options.accept',
+          'confirm.options.cancel',
+        ],
       },
     }),
 });

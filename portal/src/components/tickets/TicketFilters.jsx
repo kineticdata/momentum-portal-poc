@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { produce } from 'immer';
 import { Panel } from '../../atoms/Panel.jsx';
 import { Popover } from '../../atoms/Popover.jsx';
-import { Button, ChipButton, CloseButton } from '../../atoms/Button.js';
+import { Button, ChipButton, CloseButton } from '../../atoms/Button.jsx';
 import t from 'prop-types';
 import { StatusDot } from './StatusPill.jsx';
 

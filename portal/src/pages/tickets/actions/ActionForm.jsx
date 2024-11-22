@@ -6,7 +6,7 @@ import { KineticForm } from '../../../components/kinetic-form/KineticForm.jsx';
 import useDataItem from '../../../helpers/useDataItem.js';
 import { Loading } from '../../../components/states/Loading.jsx';
 import { Error } from '../../../components/states/Error.jsx';
-import { Button } from '../../../atoms/Button.js';
+import { Button } from '../../../atoms/Button.jsx';
 import { Panel } from '../../../atoms/Panel.jsx';
 
 const generateViewParentButton = actionSubmission => () => {

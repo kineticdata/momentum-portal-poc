@@ -2,83 +2,18 @@ import t from 'prop-types';
 import { useEffect } from 'react';
 import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
-import { regRedux } from './redux.js';
+import { Toaster } from './atoms/Toaster.jsx';
 import { Loading } from './components/states/Loading.jsx';
 import { Error } from './components/states/Error.jsx';
+import { closeConfirm } from './helpers/confirm.js';
+import { appActions, themeActions } from './helpers/state.js';
+import { clearToasts } from './helpers/toasts.js';
+import useDataItem from './helpers/useDataItem.js';
+import useRouteChange from './helpers/useRouteChange.js';
 import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
 import { PublicRoutes } from './pages/PublicRoutes.jsx';
 import { Login } from './pages/login/Login.jsx';
-import useDataItem from './helpers/useDataItem.js';
-import { getAttributeValue } from './helpers/records.js';
-import { throttle } from 'lodash-es';
-import { calculateThemeState, themeState } from './helpers/theme.js';
-
-// State for the current view size of the app
-const viewActions = regRedux(
-  'view',
-  { ...calcViewState() },
-  {
-    handleResize(state) {
-      calcViewState(state);
-    },
-  },
-);
-// Register a resize handler to update the view state
-window.addEventListener('resize', throttle(viewActions.handleResize, 200));
-
-// State for the customized theme
-const themeActions = regRedux(
-  'theme',
-  { ...themeState },
-  {
-    setTheme(state, space) {
-      calculateThemeState(state, getAttributeValue(space.data, 'Theme'));
-    },
-  },
-);
-
-// State for global app data
-const appActions = regRedux(
-  'app',
-  {
-    // Is the user authenticated
-    authenticated: false,
-    // Space record
-    space: null,
-    // Slug of the kapp to use for the service portal
-    kappSlug: null,
-    // Service portal kapp record
-    kapp: null,
-    // Profile record
-    profile: null,
-    // Error from fetching any app data
-    error: null,
-  },
-  {
-    setAuthenticated(state, payload) {
-      state.authenticated = payload;
-    },
-    setSpace(state, { error, data }) {
-      if (error) state.error = error;
-      else {
-        state.space = data;
-        state.kappSlug = getAttributeValue(
-          data,
-          'Service Portal Kapp Slug',
-          'service-portal',
-        );
-      }
-    },
-    setKapp(state, { error, data }) {
-      if (error) state.error = state.error || error;
-      else state.kapp = data;
-    },
-    setProfile(state, { error, data }) {
-      if (error) state.error = state.error || error;
-      else state.profile = data;
-    },
-  },
-);
+import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
 
 export const App = ({
   initialized,
@@ -169,6 +104,14 @@ export const App = ({
     }
   }, [kappData]);
 
+  // Clear toasts and confirmation modals whenever we change routes
+  useRouteChange((pathname, state) => {
+    if (!state?.persistToasts) {
+      clearToasts();
+    }
+    closeConfirm();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col flex-auto overflow-auto">
@@ -206,6 +149,9 @@ export const App = ({
           ) : (
             <Loading />
           )}
+
+          {/* Toast container */}
+          <Toaster />
         </main>
 
         {/* Footer element where we will render footers via a portal */}
@@ -214,35 +160,12 @@ export const App = ({
 
       {/* Panels element where we will render panels via a portal */}
       <div id="app-panels" />
+
+      {/* Global confirmation modal */}
+      <ConfirmationModal />
     </>
   );
 };
-
-/**
- * Function that updates a state object with the latest view data
- * @param {Object} state
- * @returns {Object}
- */
-function calcViewState(state = {}) {
-  state.width = window.innerWidth;
-  if (window.innerWidth < 640) {
-    state.size = 'xs';
-  } else if (window.innerWidth < 768) {
-    state.size = 'sm';
-  } else if (window.innerWidth < 1024) {
-    state.size = 'md';
-  } else if (window.innerWidth < 1280) {
-    state.size = 'lg';
-  } else if (window.innerWidth < 1536) {
-    state.size = 'xl';
-  } else {
-    state.size = '2xl';
-  }
-  state.mobile = ['xs', 'sm'].includes(state.size);
-  state.tablet = ['md', 'lg'].includes(state.size);
-  state.desktop = ['xl', '2xl'].includes(state.size);
-  return state;
-}
 
 App.propTypes = {
   initialized: t.bool,
