@@ -60,7 +60,7 @@ const registry = {};
  *  widget should be rendered rendered.
  * @param {React.FC} options.Component The React component that implements the
  *  widget functionality.
- * @param {React.FC} options.props The props that should be passed into the
+ * @param {Object} options.props The props that should be passed into the
  *  component.
  * @param {string} [options.id] Unique id for referencing this instance of the
  *  widget.
@@ -172,7 +172,7 @@ export const registerWidget = (Widget, { container, Component, props, id }) => {
 
 /**
  * Class component that stores the provided API as an instance property, so it
- * can be accessed via the ref. THis component should be used to wrap the
+ * can be accessed via the ref. This component should be used to wrap the
  * content that each widget renders, and should be forwarded the ref and passed
  * any API function to be exposed.
  */

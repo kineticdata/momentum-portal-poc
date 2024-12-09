@@ -9,6 +9,10 @@ import {
   WidgetAPI,
 } from './index.js';
 
+/**
+ * @param {MarkdownWidgetConfig} props
+ * @param {Object} props.field Kinetic field object
+ */
 const MarkdownComponent = forwardRef(
   ({ className, disabled, field, editorProps }, ref) => {
     const editorRef = useRef();
@@ -78,9 +82,9 @@ MarkdownComponent.propTypes = {
 };
 
 /**
- * Additional validations to be performed on the parameters of this widget.
+ * Additional validations to be performed on the configurations of this widget.
  */
-const validateOptions = field => {
+const validateConfig = field => {
   let valid = true;
 
   // Field must be a text field with 2+ rows so it's a textarea to properly
@@ -102,27 +106,31 @@ const validateOptions = field => {
  *
  * @param {HTMLElement} container HTML Element into which to render the widget.
  * @param {Object} field Kinetic text field with 2 or more rows.
- * @param {Object} options
- * @param {string} options.className Classes to add tyo the widget wrapper.
- * @param {boolean} options.disabled Should the markdown editor be disabled.
- *  If omitted, will use the reviewMode of the form to determine.
- * @param {Object} options.editorProps Object of props to pass through to the
- *  editor component. See the @toast-ui/react-editor Editor component for valid
- *  options.
+ * @param {MarkdownWidgetConfig} config Configuration object for the widget.
  * @param {string} [id] Optional id that can be used to retrieve a reference to
  *  the widget's API functions using the `Markdown.get` function.
  */
-export const Markdown = ({ container, field, options, id } = {}) => {
+export const Markdown = ({ container, field, config, id } = {}) => {
   if (
     validateContainer(container, 'Markdown') &&
     validateField(field, 'text', 'Markdown') &&
-    validateOptions(field, options)
+    validateConfig(field, config)
   ) {
     return registerWidget(Markdown, {
       container,
       Component: MarkdownComponent,
-      props: { ...options, field },
+      props: { ...config, field },
       id,
     });
   }
 };
+
+/**
+ * @typedef {Object} MarkdownWidgetConfig
+ * @property {string} [className] Classes to add to the widget wrapper.
+ * @property {boolean} [disabled] Should the markdown editor be disabled.
+ *  If omitted, will use the reviewMode of the form to determine.
+ * @property {Object} [editorProps] Object of props to pass through to the
+ *  editor component. See the @toast-ui/react-editor Editor component for valid
+ *  options.
+ */
