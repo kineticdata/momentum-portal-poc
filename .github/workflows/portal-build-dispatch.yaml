@@ -1,4 +1,4 @@
-# This workflow runs manual execution of this workflow via GitHub Actions.
+# This workflow runs on manual execution of this workflow via GitHub Actions.
 # 
 # This workflow will:
 # - Verify the required variables and secrets are set in this GitHub Repository
