@@ -59,6 +59,14 @@ jobs:
           script: |
             core.setFailed('The S3_BUCKET variable was not set in the Repository Settings.')
 
+      # Verify we have an S3 bucket region set in the Repository Variables
+      - name: Fail if S3 Bucket Region Not Set
+        if: ${{ !vars.S3_BUCKET_REGION }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('The S3_BUCKET_REGION variable was not set in the Repository Settings.')
+
       # Verify we have a build location set
       # This is variablized, as the bundle build location could be different per repository
       - name: Fail if Source Directory Not Set
