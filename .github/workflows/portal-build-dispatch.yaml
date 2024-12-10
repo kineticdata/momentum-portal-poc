@@ -15,7 +15,7 @@
 # S3_AWS_ACCESS_KEY_SECRET  -> The AWS Access Key Secret for an IAM User with permissions to the S3 bucket/folders
 # 
 # The final S3 bucket location will be:
-# s3://S3_BUCKET/bundles/REPOSITORY_NAME/branches/YYYYMMDD-GITHASH/
+# s3://S3_BUCKET/portals/REPOSITORY_NAME/branches/YYYYMMDD-GITHASH/
 name: Momentum Portal Publish (Dispatch)
 
 on:
