@@ -8,6 +8,7 @@
 #
 # This workflow requires the following variables set in this repository's settings:
 # S3_BUCKET                 -> The S3 bucket to publish the bundle to
+# S3_BUCKET_REGION          -> The region the S3 bucket exists in
 # SOURCE_DIRECTORY          -> The source directory for the bundle within this repository
 # S3_AWS_ACCESS_KEY_ID      -> The AWS Access Key ID for an IAM User with permissions to the S3 bucket/folders
 #
@@ -22,8 +23,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  snyk-scan:
-    name: Build Portal and Scan
+  build-and-publish-portal:
+    name: Build and Publish Portal to S3
     runs-on: ubuntu-latest
 
     steps:
@@ -127,4 +128,4 @@ jobs:
           aws s3 sync \
           ./build \ 
           s3://${{ vars.S3_BUCKET }}/portals/${{ steps.repo_name.outputs.REPO_NAME }}/branches/${{ steps.version.outputs.tag }}/ \
-          --acl public-read --cache-control="must-revalidate,max-age:0" --delete --dry-run
+          --acl public-read --cache-control="must-revalidate,max-age:0" --delete --dryrun
