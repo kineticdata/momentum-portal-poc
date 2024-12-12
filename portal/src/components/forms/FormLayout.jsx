@@ -1,5 +1,6 @@
 import t from 'prop-types';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getAttributeValue } from '../../helpers/records.js';
 import { Button } from '../../atoms/Button.jsx';
@@ -32,6 +33,7 @@ export const generateFormLayout = ({
    *  render.
    */
   const FormLayout = ({ form, submission, content }) => {
+    const spaceAdmin = useSelector(state => state.app.profile?.spaceAdmin);
     const location = useLocation();
     const backPath = location.state?.backPath;
     const icon = getAttributeValue(form, 'Icon', 'forms');
@@ -80,8 +82,19 @@ export const generateFormLayout = ({
               )}
             </span>
           </div>
-          <div className="max-w-screen-md text-base md:text-h3 font-semibold">
-            {form?.name}
+          <div className="max-w-screen-md text-base md:text-h3 font-semibold flex gap-4 items-center text-center text-balance">
+            {form?.name}{' '}
+            {form && spaceAdmin && (
+              <a
+                className="outline-0 hover:text-secondary-400 focus-visible:text-secondary-400"
+                href={`/app/console#/kapps/${form.kapp?.slug}/forms/edit/${form.slug}/general`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open Form Settings in Platform Console"
+              >
+                <Icon name="settings-share" />
+              </a>
+            )}
           </div>
           <div className="max-w-screen-md text-sm md:text-base line-clamp-2">
             {form?.description}
