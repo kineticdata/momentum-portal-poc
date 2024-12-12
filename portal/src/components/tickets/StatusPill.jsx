@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import t from 'prop-types';
 
-export const StatusPill = ({ status }) => (
+export const StatusPill = ({ className, status }) => (
   <div
     className={clsx(
       // Mobile first styles
@@ -16,6 +16,7 @@ export const StatusPill = ({ status }) => (
           status === 'Submitted' || status === 'Open',
         'bg-gray-200 text-gray-900 border-gray-500': status === 'Closed',
       },
+      className,
     )}
   >
     {status}

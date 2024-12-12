@@ -8,12 +8,16 @@ import { Icon } from '../../atoms/Icon.jsx';
 /**
  * Generates a Layout component for CoreForm.
  *
- * @param {JSX.FC} [Heading] Additional component(s) to
+ * @param {Object} [options]
+ * @param {React.FC} [options.actionComponent] Additional component to render
+ *  in the top right corner of the heading of the form layout.
+ * @param {React.FC} [options.headingComponent] Additional component(s) to
  *  render in the heading of the form layout.
- * @param {string} [backTo] Path that the back button should use.
+ * @param {string} [options.backTo] Path that the back button should use.
  * @returns {function({form: Object, content: (JSX.Element|JSX.Element[])}): *}
  */
 export const generateFormLayout = ({
+  actionComponent: Action,
   headingComponent: Heading,
   backTo,
 } = {}) => {
@@ -21,10 +25,13 @@ export const generateFormLayout = ({
    * Generate a FormLayout component to be used by the CoreForm component. The
    * props passed into this component are provided by CoreForm.
    *
-   * @param {Object} form The Kinetic form record
-   * @param {JSX.Element|JSX.Element[]} content The form content to render.
+   * @param {Object} options
+   * @param {Object} options.form The Kinetic form record
+   * @param {Object} options.submission The Kinetic submission record
+   * @param {JSX.Element|JSX.Element[]} options.content The form content to
+   *  render.
    */
-  const FormLayout = ({ form, content }) => {
+  const FormLayout = ({ form, submission, content }) => {
     const location = useLocation();
     const backPath = location.state?.backPath;
     const icon = getAttributeValue(form, 'Icon', 'forms');
@@ -63,7 +70,15 @@ export const generateFormLayout = ({
             <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-[10px] shadow-icon flex-none p-2.25">
               <Icon name={form ? icon : 'blank'} />
             </div>
-            <span className="flex-1"></span>
+            <span className="flex-1 text-right">
+              {Action && (
+                <Action
+                  form={form}
+                  submission={submission}
+                  backTo={backTo || backPath}
+                />
+              )}
+            </span>
           </div>
           <div className="max-w-screen-md text-base md:text-h3 font-semibold">
             {form?.name}
@@ -73,7 +88,11 @@ export const generateFormLayout = ({
           </div>
           {form && Heading && (
             <div className="max-w-screen-md">
-              <Heading />
+              <Heading
+                form={form}
+                submission={submission}
+                backTo={backTo || backPath}
+              />
             </div>
           )}
         </div>
@@ -97,6 +116,7 @@ export const generateFormLayout = ({
 
   FormLayout.propTypes = {
     form: t.object,
+    submission: t.object,
     content: t.any,
   };
 

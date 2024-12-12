@@ -37,7 +37,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
     >
       <div
         className={clsx(
-          'absolute w-1 bg-success-500 h-full',
+          'absolute w-1 bg-success-500',
           '-left-4',
           'md:-left-[3.875rem]',
           {

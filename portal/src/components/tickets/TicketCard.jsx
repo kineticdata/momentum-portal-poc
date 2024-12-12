@@ -3,8 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { getAttributeValue } from '../../helpers/records.js';
 import { Icon } from '../../atoms/Icon.jsx';
 import { StatusPill } from './StatusPill.jsx';
-import { timeAgo } from '../../helpers/index.js';
+import { callIfFn, timeAgo } from '../../helpers/index.js';
 import { useSelector } from 'react-redux';
+import { Button } from '../../atoms/Button.jsx';
+import { openConfirm } from '../../helpers/confirm.js';
+import { deleteSubmission } from '@kineticdata/react';
+import { toastError, toastSuccess } from '../../helpers/toasts.js';
+import useSwipe from '../../helpers/useSwipe.js';
 
 const getMetaData = submission => {
   if (['Approval', 'Task'].includes(submission.type)) {
@@ -27,6 +32,7 @@ const getMetaData = submission => {
         return {
           status: 'Draft',
           dateString: `Created ${timeAgo(submission.createdAt)}`,
+          canDelete: true,
         };
       case 'Closed':
         return {
@@ -51,53 +57,123 @@ const getToPath = submission =>
     ? `${submission.id}/edit`
     : submission.id;
 
-export const TicketCard = ({ submission }) => {
+/**
+ * Handler for deleting a draft request.
+ */
+const handleDelete = (id, reload) =>
+  openConfirm({
+    title: 'Delete Draft',
+    description: 'Are you sure you want to delete this draft request?',
+    acceptLabel: 'Delete',
+    accept: () =>
+      deleteSubmission({ id }).then(({ error }) => {
+        if (error) {
+          toastError({
+            title: 'Failed to delete draft request',
+            description: error.message,
+          });
+        } else {
+          toastSuccess({ title: 'Successfully deleted draft request' });
+          callIfFn(reload);
+        }
+      }),
+  });
+
+export const TicketCard = ({ submission, reload }) => {
   const mobile = useSelector(state => state.view.mobile);
   const location = useLocation();
   const icon = getAttributeValue(submission?.form, 'Icon', 'checklist');
   const meta = getMetaData(submission);
+  const { onTouchStart, onTouchMove, onTouchEnd, left, right } = useSwipe({
+    threshold: 80,
+    onLeftSwipe: () => handleDelete(submission.id, reload),
+  });
 
   return (
     <div
       className={clsx(
-        // Mobile first styles
-        'flex py-0.75 px-1',
         // Non mobile styles
-        'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
+        'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid]',
         // Common styles
-        'relative gap-3 items-center min-h-16 rounded-xl',
-        'bg-white shadow-card border border-transparent transition',
-        'hover:border-primary-500 hover:bg-gray-100 hover:shadow-card-hover',
-        'focus-within:border-primary-500 focus-within:bg-gray-100 focus-within:shadow-card-hover',
+        'group relative',
       )}
+      onTouchStart={mobile && meta.canDelete ? onTouchStart : undefined}
+      onTouchMove={mobile && meta.canDelete ? onTouchMove : undefined}
+      onTouchEnd={mobile && meta.canDelete ? onTouchEnd : undefined}
     >
-      <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
-        <Icon name={icon} />
-      </div>
-      {mobile ? (
-        <div className="flex flex-col gap-1 min-w-0">
-          <Link
-            className="text-sm font-medium leading-4 line-clamp-2 after:absolute after:inset-0 outline-0"
-            to={getToPath(submission)}
-            state={{ backPath: location.pathname }}
-          >
-            {submission.label}
-          </Link>
-          <div className="text-xs text-gray-900">{meta.dateString}</div>
+      {mobile && meta.canDelete && (
+        <div
+          className={clsx(
+            'absolute top-0 right-0.25 h-full w-24 pl-4',
+            'flex flex-col justify-center items-center gap-1',
+            'bg-warning-400 text-white rounded-r-xl',
+          )}
+        >
+          <Icon name="trash" />
+          <span className="text-xs font-medium">Delete</span>
         </div>
-      ) : (
-        <>
-          <Link
-            className="font-medium leading-5 line-clamp-2 after:absolute after:inset-0 outline-0"
-            to={getToPath(submission)}
-            state={{ backPath: location.pathname }}
-          >
-            {submission.label}
-          </Link>
-          <div className="text-gray-900">{meta.dateString}</div>
-        </>
       )}
-      <StatusPill status={meta.status} />
+      <div
+        className={clsx(
+          // Mobile first styles
+          'flex py-0.75 px-1',
+          // Non mobile styles
+          'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
+          // Common styles
+          'group relative gap-3 items-center min-h-16 rounded-xl',
+          'bg-white shadow-card border border-transparent transition',
+          'hover:border-primary-500 hover:bg-gray-100 hover:shadow-card-hover',
+          'focus-within:border-primary-500 focus-within:bg-gray-100 focus-within:shadow-card-hover',
+        )}
+        style={{ left, right }}
+      >
+        <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+          <Icon name={icon} />
+        </div>
+        {mobile ? (
+          <div className="flex flex-col gap-1 min-w-0">
+            <Link
+              className="text-sm font-medium leading-4 line-clamp-2 after:absolute after:inset-0 outline-0"
+              to={getToPath(submission)}
+              state={{ backPath: location.pathname }}
+            >
+              {submission.label}
+            </Link>
+            <div className="text-xs text-gray-900">{meta.dateString}</div>
+          </div>
+        ) : (
+          <>
+            <Link
+              className="font-medium leading-5 line-clamp-2 after:absolute after:inset-0 outline-0"
+              to={getToPath(submission)}
+              state={{ backPath: location.pathname }}
+            >
+              {submission.label}
+            </Link>
+            <div className="text-gray-900">{meta.dateString}</div>
+          </>
+        )}
+        <div className="max-md:ml-auto flex gap-2 items-center">
+          <StatusPill
+            className={clsx({
+              'group-hover:min-w-20 group-focus-within:min-w-20':
+                !mobile && meta.canDelete,
+            })}
+            status={meta.status}
+          />
+          {!mobile && meta.canDelete && (
+            <Button
+              variant="secondary"
+              icon="trash"
+              size="md"
+              className={clsx(
+                'relative -my-1 hidden group-hover:block group-focus-within:block',
+              )}
+              onClick={() => handleDelete(submission.id, reload)}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -19,7 +19,7 @@ export const RequestsList = ({
   const mobile = useSelector(state => state.view.mobile);
 
   const { initialized, error, loading, data, pageNumber } = listData;
-  const { nextPage, previousPage } = listActions;
+  const { nextPage, previousPage, reload } = listActions;
 
   return (
     <>
@@ -60,7 +60,11 @@ export const RequestsList = ({
               )}
               {!loading &&
                 data.map(submission => (
-                  <TicketCard key={submission.id} submission={submission} />
+                  <TicketCard
+                    key={submission.id}
+                    submission={submission}
+                    reload={reload}
+                  />
                 ))}
               {!loading && data.length === 0 && (
                 <EmptyCard>There are no requests to show.</EmptyCard>

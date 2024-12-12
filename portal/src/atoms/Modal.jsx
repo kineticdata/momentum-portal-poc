@@ -94,7 +94,10 @@ export const Modal = ({
               </Dialog.CloseTrigger>
             </div>
             {slots.description && (
-              <Dialog.Description asChild>
+              <Dialog.Description
+                asChild
+                className="overflow-auto scrollbar-white py-3 px-6"
+              >
                 {slots.description}
               </Dialog.Description>
             )}

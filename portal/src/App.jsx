@@ -120,7 +120,7 @@ export const App = ({
 
         <main
           id="app-main"
-          className="flex flex-col flex-auto relative overflow-auto scrollbar"
+          className="flex flex-col flex-auto relative overflow-y-auto overflow-x-hidden scrollbar"
         >
           {serverError || error ? (
             // If an error occurred during auth or fetching app data, show an

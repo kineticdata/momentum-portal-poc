@@ -1,10 +1,61 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { KineticForm } from '../../components/kinetic-form/KineticForm.jsx';
 import { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { deleteSubmission } from '@kineticdata/react';
+import { Button } from '../../atoms/Button.jsx';
 import { generateFormLayout } from '../../components/forms/FormLayout.jsx';
+import { KineticForm } from '../../components/kinetic-form/KineticForm.jsx';
+import { openConfirm } from '../../helpers/confirm.js';
+import { toastError, toastSuccess } from '../../helpers/toasts.js';
+import { callIfFn } from '../../helpers/index.js';
 
-export const Form = ({ review }) => {
+const generateDeleteDraftButton =
+  ({ listActions }) =>
+  ({ submission, backTo }) => {
+    const navigate = useNavigate();
+
+    if (
+      !submission ||
+      !['Service'].includes(submission.type) ||
+      submission.coreState !== 'Draft'
+    )
+      return null;
+
+    // Show delete button is submission is of type Service and is in Draft state
+    return (
+      <Button
+        variant="tertiary"
+        inverse
+        icon="trash"
+        onClick={() => {
+          openConfirm({
+            title: 'Delete Draft',
+            description: 'Are you sure you want to delete this draft request?',
+            acceptLabel: 'Delete',
+            accept: () =>
+              deleteSubmission({ id: submission.id }).then(({ error }) => {
+                if (error) {
+                  toastError({
+                    title: 'Failed to delete draft request',
+                    description: error.message,
+                  });
+                } else {
+                  toastSuccess({ title: 'Successfully deleted draft request' });
+                  callIfFn(listActions?.reload);
+                  navigate(backTo || '/requests', {
+                    state: { persistToasts: true },
+                  });
+                }
+              }),
+          });
+        }}
+        aria-label="Delete Draft"
+        title="Delete Draft"
+      />
+    );
+  };
+
+export const Form = ({ review, listActions }) => {
   const mobile = useSelector(state => state.view.mobile);
   const { kappSlug, formSlug, submissionId } = useParams();
   const portalKappSlug = useSelector(state => state.app.kappSlug);
@@ -17,7 +68,15 @@ export const Form = ({ review }) => {
     location.state?.backPath ||
     (submissionId ? '/requests' : mobile ? '/' : null);
 
-  const Layout = useMemo(() => generateFormLayout({ backTo }), []);
+  const DeleteDraftButton = useMemo(
+    () => generateDeleteDraftButton({ listActions }),
+    [listActions],
+  );
+
+  const Layout = useMemo(
+    () => generateFormLayout({ backTo, actionComponent: DeleteDraftButton }),
+    [backTo, DeleteDraftButton],
+  );
 
   const handleCompleted = useCallback(
     response => {
