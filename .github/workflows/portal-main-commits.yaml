@@ -19,7 +19,7 @@
 # 
 # The final S3 bucket location will be:
 # s3://S3_BUCKET/portals/REPOSITORY_NAME/versions/latest/
-name: Momentum Portal Publish (Tag Push)
+name: Momentum Portal Publish (Main Commits)
 
 on:
   push:
