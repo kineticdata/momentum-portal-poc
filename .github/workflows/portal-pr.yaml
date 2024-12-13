@@ -20,11 +20,11 @@ jobs:
           node-version: 18
 
       - name: Run Yarn Install
-        working-directory: portal
+        working-directory: ${{ vars.SOURCE_DIRECTORY }}
         run: yarn install
 
       - name: Run Yarn Build
-        working-directory: portal
+        working-directory: ${{ vars.SOURCE_DIRECTORY }}
         run: yarn build
 
       - name: Run Snyk
@@ -32,4 +32,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_AUTH }}
         with:
-          args: portal/ --severity-threshold=critical
+          args: ${{ vars.SOURCE_DIRECTORY }}/ --severity-threshold=critical
