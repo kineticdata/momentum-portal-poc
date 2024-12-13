@@ -7,11 +7,12 @@ import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
 import { validateEmail } from '../../helpers/index.js';
-import { appActions } from '../../helpers/state.js';
+import { appActions, themeActions } from '../../helpers/state.js';
 import { toastError, toastSuccess } from '../../helpers/toasts.js';
 
 export const Profile = () => {
   const mobile = useSelector(state => state.view.mobile);
+  const theme = useSelector(state => state.theme);
   const { profile } = useSelector(state => state.app);
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -103,6 +104,20 @@ export const Profile = () => {
         <div className="flex justify-center items-center mb-5 mt-8">
           <Avatar username={profile.username} size="xxl" />
         </div>
+        {profile.spaceAdmin && theme.ready && (
+          <div className="flex justify-center items-center">
+            <Button
+              variant="tertiary"
+              onClick={() =>
+                theme.editor
+                  ? themeActions.disableEditor()
+                  : themeActions.enableEditor()
+              }
+            >
+              {theme.editor ? 'Disable Theme Editor' : 'Enable Theme Editor'}
+            </Button>
+          </div>
+        )}
         <div
           className={clsx('field', { 'has-error': validationErrors.newEmail })}
         >

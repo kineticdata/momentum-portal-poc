@@ -14,6 +14,7 @@ import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
 import { PublicRoutes } from './pages/PublicRoutes.jsx';
 import { Login } from './pages/login/Login.jsx';
 import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
+import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 
 export const App = ({
   initialized,
@@ -23,7 +24,9 @@ export const App = ({
   serverError,
 }) => {
   // Get redux theme state
-  const themeCSS = useSelector(state => state.theme.css);
+  const { css: themeCSS, ready: themeReady } = useSelector(
+    state => state.theme,
+  );
   // Update the styles if there is a theme set
   useEffect(() => {
     if (themeCSS) {
@@ -152,6 +155,9 @@ export const App = ({
 
           {/* Toast container */}
           <Toaster />
+
+          {/* Theme Editor */}
+          {themeReady && <ThemeEditor />}
         </main>
 
         {/* Footer element where we will render footers via a portal */}

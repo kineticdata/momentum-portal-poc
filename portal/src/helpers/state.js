@@ -11,6 +11,12 @@ export const themeActions = regRedux(
     setTheme(state, space) {
       calculateThemeState(state, getAttributeValue(space.data, 'Theme'));
     },
+    enableEditor(state) {
+      state.editor = true;
+    },
+    disableEditor(state) {
+      state.editor = false;
+    },
   },
 );
 
