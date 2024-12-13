@@ -1,0 +1,140 @@
+# This workflow runs commit to the main branch in the repository.
+# 
+# This workflow will:
+# - Verify the required variables and secrets are set in this GitHub Repository
+# - Install node
+# - Install the dependencies for the portal
+# - Verify Snyk code scans pass (this is required)
+# - Publish the built portal into an S3 bucket
+#
+# This workflow requires the following variables set in this repository's settings:
+# S3_BUCKET                 -> The S3 bucket to publish the portal to
+# S3_BUCKET_REGION          -> The region the S3 bucket exists in
+# SOURCE_DIRECTORY          -> The source directory for the portal within this repository
+# S3_AWS_ACCESS_KEY_ID      -> The AWS Access Key ID for an IAM User with permissions to the S3 bucket/folders
+#
+# This workflow requires the following secrets set in this repository's settings:
+# S3_AWS_ACCESS_KEY_SECRET  -> The AWS Access Key Secret for an IAM User with permissions to the S3 bucket/folders
+# SNYK_AUTH                 -> A token to authenticate to Snyk for scans
+# 
+# The final S3 bucket location will be:
+# s3://S3_BUCKET/portals/REPOSITORY_NAME/versions/latest/
+name: Momentum Portal Publish (Tag Push)
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'portal/**'
+
+jobs:
+  build-and-publish-portal:
+    name: Build and Publish Portal to S3
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Determine the Repository Name of where this Action is running
+      # GHA does not conveniently set a context variable with *only* the Repository Name
+      - name: Set Repository Name
+        id: repo_name
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> "$GITHUB_OUTPUT"
+
+      # Verify we were able to parse out the repository name
+      - name: Fail if Repository Name Not Set
+        if: ${{ !steps.repo_name.outputs.REPO_NAME }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('The REPO_NAME value was not set in the github actions outputs.')
+      
+      # Verify we have an S3 bucket set in the Repository Variables
+      - name: Fail if S3 Bucket Not Set
+        if: ${{ !vars.S3_BUCKET }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('The S3_BUCKET variable was not set in the Repository Settings.')
+
+      # Verify we have an S3 bucket region set in the Repository Variables
+      - name: Fail if S3 Bucket Region Not Set
+        if: ${{ !vars.S3_BUCKET_REGION }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('The S3_BUCKET_REGION variable was not set in the Repository Settings.')
+
+      # Verify we have a build location set
+      # This is variablized, as the portal build location could be different per repository
+      - name: Fail if Source Directory Not Set
+        if: ${{ !vars.SOURCE_DIRECTORY }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('The SOURCE_DIRECTORY variable was not set in the Repository Settings.')
+
+      # Verify we have an AWS Access Key ID set in the Repository Variables
+      - name: Fail AWS Access Key ID Not Set
+        if: ${{ env.S3_AWS_ACCESS_KEY_ID == '' }}
+        uses: actions/github-script@v7
+        env:
+          S3_AWS_ACCESS_KEY_ID: ${{ vars.S3_AWS_ACCESS_KEY_ID }}
+        with:
+          script: |
+            core.setFailed('The S3_AWS_ACCESS_KEY_ID secret was not set in the Repository Settings.')
+
+      # Verify we have the key for the AWS Access Key in the Repository Variables
+      - name: Fail AWS Access Key Secret Not Set
+        if: ${{ env.S3_AWS_ACCESS_KEY_SECRET == '' }}
+        uses: actions/github-script@v7
+        env:
+          S3_AWS_ACCESS_KEY_SECRET: ${{ secrets.S3_AWS_ACCESS_KEY_SECRET }}
+        with:
+          script: |
+            core.setFailed('The S3_AWS_ACCESS_KEY_SECRET secret was not set in the Repository Settings.')
+
+      # Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Install dependencies
+      - name: Run Yarn Install
+        working-directory: ${{ vars.SOURCE_DIRECTORY }}
+        run: yarn install
+
+      # Build the portal
+      - name: Run Yarn Build
+        working-directory: ${{ vars.SOURCE_DIRECTORY }}
+        run: yarn build
+
+      # Verify Snyk Scans Pass
+      - name: Run Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_AUTH }}
+        with:
+          args: ${{ vars.SOURCE_DIRECTORY }}/ --severity-threshold=critical
+
+      # Setup our access to AWS
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ vars.S3_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.S3_AWS_ACCESS_KEY_SECRET }}
+          aws-region: ${{ vars.S3_BUCKET_REGION }}
+
+      # Copy our built portal to the S3 bucket
+      - name: Deploy to S3
+        working-directory: ${{ vars.SOURCE_DIRECTORY }}
+        run: |
+          aws s3 sync \
+          ./build \
+          s3://${{ vars.S3_BUCKET }}/portals/${{ steps.repo_name.outputs.REPO_NAME }}/versions/latest/ \
+          --cache-control=\"must-revalidate,max-age:0\" --delete
