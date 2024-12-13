@@ -9,11 +9,18 @@ export const MobileFooter = props => {
   // Are we on action details or form pages
   const matchesRequests = useMatch('/requests/:id/*');
   // Are we on a form page
-  const matchesForm = useMatch('/forms/:id/*');
+  const matchesForm = useMatch('/forms/:formSlug/*');
+  const matchesForm2 = useMatch('/kapps/:kappSlug/forms/:formSlug/*');
   // Are we on the profile page
   const matchesProfile = useMatch('/profile');
   // Don't render footer if we are on any of the above pages
-  if (matchesActions || matchesRequests || matchesForm || matchesProfile)
+  if (
+    matchesActions ||
+    matchesRequests ||
+    matchesForm ||
+    matchesForm2 ||
+    matchesProfile
+  )
     return null;
 
   return (

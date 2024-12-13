@@ -1,7 +1,9 @@
-import t from 'prop-types';
 import { useEffect } from 'react';
-import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
+import { useMatch } from 'react-router-dom';
+import t from 'prop-types';
+import clsx from 'clsx';
+import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
 import { Toaster } from './atoms/Toaster.jsx';
 import { Loading } from './components/states/Loading.jsx';
 import { Error } from './components/states/Error.jsx';
@@ -16,6 +18,25 @@ import { Login } from './pages/login/Login.jsx';
 import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
 import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 
+const useBackgroundGradient = mobile => {
+  const matchesHome = useMatch('/');
+  const matchesProfile = useMatch('/profile');
+  const matchesForm = useMatch('/forms/:kappSlug/*');
+  const matchesForm2 = useMatch('/kapps/:kappSlug/forms/:kappSlug/*');
+  const matchesForm3 = useMatch('/requests/:id/:formMode');
+  const className = 'bg-gradient-to-b from-transparent from-85% to-primary-300';
+
+  // Only add gradient to home and profile pages for mobile
+  if (mobile) {
+    if (matchesHome || matchesProfile) return className;
+    return '';
+  }
+
+  // Add gradiant to all pages except form pages for non mobile
+  if (matchesForm || matchesForm2 || matchesForm3) return '';
+  return className;
+};
+
 export const App = ({
   initialized,
   loggedIn,
@@ -23,6 +44,8 @@ export const App = ({
   timedOut,
   serverError,
 }) => {
+  // Get redux view state
+  const mobile = useSelector(state => state.view.mobile);
   // Get redux theme state
   const { css: themeCSS, ready: themeReady } = useSelector(
     state => state.theme,
@@ -115,6 +138,8 @@ export const App = ({
     closeConfirm();
   }, []);
 
+  const bgGradient = useBackgroundGradient(mobile);
+
   return (
     <>
       <div className="flex flex-col flex-auto overflow-auto">
@@ -123,7 +148,10 @@ export const App = ({
 
         <main
           id="app-main"
-          className="flex flex-col flex-auto relative overflow-y-auto overflow-x-hidden scrollbar"
+          className={clsx(
+            'flex flex-col flex-auto relative overflow-y-auto overflow-x-hidden scrollbar',
+            bgGradient,
+          )}
         >
           {serverError || error ? (
             // If an error occurred during auth or fetching app data, show an
