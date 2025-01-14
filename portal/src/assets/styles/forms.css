@@ -35,12 +35,16 @@
     }
 
     input[type='text'],
-    input[type='password'] {
+    input[type='password'],
+    textarea {
       @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
       @apply text-primary-900 bg-white border-primary-400;
       @apply hover:bg-primary-100;
       @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
       @apply disabled:text-gray-900 disabled:bg-gray-100;
+    }
+    textarea {
+      @apply md:rounded-br-md;
     }
 
     &.has-error {

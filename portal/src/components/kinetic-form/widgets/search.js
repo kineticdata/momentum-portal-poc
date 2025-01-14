@@ -9,12 +9,13 @@ import {
 import t from 'prop-types';
 import { Combobox, createListCollection } from '@ark-ui/react/combobox';
 import { Portal } from '@ark-ui/react/portal';
-import { bundle, defineFilter, getCsrfToken } from '@kineticdata/react';
+import { defineFilter } from '@kineticdata/react';
 import { debounce } from 'lodash-es';
 import clsx from 'clsx';
 import { registerWidget, validateContainer, WidgetAPI } from './index.js';
 import { CloseButton } from '../../../atoms/Button.jsx';
 import { Icon } from '../../../atoms/Icon.jsx';
+import { executeIntegration } from '../../../helpers/api.js';
 import { callIfFn } from '../../../helpers/index.js';
 import useDataItem from '../../../helpers/useDataItem.js';
 
@@ -22,38 +23,15 @@ const fetchIntegrationOptions = ({
   integration: { kappSlug, formSlug, integrationName, parameters },
   query,
 }) =>
-  fetch(
-    [
-      `${bundle.apiLocation()}/integrations/kapps/${kappSlug}`,
-      formSlug && `/forms/${formSlug}`,
-      `/${integrationName}`,
-    ]
-      .filter(Boolean)
-      .join(''),
-    {
-      method: 'POST',
-      body: JSON.stringify(
-        parameters.reduce(
-          (vals, param) => ({ ...vals, [param.name]: param.value || query }),
-          {},
-        ),
-      ),
-      headers: { 'X-XSRF-TOKEN': getCsrfToken() },
-    },
-  )
-    .then(async response => {
-      const data = await response.json();
-      if (!response.ok) throw data;
-      return data;
-    })
-    .catch(error => {
-      if (typeof error === 'object') {
-        const { error: m1, errorKey: key = null, message: m2, ...rest } = error;
-        const message = m1 || m2 || 'Unexpected error occurred.';
-        return { error: { ...rest, message, key } };
-      }
-      return { error: { message: 'Unexpected error occurred.' } };
-    });
+  executeIntegration({
+    kappSlug,
+    formSlug,
+    integrationName,
+    parameters: parameters.reduce(
+      (vals, param) => ({ ...vals, [param.name]: param.value || query }),
+      {},
+    ),
+  });
 
 const filterStaticOptions = ({ options, search: { fields, fn }, query }) => {
   // If filter function is provided, use it to filter the options
@@ -198,7 +176,7 @@ const SearchComponent = forwardRef(
     // Handler for when the selection is changed
     const handleChange = ({ value, items }) => {
       // Remove proxy wrapper from items
-      const selectedItems = items.map(item => ({ ...item }));
+      const selectedItems = structuredClone(items);
       // Set value state
       setSelection(selectedItems);
       // Set API ref data
@@ -277,7 +255,7 @@ const SearchComponent = forwardRef(
                     <Combobox.Positioner>
                       <Combobox.Content
                         className={clsx(
-                          'py-2 bg-white border border-gray-600 rounded min-w-[10rem] shadow-lg',
+                          'py-2 bg-white border border-gray-600 rounded min-w-[10rem] shadow-lg z-30',
                         )}
                       >
                         <Combobox.ItemGroup>

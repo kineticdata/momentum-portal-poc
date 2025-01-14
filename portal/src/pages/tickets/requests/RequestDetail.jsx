@@ -1,14 +1,18 @@
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
 import { fetchSubmission } from '@kineticdata/react';
 import { Button } from '../../../atoms/Button.jsx';
 import { Icon } from '../../../atoms/Icon.jsx';
+import { Modal } from '../../../atoms/Modal.jsx';
 import { StatusPill } from '../../../components/tickets/StatusPill.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
-import { timeAgo } from '../../../helpers/index.js';
+import { executeIntegration } from '../../../helpers/api.js';
+import { callIfFn, timeAgo } from '../../../helpers/index.js';
 import { getAttributeValue } from '../../../helpers/records.js';
+import { toastError, toastSuccess } from '../../../helpers/toasts.js';
 import useDataItem from '../../../helpers/useDataItem.js';
 
 const parseActivityData = data => {
@@ -20,8 +24,160 @@ const parseActivityData = data => {
   }
 };
 
+const useWorkNotes = ({ kappSlug, id }) => {
+  // Fetch work notes if id was provided
+  const [{ initialized, loading, error, data }, { reload }] = useDataItem(
+    executeIntegration,
+    id && [
+      {
+        kappSlug,
+        integrationName: 'Get SNOW Incident Work Notes',
+        parameters: { id },
+      },
+    ],
+    response => response?.Result,
+  );
+
+  return { initialized, loading, error, data, reload };
+};
+
+const createWorkNote = ({ kappSlug, id, note, onSuccess }) => {
+  executeIntegration({
+    kappSlug,
+    integrationName: 'Create SNOW Incident Work Note',
+    parameters: { id: id, note },
+  }).then(response => {
+    if (response.error) {
+      toastError({ title: 'Failed to save the work note.' });
+    } else {
+      toastSuccess({ title: 'Work note added successfully.' });
+      callIfFn(onSuccess);
+    }
+  });
+};
+
+const WorkNotes = ({ id }) => {
+  const { kappSlug } = useSelector(state => state.app);
+  const mobile = useSelector(state => state.view.mobile);
+  // State for tracking if work notes section is open
+  const [open, setOpen] = useState(false);
+  // Get work notes if the section is open
+  const { ...workNotes } = useWorkNotes({
+    kappSlug,
+    id: open ? id : undefined,
+  });
+  // State for adding new work notes
+  const [newNote, setNewNote] = useState(null);
+
+  if (id) {
+    return (
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <Button
+            variant="custom"
+            size="custom"
+            className={clsx(
+              'max-md:text-sm font-medium flex gap-2 border-0',
+              'rounded hover:bg-primary-100 focus-visible:bg-primary-100',
+            )}
+            onClick={() => setOpen(o => !o)}
+          >
+            <span>Work Notes</span>
+            <Icon
+              name={open ? 'chevron-up' : 'chevron-down'}
+              size={mobile ? 20 : 24}
+            />
+          </Button>
+          {open && (
+            <Button
+              variant="tertiary"
+              size="custom"
+              className="rounded-full p-1"
+              onClick={workNotes.reload}
+              disabled={workNotes.loading}
+              aria-label="Refresh Work Notes"
+            >
+              <Icon name="refresh" size={mobile ? 16 : 20} />
+            </Button>
+          )}
+        </div>
+        {open && workNotes.initialized && (
+          <>
+            {workNotes.loading && <Loading size={24} small />}
+            {!workNotes.loading &&
+              (!workNotes.data || workNotes.data.length === 0) && (
+                <div className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3 text-gray-900 italic">
+                  There are no work notes.
+                </div>
+              )}
+            {(workNotes.data || []).map((note, i) => (
+              <div
+                key={`${note?.['Created On']}-${i}`}
+                className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3"
+              >
+                <div className="text-xs md:text-sm text-gray-900 mb-2">
+                  {timeAgo(note?.['Created On'])}
+                </div>
+                <div className="max-md:text-sm">{note?.['Value']}</div>
+              </div>
+            ))}
+            <div className="flex justify-center mt-2">
+              <Modal
+                title="Add Work Note"
+                open={newNote !== null}
+                onOpenChange={({ open }) => setNewNote(open ? '' : null)}
+                size="sm"
+              >
+                <Button slot="trigger" variant="secondary" size="sm">
+                  Add Work Note
+                </Button>
+                <div slot="body" className="field">
+                  <textarea
+                    name="new-work-note"
+                    rows="4"
+                    value={newNote}
+                    onChange={e => setNewNote(e.target.value)}
+                    placeholder="New note"
+                  />
+                </div>
+                <div slot="footer">
+                  <Button
+                    className="w-full"
+                    variant="primary"
+                    disabled={!newNote}
+                    onClick={() =>
+                      createWorkNote({
+                        kappSlug,
+                        id,
+                        note: newNote,
+                        onSuccess: () => {
+                          setNewNote(null);
+                          workNotes.reload();
+                        },
+                      })
+                    }
+                  >
+                    Save
+                  </Button>
+                </div>
+              </Modal>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
+};
+
 const Activity = ({ first, last, mobile, icon, activity }) => {
   const data = parseActivityData(activity.data);
+  const snowIncidentSysId = data?.['SNOW SYS ID'];
+  const status =
+    !data?.Status || ['Approved', 'Complete'].includes(data?.Status)
+      ? true
+      : ['Denied', 'Cancelled'].includes(data?.Status)
+        ? false
+        : null;
 
   return (
     <div
@@ -53,24 +209,42 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
       <div
         className={clsx(
           'absolute flex justify-center items-center',
-          'border border-success-400 bg-success-200 top-1/2 -translate-y-1/2',
-          '-left-6 w-5 h-5 rounded-[5px]',
+          'border top-1/2 -translate-y-1/2 -left-6 w-5 h-5 rounded-[5px]',
           'md:-left-20 md:w-10 md:h-10 md:rounded-[10px]',
+          {
+            'bg-gray-200 text-gray-500 border-gray-500': status === null,
+            'bg-success-200 text-success-500 border-success-400':
+              status === true,
+            'bg-warning-200 text-warning-500 border-warning-400':
+              status === false,
+          },
         )}
       >
-        {icon && (
+        {icon && <Icon name={icon} size={mobile ? 12 : 24} />}
+        {status === true && (
           <Icon
-            name={icon}
-            className="text-success-500"
-            size={mobile ? 12 : 24}
+            name="circle-check"
+            className="absolute -right-1 -bottom-1"
+            size={mobile ? 12 : 16}
+            filled
+          />
+        )}
+        {status === false && (
+          <Icon
+            name="circle-x"
+            className="absolute -right-1 -bottom-1"
+            size={mobile ? 12 : 16}
+            filled
           />
         )}
       </div>
       <div className="flex gap-3 items-center">
         <div className="flex-auto flex flex-col items-stretch gap-1 md:gap-2.5">
-          <div className="text-xs md:text-sm text-gray-900">
-            {timeAgo(activity.createdAt)}
-          </div>
+          {activity.createdAt && (
+            <div className="text-xs md:text-sm text-gray-900">
+              {timeAgo(activity.createdAt)}
+            </div>
+          )}
           <div className="max-md:text-sm font-medium">{activity.label}</div>
         </div>
         {data?.Status && (
@@ -83,20 +257,11 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
               'md:py-1.25 md:min-w-32',
               // Colors
               {
-                'bg-secondary-100 text-secondary-500 border-secondary-500': ![
-                  'Approved',
-                  'Complete',
-                  'Denied',
-                  'Cancelled',
-                ].includes(data?.Status),
-                'bg-success-200 text-success-500 border-success-400': [
-                  'Approved',
-                  'Complete',
-                ].includes(data?.Status),
-                'bg-gray-200 text-gray-900 border-gray-500': ['Draft'].includes(
-                  'Denied',
-                  'Cancelled',
-                ),
+                'bg-gray-200 text-gray-900 border-gray-500': status === null,
+                'bg-success-200 text-success-500 border-success-400':
+                  status === true,
+                'bg-warning-200 text-warning-500 border-warning-400':
+                  status === false,
               },
             )}
           >
@@ -126,6 +291,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
           )}
         </div>
       )}
+      {snowIncidentSysId && <WorkNotes id={snowIncidentSysId} />}
     </div>
   );
 };
@@ -134,7 +300,7 @@ export const RequestDetail = () => {
   const { submissionId } = useParams();
   const mobile = useSelector(state => state.view.mobile);
 
-  const [{ initialized, loading, error, data }] = useDataItem(
+  const [{ initialized, loading, error, data }, { reload }] = useDataItem(
     fetchSubmission,
     [
       {
@@ -145,6 +311,24 @@ export const RequestDetail = () => {
     ],
     response => response.submission,
   );
+
+  // Start a poller to reload the submission regularly. We'll start at 5
+  // seconds, and double the interval until it gets to 1 minute.
+  const poller = useRef({ id: null, counter: 1 });
+  useEffect(() => {
+    if (typeof reload === 'function') {
+      poller.current.id = setTimeout(
+        () => {
+          reload();
+          // Update the counter by doubling it, but limit it to 12
+          poller.current.counter = Math.min(poller.current.counter * 2, 12);
+        },
+        // Set the delay by multiplying the counter by 5 seconds
+        poller.current.counter * 5000,
+      );
+      return () => clearTimeout(poller.current.id);
+    }
+  }, [reload]);
 
   const icon = getAttributeValue(
     data?.form,
@@ -185,7 +369,7 @@ export const RequestDetail = () => {
         {initialized &&
           (error ? (
             <Error error={error} />
-          ) : loading ? (
+          ) : loading && !data ? (
             <Loading />
           ) : (
             <div

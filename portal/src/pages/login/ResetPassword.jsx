@@ -4,6 +4,7 @@ import { createSubmission, getCsrfToken } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
 import { LoginHeader } from './Login.jsx';
 import { Button } from '../../atoms/Button.jsx';
+import { toastSuccess } from '../../helpers/toasts.js';
 
 export const ResetPassword = () => {
   let { token } = useParams();
@@ -50,7 +51,7 @@ const ResetPasswordRequestForm = () => {
       e.preventDefault();
       const { error } = await createSubmission({
         kappSlug,
-        formSlug: 'password-reset',
+        formSlug: 'account-password-reset',
         values: { Username: username },
         public: true,
       });
@@ -145,9 +146,9 @@ const ResetPasswordChangeForm = ({ token, username }) => {
         headers: { 'X-XSRF-TOKEN': getCsrfToken() },
       });
 
-      if (response.status === 302) {
-        navigate('/');
-        // TODO toast password reset success
+      if (response.status === 302 || (response.ok && response.redirected)) {
+        navigate('/', { state: { persistToasts: true } });
+        toastSuccess({ title: 'Password was successfully updated.' });
       } else {
         try {
           const json = await response.json();

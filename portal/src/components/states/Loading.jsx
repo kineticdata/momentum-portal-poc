@@ -2,10 +2,11 @@ import t from 'prop-types';
 import clsx from 'clsx';
 import { Icon } from '../../atoms/Icon.jsx';
 
-export const Loading = ({ className, size = 48 }) => (
+export const Loading = ({ className, size = 48, small }) => (
   <div
     className={clsx(
-      'flex justify-center items-center text-gray-500 p-6',
+      'flex justify-center items-center text-gray-500',
+      { 'p-6': !small, 'p-3': small },
       className,
     )}
   >
@@ -16,4 +17,5 @@ export const Loading = ({ className, size = 48 }) => (
 Loading.propTypes = {
   className: t.string,
   size: t.number,
+  small: t.bool,
 };
