@@ -19,9 +19,10 @@ import { generateKey } from '@kineticdata/react';
 
 import { Markdown } from './markdown.js';
 import { Search } from './search.js';
+import { Signature } from './signature.js';
 
 // Defines a map of available widgets
-const AVAILABLE_WIDGETS = { Markdown, Search };
+const AVAILABLE_WIDGETS = { Markdown, Search, Signature };
 
 // Ensure the bundle global object exists
 const bundle = window.bundle ?? {};

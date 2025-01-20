@@ -76,7 +76,7 @@ export const Modal = ({
               // Mobile first styles
               'max-md:w-screen max-md:h-screen',
               // Non mobile styles
-              'md:max-w-[calc(100vw-3rem)] md:max-h-[calc(100vh-3rem)] md:rounded md:shadow-lg',
+              'md:max-w-[calc(100vw-3rem)] md:max-h-[calc(100vh-3rem)] md:rounded-[40px] md:shadow-lg',
               {
                 'md:w-screen-sm md:max-h-[60vh]': size === 'sm',
                 'md:w-screen-md md:max-h-[70vh]': size === 'md',
