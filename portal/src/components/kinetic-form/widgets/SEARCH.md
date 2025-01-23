@@ -1,4 +1,4 @@
-[&#x2B9C; Back to Kinetic Form Widgets](README.md)
+[&#x2B9C; Back to Kinetic Form Widgets](README.md#available-widgets)
 
 ## Search Widget
 

@@ -61,25 +61,25 @@ The markdown widget renders a markdown editor (or viewer when disabled), allowin
 
 The search widget renders a typeahead style search field that can be configured to filter static data, or search data retrieved through an integration.
 
-[Search Widget Documentation &#x2B9E;](Search.md)
+[Search Widget Documentation &#x2B9E;](SEARCH.md)
 
 ### Signature
 
 The signature widget renders a signature element, which opens a modal where the user can draw their signature. That signature is the stored as an image in an attachment field on the form.
 
-[Signature Widget Documentation &#x2B9E;](Signature.md)
+[Signature Widget Documentation &#x2B9E;](SIGNATURE.md)
 
 ### Subform
 
 The subform widget renders a Kinetic form in either a modal or inline, allowing users to provide additional information, and the builder to collect the data and store it however they find appropriate.
 
-[Subform Widget Documentation &#x2B9E;](Subform.md)
+[Subform Widget Documentation &#x2B9E;](SUBFORM.md)
 
 ### Toast
 
 The toast widget provides access to toast functions, allowing builders to provide feedback to users. This widget doesn't render anything into the form dom, and thus works differently from the documentation above.
 
-[Toast Widget Documentation &#x2B9E;](Toast.md)
+[Toast Widget Documentation &#x2B9E;](TOAST.md)
 
 ---
 

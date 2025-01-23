@@ -175,7 +175,6 @@ const SearchComponent = forwardRef(
 
     // Handler for when the selection is changed
     const handleChange = ({ value, items }) => {
-      console.log('handleChange', value, items);
       // Remove proxy wrapper from items
       const selectedItems = structuredClone(items);
       // Set value state

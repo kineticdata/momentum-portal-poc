@@ -84,7 +84,6 @@ const SubformComponent = forwardRef(
     // Loaded callback to set ready state and formFn ref value
     const loaded = useCallback(
       form => {
-        console.log('loaded', form);
         setReady(!!form);
         formFn.current = form;
         callIfFn(onLoad, null, [form, { close: destroy }]);
@@ -92,13 +91,9 @@ const SubformComponent = forwardRef(
       [onLoad, destroy],
     );
     // Error callback
-    const error = useCallback(
-      (...args) => {
-        console.log('error', args);
-        callIfFn(onError, null, [{ close: destroy }]);
-      },
-      [onError, destroy],
-    );
+    const error = useCallback(() => {
+      callIfFn(onError, null, [{ close: destroy }]);
+    }, [onError, destroy]);
 
     // API function for getting the kinetic form object for the subform
     const subform = () => {
@@ -107,7 +102,6 @@ const SubformComponent = forwardRef(
         "Subform Widget: The API function `form` isn't available until the form is fully loaded.",
       );
     };
-    console.log('subform widget', { formFn, onSave });
 
     const [toasterId] = useState(!inline ? generateKey() : undefined);
     const toastApis = toasterId
