@@ -175,6 +175,7 @@ const SearchComponent = forwardRef(
 
     // Handler for when the selection is changed
     const handleChange = ({ value, items }) => {
+      console.log('handleChange', value, items);
       // Remove proxy wrapper from items
       const selectedItems = structuredClone(items);
       // Set value state
@@ -191,10 +192,10 @@ const SearchComponent = forwardRef(
         api={{
           getSelection: () => apiData.current.value[0],
           setSelection: v => {
-            const item = typeof v === 'object' ? v : undefined;
+            const item = v && typeof v === 'object' ? v : undefined;
             const value = (item && optionToValue(item)) || undefined;
             handleChange({
-              value: value ? [value] : value,
+              value: value ? [value] : [],
               items: item ? [item] : [],
             });
           },

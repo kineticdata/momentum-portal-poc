@@ -96,15 +96,18 @@ momentum-portal/portal
 
 ## Documentation
 
+[Kinetic Widgets Documentation &#x2B9E;](src/components/kinetic-form/widgets/README.md)
+
 See the [Kinetic Data Documentation Library](https://docs.kineticdata.com/) for more information.
 
 ## Portal S3 Deployment
-The Momentum Portal code can be found in an S3 bucket.  The base URL for the S3 bucket is: `https://s3.amazonaws.com/kinetic-portals/portals/momentum-portal/versions/`
 
-There are versioned directories in S3 that correspond to specific Github Workflow actions that trigger based on events that take place in the repository.  The workflow files can be found [here](../.github/workflows/).
+The Momentum Portal code can be found in an S3 bucket. The base URL for the S3 bucket is: `https://s3.amazonaws.com/kinetic-portals/portals/momentum-portal/versions/`
+
+There are versioned directories in S3 that correspond to specific Github Workflow actions that trigger based on events that take place in the repository. The workflow files can be found [here](../.github/workflows/).
 
 | Github Event          | Version Directory | Github Action Workflow File | Example Usage                                  |
-|-----------------------|-------------------|-----------------------------|------------------------------------------------|
+| --------------------- | ----------------- | --------------------------- | ---------------------------------------------- |
 | Tag Push              | vXX.YY.ZZ         | portal-tag-push.yaml        | Releasing a tagged version.                    |
 | Commit to Main Branch | latest            | portal-main-commits.yaml    | Testing latest commits to main.                |
 | Run Dispatch Workflow | YYYYMMDD-abcd1234 | portal-build-dispatch.yaml  | Testing code on a particular branch or commit. |
@@ -113,9 +116,8 @@ Example: merging a PR (which causes a commit in the `main` branch) would result 
 
 You can also view the output to determine the S3 bucket by viewing the Github Action workflow run.
 
+[github_actions_directory](../.github/workflows/)
 
 ### License
 
 Code released under [the MIT license](https://github.com/coreui/coreui-free-react-admin-template/blob/main/LICENSE).
-
-[github_actions_directory](../.github/workflows/)

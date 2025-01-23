@@ -5,6 +5,7 @@ import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
 import { getChildSlots } from '../helpers/atoms.js';
 import { CloseButton } from './Button.jsx';
+import { Toaster } from './Toaster.jsx';
 
 /**
  * A modal.
@@ -28,6 +29,9 @@ import { CloseButton } from './Button.jsx';
  *  escape key is pressed.
  * @param {boolean} [props.closeOnInteractOutside=true] Should the modal close
  *  when the user interacts with the area outside the modal.
+ * @param {string} [props.toasterId] The id for a Toaster component that should
+ *  be rendered inside the modal to allow for toasts that can be interacted
+ *  with without the modal getting closed.
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
  *  available slots in the modal. Available slots are:
  *  - trigger: Component that toggles the modal open state when interacted with.
@@ -45,6 +49,7 @@ export const Modal = ({
   size = 'sm',
   closeOnEscape,
   closeOnInteractOutside,
+  toasterId,
   children,
 }) => {
   const slots = getChildSlots(children, {
@@ -73,10 +78,11 @@ export const Modal = ({
             className={clsx(
               // Common styles
               'data-[state=open]:flex flex-col items-stretch py-3 bg-white',
+              'max-h-[calc(100vh-3rem)] rounded-[40px] shadow-lg',
               // Mobile first styles
-              'max-md:w-screen max-md:h-screen',
+              'max-md:w-screen',
               // Non mobile styles
-              'md:max-w-[calc(100vw-3rem)] md:max-h-[calc(100vh-3rem)] md:rounded-[40px] md:shadow-lg',
+              'md:max-w-[calc(100vw-3rem)]',
               {
                 'md:w-screen-sm md:max-h-[60vh]': size === 'sm',
                 'md:w-screen-md md:max-h-[70vh]': size === 'md',
@@ -117,6 +123,7 @@ export const Modal = ({
                 {slots.footer}
               </ark.div>
             )}
+            {toasterId && <Toaster id={toasterId} />}
           </Dialog.Content>
 
           {/* This div is used to position the modal higher up on the screen */}
@@ -135,5 +142,6 @@ Modal.propTypes = {
   closeOnInteractOutside: t.bool,
   title: t.string.isRequired,
   size: t.string,
+  toasterId: t.string,
   children: t.node,
 };

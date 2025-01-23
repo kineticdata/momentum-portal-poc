@@ -15,14 +15,18 @@
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { HashRouter } from 'react-router-dom';
 import { generateKey } from '@kineticdata/react';
+import { callIfFn } from '../../../helpers/index.js';
 
 import { Markdown } from './markdown.js';
 import { Search } from './search.js';
 import { Signature } from './signature.js';
+import { Subform } from './subform.js';
+import { Toast } from './toast.js';
 
 // Defines a map of available widgets
-const AVAILABLE_WIDGETS = { Markdown, Search, Signature };
+const AVAILABLE_WIDGETS = { Markdown, Search, Signature, Subform, Toast };
 
 // Ensure the bundle global object exists
 const bundle = window.bundle ?? {};
@@ -104,27 +108,31 @@ export const registerWidget = (Widget, { container, Component, props, id }) => {
   // Render the component
   state.root = createRoot(container);
   state.root.render(
-    <Component
-      {...props}
-      // Use a custom ref function that will update the api state with any
-      // API functions or properties provided by the component
-      ref={el => {
-        if (typeof el?.api === 'object') {
-          Object.assign(state.api, el.api);
-        } else {
-          // If there is no element or api (such as after the element is
-          // unmounted) clear any API functions from the state
-          Object.keys(state.api).forEach(key => {
-            // Keep the container function since that's the initial API state
-            if (!['container'].includes(key)) {
-              delete state.api[key];
-            }
-          });
-          // Add a destroyed flag after the component is unmounted
-          Object.assign(state.api, { destroyed: true });
-        }
-      }}
-    />,
+    <HashRouter>
+      <Component
+        {...props}
+        // Use a custom ref function that will update the api state with any
+        // API functions or properties provided by the component
+        ref={el => {
+          if (typeof el?.api === 'object') {
+            Object.assign(state.api, el.api);
+          } else {
+            // If there is no element or api (such as after the element is
+            // unmounted) clear any API functions from the state
+            Object.keys(state.api).forEach(key => {
+              // Keep the container function since that's the initial API state
+              if (!['container'].includes(key)) {
+                delete state.api[key];
+              }
+            });
+            // Add a destroyed flag after the component is unmounted
+            Object.assign(state.api, { destroyed: true });
+          }
+        }}
+        // Pass a way to trigger the destroy function from within the component
+        destroy={() => callIfFn(state.api.destroy)}
+      />
+    </HashRouter>,
   );
 
   // Register this widget by defining a cleanup function

@@ -102,7 +102,7 @@ export const SearchModal = ({ children }) => {
             >
               Previous
             </Button>
-            <div className="flex justify-center items-center w-11 h-11 bg-secondary-400 rounded-full font-semibold">
+            <div className="flex justify-center items-center flex-none w-11 h-11 bg-secondary-400 rounded-full font-semibold">
               {searchResults.pageNumber}
             </div>
             <Button

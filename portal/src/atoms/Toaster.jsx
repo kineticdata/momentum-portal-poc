@@ -78,7 +78,7 @@ export const Toaster = ({
               </Toast.CloseTrigger>
             </div>
             {toast.description && (
-              <Toast.Description className="">
+              <Toast.Description className="whitespace-pre-wrap">
                 {toast.description}
               </Toast.Description>
             )}
