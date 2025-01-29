@@ -32,7 +32,12 @@ export const generateFormLayout = ({
    * @param {JSX.Element|JSX.Element[]} options.content The form content to
    *  render.
    */
-  const FormLayout = ({ form, submission, content }) => {
+  const FormLayout = ({
+    form,
+    submission,
+    content,
+    reviewPaginationControl,
+  }) => {
     const spaceAdmin = useSelector(state => state.app.profile?.spaceAdmin);
     const location = useLocation();
     const backPath = location.state?.backPath;
@@ -121,6 +126,7 @@ export const generateFormLayout = ({
         >
           <div className="mx-auto p-6 md:p-10 w-full max-w-screen-lg">
             {content}
+            {reviewPaginationControl}
           </div>
         </div>
       </div>
