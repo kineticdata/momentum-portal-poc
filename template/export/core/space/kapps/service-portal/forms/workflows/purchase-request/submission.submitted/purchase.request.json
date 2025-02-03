@@ -185,7 +185,7 @@
           "id": "Assignees",
           "label": "Assignees",
           "menu": "",
-          "value": "brian.peterson@kineticdata.com",
+          "value": "approvers@kineticdata.com",
           "required": true
         },
         {
