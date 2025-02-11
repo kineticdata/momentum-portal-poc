@@ -65,7 +65,7 @@ The search widget renders a typeahead style search field that can be configured 
 
 ### Signature
 
-The signature widget renders a signature element, which opens a modal where the user can draw their signature. That signature is the stored as an image in an attachment field on the form.
+The signature widget renders a signature element, which opens a modal where the user can draw or type their signature. That signature is then stored as an image in an attachment field on the form.
 
 [Signature Widget Documentation &#x2B9E;](SIGNATURE.md)
 

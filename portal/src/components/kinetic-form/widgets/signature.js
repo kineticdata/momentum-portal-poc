@@ -369,7 +369,7 @@ SignatureComponent.propTypes = {
  * instance of the widget and render it into the provided container.
  *
  * @param {HTMLElement} container HTML Element into which to render the widget.
- * @param {Object} field Kinetic text field with 2 or more rows.
+ * @param {Object} field The Kinetic field object used to store the value of the signature.
  * @param {SignatureWidgetConfig} config Configuration object for the widget.
  * @param {string} [id] Optional id that can be used to retrieve a reference to
  *  the widget's API functions using the `Signature.get` function.
