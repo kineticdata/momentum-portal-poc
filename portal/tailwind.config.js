@@ -56,6 +56,12 @@ export default {
       },
       fontFamily: {
         sans: ['"Mona Sans Expanded"'],
+        sunrise: ['"Waiting for the Sunrise"'],
+        grechen: ['"Grechen Fuemen"'],
+        nothing: ['"Nothing You Could Do"'],
+        mynerve: ['"Mynerve"'],
+        condiment: ['"Condiment"'],
+        comforter: ['"Comforter Brush"'],
       },
       fontSize: {
         h4: ['1.125rem', '1.75rem'] /* 18px, 28px */,

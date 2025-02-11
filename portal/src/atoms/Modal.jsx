@@ -84,9 +84,9 @@ export const Modal = ({
               // Non mobile styles
               'md:max-w-[calc(100vw-3rem)]',
               {
-                'md:w-screen-sm md:max-h-[60vh]': size === 'sm',
-                'md:w-screen-md md:max-h-[70vh]': size === 'md',
-                'md:w-screen-lg md:max-h-[80vh]': size === 'lg',
+                'md:w-screen-sm': size === 'sm',
+                'md:w-screen-md': size === 'md',
+                'md:w-screen-lg': size === 'lg',
                 'md:w-screen': size === 'xl',
               },
             )}

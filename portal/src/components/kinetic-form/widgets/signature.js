@@ -1,8 +1,9 @@
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useRef } from 'react';
 import clsx from 'clsx';
 import t from 'prop-types';
 import { Modal } from '../../../atoms/Modal.jsx';
 import { SignaturePad } from '@ark-ui/react/signature-pad';
+import { Tabs } from '@ark-ui/react/tabs';
 import { Icon } from '../../../atoms/Icon.jsx';
 import {
   WidgetAPI,
@@ -12,6 +13,8 @@ import {
 } from './index.js';
 import { getCsrfToken } from '@kineticdata/react';
 import { toastError } from '../../../helpers/toasts.js';
+import { Provider, useSelector } from 'react-redux';
+import { store } from '../../../redux.js';
 
 /**
  * @param {Object} props.field Kinetic field object
@@ -23,6 +26,7 @@ const SignatureComponent = forwardRef(
       field,
       modalTitle = 'Sign your form',
       signaturePadLabel = 'Signature',
+      fullNameLabel = 'Full Name*',
       agreementText = 'I understand this is a legal representation of my signature.',
       savedButtonLabel = 'Save',
       savedFileName = 'signature_widget',
@@ -31,12 +35,32 @@ const SignatureComponent = forwardRef(
     },
     ref,
   ) => {
+    const canvasRef = useRef(null);
+    const profile = useSelector(state => state.app.profile);
     const [open, setOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('draw');
     const [imageUrl, setImageUrl] = useState('');
+    const [fullName, setFullName] = useState(
+      profile.displayName || 'Full Name',
+    );
+    const [selectedStyle, setSelectedStyle] = useState('');
     const [savedSignature, setSavedSignature] = useState(() =>
       field.value()?.[0]
         ? `${field.form().fileDownloadPath(field.name())}/0/${encodeURIComponent(field.value()[0].name)}`
         : null,
+    );
+
+    const signatureFonts = [
+      { font: 'Waiting for the Sunrise' },
+      { font: 'Mynerve' },
+      { font: 'Grechen Fuemen' },
+      { font: 'Condiment' },
+      { font: 'Nothing You Could Do' },
+      { font: 'Comforter Brush' },
+    ];
+
+    const tabClasses = clsx(
+      'flex items-center justify-center gap-1 px-3 py-2 h-[2.25rem] w-[6rem] rounded-2.5xl',
     );
 
     // Function to get the value
@@ -51,6 +75,39 @@ const SignatureComponent = forwardRef(
       field.value([]);
     };
 
+    const generateSignatureImage = () => {
+      const canvas = canvasRef.current;
+      const canvasContext = canvas.getContext('2d');
+
+      canvas.width = 500;
+      canvas.height = 100;
+
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+      canvasContext.fillStyle = '#11005E';
+      canvasContext.textAlign = 'center';
+      canvasContext.textBaseline = 'middle';
+
+      let fontSize = 48;
+      canvasContext.font = `${fontSize}px ${selectedStyle}`;
+
+      let textWidth = canvasContext.measureText(fullName.toUpperCase()).width;
+
+      // Adjusts the font size to ensure the text fits within the canvas width
+      while (textWidth > canvas.width - 20 && fontSize > 10) {
+        fontSize -= 2;
+        canvasContext.font = `${fontSize}px ${selectedStyle}`;
+        textWidth = canvasContext.measureText(fullName.toUpperCase()).width;
+      }
+
+      canvasContext.fillText(
+        fullName.toUpperCase(),
+        canvas.width / 2,
+        canvas.height / 2,
+      );
+
+      return canvas.toDataURL('image/png');
+    };
+
     const dataUrlToBlob = dataUrl => {
       return fetch(dataUrl)
         .then(response => response.blob())
@@ -58,10 +115,13 @@ const SignatureComponent = forwardRef(
     };
 
     const onSave = async () => {
+      let signatureImageUrl =
+        activeTab === 'draw' ? imageUrl : generateSignatureImage();
+
       let data = new FormData();
       data.append(
         'files',
-        await dataUrlToBlob(imageUrl),
+        await dataUrlToBlob(signatureImageUrl),
         `${savedFileName}.png`,
       );
 
@@ -77,7 +137,7 @@ const SignatureComponent = forwardRef(
 
           const responseData = await response.json();
           field.value(responseData);
-          setSavedSignature(imageUrl);
+          setSavedSignature(signatureImageUrl);
           setOpen(false);
         })
         .catch(() => {
@@ -90,6 +150,10 @@ const SignatureComponent = forwardRef(
     const onExitComplete = () => {
       setImageUrl('');
     };
+
+    const isSaveDisabled =
+      (activeTab === 'draw' && !imageUrl) ||
+      (activeTab === 'type' && (!selectedStyle || !fullName));
 
     return (
       <WidgetAPI
@@ -104,7 +168,7 @@ const SignatureComponent = forwardRef(
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="w-[271px] h-[59px] bg-white border border-primary-400 rounded-2.5xl hover:bg-primary-100 flex items-center justify-center focus-visible:bg-primary-100 outline-0"
+              className="w-[17rem] h-[3.5rem] bg-white border border-primary-400 rounded-2.5xl hover:bg-primary-100 flex items-center justify-center focus-visible:bg-primary-100 outline-0"
             >
               {savedSignature ? (
                 <img
@@ -119,7 +183,7 @@ const SignatureComponent = forwardRef(
               )}
             </button>
             {savedSignature && (
-              <button className="flex ml-6 font-semibold" onClick={reset}>
+              <button className="ml-6 font-semibold" onClick={reset}>
                 {clearButtonLabel}
               </button>
             )}
@@ -133,38 +197,130 @@ const SignatureComponent = forwardRef(
           size="sm"
         >
           <div slot="body">
-            <SignaturePad.Root
-              onDrawEnd={details =>
-                details.getDataUrl('image/png').then(url => setImageUrl(url))
-              }
+            <Tabs.Root
+              value={activeTab}
+              onValueChange={tab => setActiveTab(tab.value)}
             >
-              <div className="mb-2 font-semibold text-gray-900">
-                <SignaturePad.Label>{signaturePadLabel}</SignaturePad.Label>
-              </div>
-              <SignaturePad.Control
-                className={clsx(
-                  'border border-primary-400 bg-gray-100 relative rounded-2.5xl transition-all',
-                  'hover:bg-primary-100',
-                  'focus-within:ring focus-within:ring-secondary-400',
-                )}
-              >
-                <SignaturePad.Segment />
-                <SignaturePad.Guide
+              <Tabs.List className="justify-center flex p-2 bg-primary-100 rounded-[3.75rem] w-[16rem] gap-8 mb-6">
+                <Tabs.Trigger
+                  value="draw"
                   className={clsx(
-                    'h-[200px] relative rounded-2.5xl',
-                    'border-primary-400',
+                    tabClasses,
+                    activeTab === 'draw'
+                      ? 'bg-primary-900 text-primary-100'
+                      : 'bg-primary-100 text-grey-900',
                   )}
                 >
-                  <SignaturePad.ClearTrigger
-                    className="absolute top-2 right-2 mr-3 mt-3"
-                    onClick={reset}
+                  <Icon name="writing" aria-label="draw"></Icon>
+                  Draw
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  value="type"
+                  className={clsx(
+                    tabClasses,
+                    activeTab === 'type'
+                      ? 'bg-primary-900 text-primary-100'
+                      : 'bg-primary-100 text-grey-900',
+                  )}
+                >
+                  <Icon name="keyboard" aria-label="keyboard"></Icon>
+                  Type
+                </Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Content value="draw">
+                <SignaturePad.Root
+                  onDrawEnd={details =>
+                    details
+                      .getDataUrl('image/png')
+                      .then(url => setImageUrl(url))
+                  }
+                >
+                  <div className="mb-2 font-semibold text-gray-900">
+                    <SignaturePad.Label>{signaturePadLabel}</SignaturePad.Label>
+                  </div>
+                  <SignaturePad.Control
+                    className={clsx(
+                      'border border-primary-400 bg-gray-100 relative rounded-2.5xl transition-all',
+                      'hover:bg-primary-100',
+                      'focus-within:ring focus-within:ring-secondary-400',
+                    )}
                   >
-                    <Icon name="refresh" aria-label="reset"></Icon>
-                  </SignaturePad.ClearTrigger>
-                  <div className="flex justify-between items-center absolute bottom-4 left-5 right-6 border-t-2 border-gray-400"></div>
-                </SignaturePad.Guide>
-              </SignaturePad.Control>
-            </SignaturePad.Root>
+                    <SignaturePad.Segment />
+                    <SignaturePad.Guide
+                      className={clsx(
+                        'h-[12.5rem] relative rounded-2.5xl',
+                        'border-primary-400',
+                      )}
+                    >
+                      <SignaturePad.ClearTrigger
+                        className="absolute top-2 right-2 mr-3 mt-3"
+                        onClick={reset}
+                      >
+                        <Icon name="refresh" aria-label="reset"></Icon>
+                      </SignaturePad.ClearTrigger>
+                      <div className="flex justify-between items-center absolute bottom-4 left-5 right-6 border-t-2 border-gray-400"></div>
+                    </SignaturePad.Guide>
+                  </SignaturePad.Control>
+                </SignaturePad.Root>
+              </Tabs.Content>
+              <Tabs.Content value="type">
+                <div className="mb-4">
+                  <label
+                    htmlFor="fullName"
+                    className="block text-sm font-semibold text-gray-900 mb-2"
+                  >
+                    {fullNameLabel}
+                  </label>
+                  <div className="field w-full">
+                    <input
+                      type="text"
+                      value={fullName}
+                      onChange={e => setFullName(e.target.value)}
+                      className="block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-semibold
+               text-primary-900 bg-white border-primary-400
+               hover:bg-primary-100 focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400
+               disabled:text-gray-900 disabled:bg-gray-100"
+                    />
+                  </div>
+                </div>
+                <hr className="mb-4 mt-6 border-primary-400" />
+                <div className="grid grid-cols-2 gap-4 radio-btn">
+                  {signatureFonts.map(style => (
+                    <label
+                      key={style.font}
+                      className="flex items-center justify-between border rounded-2.5xl p-4 w-[18rem] h-16 cursor-pointer transition-all
+             text-primary-900 bg-white border-primary-400 hover:bg-primary-100
+             focus-within:bg-white focus-within:ring focus-within:ring-secondary-400
+             overflow-wrap-anywhere disabled:text-gray-900 disabled:bg-gray-100"
+                      onClick={() => setSelectedStyle(style.font)}
+                    >
+                      <span
+                        className="text-2xl text-primary-900 uppercase"
+                        style={{
+                          fontFamily: style.font,
+                          display: 'inline-block',
+                          maxWidth: '12.5rem',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {fullName}
+                      </span>
+
+                      <input
+                        type="radio"
+                        value={style.font}
+                        checked={selectedStyle === style.font}
+                        onChange={() => setSelectedStyle(style.font)}
+                        className="flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat rounded-full
+               checked:bg-[url('./icons/radio-checked.svg')] disabled:checked:bg-[url('./icons/radio-checked_disabled.svg')] bg-[length:0.75rem]"
+                      />
+                    </label>
+                  ))}
+                </div>
+              </Tabs.Content>
+            </Tabs.Root>
           </div>
           <div slot="footer" className="flex flex-col items-center">
             <p className="text-center text-small text-gray-900">
@@ -173,7 +329,7 @@ const SignatureComponent = forwardRef(
             <button
               type="button"
               onClick={onSave}
-              disabled={!imageUrl}
+              disabled={isSaveDisabled}
               className={clsx(
                 'w-full rounded-2.5xl bg-secondary-400 button-text py-2 font-semibold border border-primary-500',
                 {
@@ -183,6 +339,11 @@ const SignatureComponent = forwardRef(
             >
               {savedButtonLabel}
             </button>
+            <canvas
+              ref={canvasRef}
+              id="signature-canvas"
+              style={{ display: 'none' }}
+            ></canvas>
           </div>
         </Modal>
       </WidgetAPI>
@@ -194,6 +355,7 @@ SignatureComponent.propTypes = {
   field: t.object.isRequired,
   modalTitle: t.string,
   signaturePadLabel: t.string,
+  fullNameLabel: t.string,
   agreementText: t.string,
   savedButtonLabel: t.string,
   savedFileName: t.string,
@@ -219,7 +381,11 @@ export const Signature = ({ container, field, config, id } = {}) => {
   ) {
     return registerWidget(Signature, {
       container,
-      Component: SignatureComponent,
+      Component: props => (
+        <Provider store={store}>
+          <SignatureComponent {...props} />
+        </Provider>
+      ),
       props: { ...config, field },
       id,
     });
@@ -230,6 +396,7 @@ export const Signature = ({ container, field, config, id } = {}) => {
  * @typedef {Object} SignatureWidgetConfig
  * @property {string} [modalTitle] The title displayed at the top of the modal.
  * @property {string} [signaturePadLabel] The label displayed above the signature pad.
+ * @property {string} [fullNameLabel] The label displayed above the signature type styles.
  * @property {string} [agreementText] The text displayed to indicate the agreement for the signature.
  * @property {string} [savedButtonLabel] The label for the "Save" button in the modal.
  * @property {string} [savedFileName] The name of the file saved after the signature is completed.
