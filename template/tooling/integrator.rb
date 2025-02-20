@@ -84,12 +84,9 @@ def sanitize_http_basic(connection)
 end
 
 def delete_metadata(item)
-  item.delete("id")
   item.delete("insertedAt")
   item.delete("updatedAt")
   item.delete("lockVersion")
-  # operation
-  item.delete("connectionId")
   # connection
   item.delete("status")
   item
