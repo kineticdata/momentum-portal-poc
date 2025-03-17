@@ -3,9 +3,10 @@ import clsx from 'clsx';
 import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
 import { ServicesPanel } from '../services/ServicesPanel.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
-import useDataList from '../../helpers/useDataList.js';
 import { Loading } from '../states/Loading.jsx';
 import { sortBy } from '../../helpers/index.js';
+import { useData } from '../../helpers/hooks/useData.js';
+import { useMemo } from 'react';
 
 const ShortcutLink = ({ title, description, icon, link, index, mobile }) => {
   return (
@@ -85,7 +86,7 @@ const ShortcutLink = ({ title, description, icon, link, index, mobile }) => {
   );
 };
 
-// query for retrieving shortcuts data
+// Query for retrieving shortcuts data
 const shortcutsSearch = {
   q: defineKqlQuery().equals('values[Status]', 'status').end()({
     status: 'Active',
@@ -93,28 +94,36 @@ const shortcutsSearch = {
   include: ['values'],
   limit: 6,
 };
+
 // Transform function for converting shortcuts submissions into the format
 // needed for the UI
-const shortcutsTransform = ({ submissions }) =>
+const shortcutsTransform = submissions =>
   submissions
-    .map(({ values }) => ({
+    ?.map(({ values }) => ({
       title: values['Title'],
       description: values['Description'],
       link: values['URL'],
       icon: values['Icon Name'],
       sortOrder: parseInt(values['Sort Order'], 10) || 999,
     }))
-    .sort(sortBy('sortOrder'));
+    ?.sort(sortBy('sortOrder'));
 
 export const ShortcutsSection = () => {
   const mobile = useSelector(state => state.view.mobile);
   const { kappSlug } = useSelector(state => state.app);
 
-  const [{ initialized, error, loading, data }] = useDataList(
-    searchSubmissions,
-    [{ kapp: kappSlug, form: 'portal-shortcuts', search: shortcutsSearch }],
-    shortcutsTransform,
+  // Parameters for the shortcuts query
+  const params = useMemo(
+    () => ({
+      kapp: kappSlug,
+      form: 'portal-shortcuts',
+      search: shortcutsSearch,
+    }),
+    [kappSlug],
   );
+
+  const { initialized, loading, response } = useData(searchSubmissions, params);
+  const shortcuts = shortcutsTransform(response?.submissions);
 
   return (
     <div className="relative md:min-h-40 overflow-visible">
@@ -134,11 +143,11 @@ export const ShortcutsSection = () => {
             : 'none',
         }}
       >
-        {initialized && !error && (
+        {initialized && !response?.error && (
           <>
             {loading && <Loading />}
             {!loading &&
-              data.map((shortcut, index) => (
+              shortcuts?.map((shortcut, index) => (
                 <ShortcutLink
                   key={index}
                   index={index}

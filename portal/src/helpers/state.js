@@ -8,8 +8,8 @@ export const themeActions = regRedux(
   'theme',
   { ...themeState },
   {
-    setTheme(state, space) {
-      calculateThemeState(state, getAttributeValue(space.data, 'Theme'));
+    setTheme(state, payload) {
+      calculateThemeState(state, getAttributeValue(payload.space, 'Theme'));
     },
     enableEditor(state) {
       state.editor = true;
@@ -41,24 +41,24 @@ export const appActions = regRedux(
     setAuthenticated(state, payload) {
       state.authenticated = payload;
     },
-    setSpace(state, { error, data }) {
+    setSpace(state, { error, space }) {
       if (error) state.error = error;
       else {
-        state.space = data;
+        state.space = space;
         state.kappSlug = getAttributeValue(
-          data,
+          space,
           'Service Portal Kapp Slug',
           'service-portal',
         );
       }
     },
-    setKapp(state, { error, data }) {
+    setKapp(state, { error, kapp }) {
       if (error) state.error = state.error || error;
-      else state.kapp = data;
+      else state.kapp = kapp;
     },
-    setProfile(state, { error, data }) {
+    setProfile(state, { error, profile }) {
       if (error) state.error = state.error || error;
-      else state.profile = data;
+      else state.profile = profile;
     },
     updateProfile(state, profile) {
       Object.assign(state.profile, profile);

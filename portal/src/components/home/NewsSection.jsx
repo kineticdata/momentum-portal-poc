@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import { Carousel } from '@ark-ui/react/carousel';
 import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
 import { sortBy } from '../../helpers/index.js';
-import useDataList from '../../helpers/useDataList.js';
 import { Loading } from '../states/Loading.jsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '../../atoms/Button.jsx';
+import { useData } from '../../helpers/hooks/useData.js';
 
 const NewsLink = ({ title, description, link, image, index, mobile }) => {
   return (
@@ -57,6 +57,7 @@ const NewsLink = ({ title, description, link, image, index, mobile }) => {
   );
 };
 
+// Query for retrieving news data
 const newsSearch = {
   q: defineKqlQuery().equals('values[Status]', 'status').end()({
     status: 'Active',
@@ -64,31 +65,35 @@ const newsSearch = {
   include: ['values'],
   limit: 5,
 };
+
 // Transform function for converting news submissions into the format
 // needed for the UI
-const newsTransform = ({ submissions }) =>
+const newsTransform = submissions =>
   submissions
-    .map(({ values }) => ({
+    ?.map(({ values }) => ({
       title: values['Title'],
       description: values['Description'],
       link: values['URL'],
       image: values['Image URL'],
       sortOrder: parseInt(values['Sort Order'], 10) || 999,
     }))
-    .filter(news => news.link)
-    .sort(sortBy('sortOrder'));
+    ?.filter(news => news.link)
+    ?.sort(sortBy('sortOrder'));
 
 export const NewsSection = () => {
   const mobile = useSelector(state => state.view.mobile);
   const { kappSlug } = useSelector(state => state.app);
 
-  const [{ initialized, error, loading, data }] = useDataList(
-    searchSubmissions,
-    [{ kapp: kappSlug, form: 'portal-news', search: newsSearch }],
-    newsTransform,
+  // Parameters for the news query
+  const params = useMemo(
+    () => ({ kapp: kappSlug, form: 'portal-news', search: newsSearch }),
+    [kappSlug],
   );
 
-  const pageSize = data.length || 1;
+  const { initialized, loading, response } = useData(searchSubmissions, params);
+  const news = newsTransform(response?.submissions);
+
+  const pageSize = news?.length || 1;
   const [openIndex, setOpenIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
@@ -102,10 +107,10 @@ export const NewsSection = () => {
 
   return (
     initialized &&
-    !error && (
+    !response?.error && (
       <>
         {loading && <Loading />}
-        {!loading && data.length > 0 && (
+        {!loading && news?.length > 0 && (
           <Carousel.Root
             index={openIndex}
             onIndexChange={({ index }) => setOpenIndex(index)}
@@ -124,7 +129,7 @@ export const NewsSection = () => {
               )}
             >
               <Carousel.ItemGroup className="flex-auto max-h-full">
-                {data.map((news, index) => (
+                {news.map((news, index) => (
                   <Carousel.Item key={index} index={index}>
                     <NewsLink index={index} mobile={mobile} {...news} />
                   </Carousel.Item>
@@ -136,7 +141,7 @@ export const NewsSection = () => {
                 'absolute bottom-0.75 left-1.5 md:bottom-5 md:left-[4.625rem]',
               )}
             >
-              {data.map((news, index) => (
+              {news.map((news, index) => (
                 <Carousel.Indicator key={index} index={index} asChild>
                   <Button
                     variant="custom"

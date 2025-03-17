@@ -41,7 +41,7 @@ const generateDeleteDraftButton =
                   });
                 } else {
                   toastSuccess({ title: 'Successfully deleted draft request' });
-                  callIfFn(listActions?.reload);
+                  callIfFn(listActions?.reloadPage);
                   navigate(backTo || '/requests', {
                     state: { persistToasts: true },
                   });

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
@@ -13,7 +13,8 @@ import { executeIntegration } from '../../../helpers/api.js';
 import { callIfFn, timeAgo } from '../../../helpers/index.js';
 import { getAttributeValue } from '../../../helpers/records.js';
 import { toastError, toastSuccess } from '../../../helpers/toasts.js';
-import useDataItem from '../../../helpers/useDataItem.js';
+import { useData } from '../../../helpers/hooks/useData.js';
+import { usePoller } from '../../../helpers/hooks/usePoller.js';
 
 const parseActivityData = data => {
   if (!data) return data;
@@ -22,23 +23,6 @@ const parseActivityData = data => {
   } catch (e) {
     return data;
   }
-};
-
-const useWorkNotes = ({ kappSlug, id }) => {
-  // Fetch work notes if id was provided
-  const [{ initialized, loading, error, data }, { reload }] = useDataItem(
-    executeIntegration,
-    id && [
-      {
-        kappSlug,
-        integrationName: 'Get SNOW Incident Work Notes',
-        parameters: { id },
-      },
-    ],
-    response => response?.Result,
-  );
-
-  return { initialized, loading, error, data, reload };
 };
 
 const createWorkNote = ({ kappSlug, id, note, onSuccess }) => {
@@ -61,11 +45,28 @@ const WorkNotes = ({ id }) => {
   const mobile = useSelector(state => state.view.mobile);
   // State for tracking if work notes section is open
   const [open, setOpen] = useState(false);
-  // Get work notes if the section is open
-  const { ...workNotes } = useWorkNotes({
-    kappSlug,
-    id: open ? id : undefined,
-  });
+
+  // Parameters for the query (if null, the query will not run)
+  const params = useMemo(
+    () =>
+      open
+        ? {
+            kappSlug,
+            integrationName: 'Get SNOW Incident Work Notes',
+            parameters: { id },
+          }
+        : null,
+    [kappSlug, open, id],
+  );
+
+  // Retrieve the work notes
+  const { initialized, loading, response, actions } = useData(
+    executeIntegration,
+    params,
+  );
+  const { Result: data } = response || {};
+  const { reloadData } = actions;
+
   // State for adding new work notes
   const [newNote, setNewNote] = useState(null);
 
@@ -93,24 +94,23 @@ const WorkNotes = ({ id }) => {
               variant="tertiary"
               size="custom"
               className="rounded-full p-1"
-              onClick={workNotes.reload}
-              disabled={workNotes.loading}
+              onClick={reloadData}
+              disabled={loading}
               aria-label="Refresh Work Notes"
             >
               <Icon name="refresh" size={mobile ? 16 : 20} />
             </Button>
           )}
         </div>
-        {open && workNotes.initialized && (
+        {open && initialized && (
           <>
-            {workNotes.loading && <Loading size={24} small />}
-            {!workNotes.loading &&
-              (!workNotes.data || workNotes.data.length === 0) && (
-                <div className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3 text-gray-900 italic">
-                  There are no work notes.
-                </div>
-              )}
-            {(workNotes.data || []).map((note, i) => (
+            {loading && <Loading size={28} xsmall />}
+            {!loading && (!data || data.length === 0) && (
+              <div className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3 text-gray-900 italic">
+                There are no work notes.
+              </div>
+            )}
+            {(data || []).map((note, i) => (
               <div
                 key={`${note?.['Created On']}-${i}`}
                 className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3"
@@ -152,7 +152,7 @@ const WorkNotes = ({ id }) => {
                         note: newNote,
                         onSuccess: () => {
                           setNewNote(null);
-                          workNotes.reload();
+                          reloadData();
                         },
                       })
                     }
@@ -300,41 +300,31 @@ export const RequestDetail = () => {
   const { submissionId } = useParams();
   const mobile = useSelector(state => state.view.mobile);
 
-  const [{ initialized, loading, error, data }, { reload }] = useDataItem(
-    fetchSubmission,
-    [
-      {
-        id: submissionId,
-        include:
-          'activities,activities.details,details,form.attributesMap[Icon]',
-      },
-    ],
-    response => response.submission,
+  // Parameters for the query (if null, the query will not run)
+  const params = useMemo(
+    () => ({
+      id: submissionId,
+      include: 'activities,activities.details,details,form.attributesMap[Icon]',
+    }),
+    [submissionId],
   );
 
-  // Start a poller to reload the submission regularly. We'll start at 5
-  // seconds, and double the interval until it gets to 1 minute.
-  const poller = useRef({ id: null, counter: 1 });
-  useEffect(() => {
-    if (typeof reload === 'function') {
-      poller.current.id = setTimeout(
-        () => {
-          reload();
-          // Update the counter by doubling it, but limit it to 12
-          poller.current.counter = Math.min(poller.current.counter * 2, 12);
-        },
-        // Set the delay by multiplying the counter by 5 seconds
-        poller.current.counter * 5000,
-      );
-      return () => clearTimeout(poller.current.id);
-    }
-  }, [reload]);
+  // Retrieve the submission record
+  const { initialized, loading, response, actions } = useData(
+    fetchSubmission,
+    params,
+  );
+  const { error, submission: data } = response || {};
+  const { reloadData } = actions;
 
   const icon = getAttributeValue(
     data?.form,
     'Icon',
     data ? 'checklist' : 'blank',
   );
+
+  // Start a poller to reload the submission regularly
+  usePoller(reloadData);
 
   return (
     <>

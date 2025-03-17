@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
 import { RequestsList } from './RequestsList.jsx';
 import { RequestDetail } from './RequestDetail.jsx';
-import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
 import { Form } from '../../forms/Form.jsx';
-import useDataList from '../../../helpers/useDataList.js';
+import { usePaginatedData } from '../../../helpers/hooks/usePaginatedData.js';
 
 const buildMyRequestsSearch = (profile, filters) => {
   // Start query builder
@@ -37,6 +37,8 @@ const buildMyRequestsSearch = (profile, filters) => {
       ].filter(Boolean),
       username: profile.username,
     }),
+    sortOrder: 'createdAt',
+    direction: 'asc',
     include: ['details', 'values', 'form', 'form.attributesMap'],
     limit: 10,
   };
@@ -50,36 +52,36 @@ export const Requests = () => {
     status: { draft: false, open: false, closed: false },
   });
 
-  // Search object based on the current filters
-  const search = useMemo(
-    () => buildMyRequestsSearch(profile, filters),
-    [profile, filters],
+  // Parameters for the query (if null, the query will not run)
+  const params = useMemo(
+    () => ({ kapp: kappSlug, search: buildMyRequestsSearch(profile, filters) }),
+    [kappSlug, profile, filters],
   );
 
-  // Retrieve the actions list data
-  const [listData, listActions] = useDataList(
-    searchSubmissions,
-    [{ kapp: kappSlug, search }],
-    ({ submissions }) => submissions,
-  );
+  // Retrieve the data for the requests list
+  const { initialized, loading, response, pageNumber, actions } =
+    usePaginatedData(searchSubmissions, params);
 
   return (
     <Routes>
-      <Route
-        path=":submissionId"
-        element={<RequestDetail listActions={listActions} />}
-      />
+      <Route path=":submissionId" element={<RequestDetail />} />
       <Route
         path=":submissionId/edit"
-        element={<Form listActions={listActions} />}
+        element={<Form listActions={actions} />}
       />
       <Route path=":submissionId/review" element={<Form review={true} />} />
       <Route
         path="*"
         element={
           <RequestsList
-            listData={listData}
-            listActions={listActions}
+            listData={{
+              initialized,
+              loading,
+              data: response?.submissions,
+              error: response?.error,
+              pageNumber,
+            }}
+            listActions={actions}
             filters={filters}
             setFilters={setFilters}
           />

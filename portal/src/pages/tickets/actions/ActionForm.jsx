@@ -3,16 +3,16 @@ import { useCallback, useMemo, useState } from 'react';
 import { fetchSubmission } from '@kineticdata/react';
 import { generateFormLayout } from '../../../components/forms/FormLayout.jsx';
 import { KineticForm } from '../../../components/kinetic-form/KineticForm.jsx';
-import useDataItem from '../../../helpers/useDataItem.js';
 import { Loading } from '../../../components/states/Loading.jsx';
 import { Error } from '../../../components/states/Error.jsx';
 import { Button } from '../../../atoms/Button.jsx';
 import { Panel } from '../../../atoms/Panel.jsx';
+import { useData } from '../../../helpers/hooks/useData.js';
 
-const generateViewParentButton = actionSubmission => () => {
+const ViewParentButton = ({ submission }) => {
   const [open, setOpen] = useState(false);
 
-  if (!actionSubmission?.parent) return null;
+  if (!submission?.parent) return null;
 
   return (
     <>
@@ -21,35 +21,25 @@ const generateViewParentButton = actionSubmission => () => {
           View Original Request
         </Button>
         <div slot="content">
-          <KineticForm
-            submissionId={actionSubmission.parent.id}
-            review={true}
-          />
+          <KineticForm submissionId={submission.parent.id} review={true} />
         </div>
       </Panel>
     </>
   );
 };
 
-export const ActionForm = ({ listActions: { reload } }) => {
+export const ActionForm = ({ listActions: { reloadPage } }) => {
   const { submissionId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const backTo = location.state?.backPath || '/actions';
 
-  // Fetch the action submission
-  const [actionData] = useDataItem(
-    fetchSubmission,
-    submissionId && [{ id: submissionId, include: 'parent' }],
-    response => response.submission,
-  );
+  // Parameters for the query
+  const params = useMemo(() => ({ id: submissionId }), [submissionId]);
 
-  // Generate a component that renders a button to view the parent submission
-  // if the action has a parent
-  const ViewParentButton = useMemo(
-    () => generateViewParentButton(actionData.data),
-    [actionData],
-  );
+  // Retrieve the submission record
+  const { response } = useData(fetchSubmission, params);
+  const { error, submission: data } = response || {};
 
   // Generate the layout for the form
   const Layout = useMemo(
@@ -58,31 +48,25 @@ export const ActionForm = ({ listActions: { reload } }) => {
         headingComponent: ViewParentButton,
         backTo,
       }),
-    [ViewParentButton, backTo],
+    [backTo],
   );
 
   const handleCompleted = useCallback(() => {
     navigate(backTo);
-    reload();
-  }, [navigate, backTo, reload]);
+    reloadPage();
+  }, [navigate, backTo, reloadPage]);
 
-  return actionData.data ? (
+  return data ? (
     <KineticForm
       submissionId={submissionId}
       components={{ Layout }}
       completed={handleCompleted}
       // Load the submission in review mode if it's not in Draft state
-      review={actionData.data.coreState !== 'Draft'}
+      review={data.coreState !== 'Draft'}
     />
   ) : (
     <Layout
-      content={
-        !actionData.error ? (
-          <Loading />
-        ) : (
-          <Error error={actionData.error}></Error>
-        )
-      }
+      content={!error ? <Loading /> : <Error error={error}></Error>}
     ></Layout>
   );
 };

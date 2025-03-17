@@ -9,7 +9,7 @@ import { Button } from '../../atoms/Button.jsx';
 import { openConfirm } from '../../helpers/confirm.js';
 import { deleteSubmission } from '@kineticdata/react';
 import { toastError, toastSuccess } from '../../helpers/toasts.js';
-import useSwipe from '../../helpers/useSwipe.js';
+import useSwipe from '../../helpers/hooks/useSwipe.js';
 
 const getMetaData = submission => {
   if (['Approval', 'Task'].includes(submission.type)) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ark } from '@ark-ui/react/factory';
 import { produce } from 'immer';
@@ -10,11 +10,11 @@ import {
   CloseButton,
   PopularServiceButton,
 } from '../../atoms/Button.jsx';
-import useDataItem from '../../helpers/useDataItem.js';
 import { getAttributeValue } from '../../helpers/records.js';
 import { Loading } from '../states/Loading.jsx';
 import clsx from 'clsx';
 import { ServiceCard } from './ServiceCard.jsx';
+import { useData } from '../../helpers/hooks/useData.js';
 
 export const ServicesPanel = ({ children }) => {
   const mobile = useSelector(state => state.view.mobile);
@@ -27,6 +27,13 @@ export const ServicesPanel = ({ children }) => {
 
   // State for opening the panel
   const [open, setOpen] = useState(false);
+  // State for tracking whether the panel was opened at some point so we don't
+  // have to refetch data each time it reopens, and helps with not hiding data
+  // while the panel is closing
+  const [opened, setOpened] = useState(open);
+  useEffect(() => {
+    if (!opened && open) setOpened(open);
+  }, [open, opened]);
   // State for path of categories and subcategories that have been opened
   const [path, setPath] = useState([]);
 
@@ -75,49 +82,58 @@ export const ServicesPanel = ({ children }) => {
     );
   };
 
+  // Parameters for the popular services query (if null, the query will not run)
+  const popularParams = useMemo(
+    () =>
+      opened
+        ? {
+            kappSlug,
+            categorySlug: 'popular-services',
+            include:
+              'categorizations.form,categorizations.form.attributesMap,categorizations.form.categorizations.category',
+          }
+        : null,
+    [opened, kappSlug],
+  );
   // Retrieve the popular requests when the panel opens
-  const [popularData] = useDataItem(
-    fetchCategory,
-    open && [
-      {
-        kappSlug,
-        categorySlug: 'popular-services',
-        include:
-          'categorizations.form,categorizations.form.attributesMap,categorizations.form.categorizations.category',
-      },
-    ],
-    response => response.category?.categorizations?.map(c => c?.form),
+  const popularData = useData(fetchCategory, popularParams);
+  const popularForms = popularData?.response?.category?.categorizations?.map(
+    c => c?.form,
   );
 
+  // Parameters for the current category services query (if null, the query will not run)
+  const servicesParams = useMemo(
+    () =>
+      opened && !!currentCategory
+        ? {
+            kappSlug,
+            categorySlug: currentCategory.slug,
+            include:
+              'categorizations.form,categorizations.form.attributesMap,categorizations.form',
+          }
+        : null,
+    [opened, currentCategory, kappSlug],
+  );
   // Retrieve the services for the current category when a category is opened
-  const [servicesData] = useDataItem(
-    fetchCategory,
-    open &&
-      !!currentCategory && [
-        {
-          kappSlug,
-          categorySlug: currentCategory.slug,
-          include:
-            'categorizations.form,categorizations.form.attributesMap,categorizations.form',
-        },
-      ],
-    // Pull our the list of forms from the category
-    response => response.category?.categorizations?.map(c => c?.form),
+  const servicesData = useData(fetchCategory, servicesParams);
+  const servicesForms = servicesData?.response?.category?.categorizations?.map(
+    c => c?.form,
   );
 
-  // Retrieve all services if there are no categories
-  const [allServicesData] = useDataItem(
-    fetchForms,
-    open &&
-      !hasCategories && [
-        {
-          kappSlug,
-          include: 'attributesMap',
-          q: 'type = "Service"',
-        },
-      ],
-    response => response.forms,
+  // Parameters for the all services query (if null, the query will not run)
+  const allServicesParams = useMemo(
+    () =>
+      opened && !hasCategories
+        ? {
+            kappSlug,
+            include: 'attributesMap',
+            q: 'type = "Service"',
+          }
+        : null,
+    [opened, hasCategories, kappSlug],
   );
+  // Retrieve all services if there are no categories
+  const allServicesData = useData(fetchForms, allServicesParams);
 
   // Are any of the data fetches for services loading
   const servicesLoading = servicesData.loading || allServicesData.loading;
@@ -158,7 +174,7 @@ export const ServicesPanel = ({ children }) => {
             {/* Render the popular services when not viewing a category */}
             {!currentCategory &&
               popularData.initialized &&
-              popularData.data?.length > 0 && (
+              popularForms?.length > 0 && (
                 <div className="flex flex-col items-stretch gap-3">
                   <div className="h3 text-center">Popular</div>
                   <div
@@ -168,7 +184,7 @@ export const ServicesPanel = ({ children }) => {
                       !mobile && ['flex-col'],
                     )}
                   >
-                    {popularData.data.map((popularForm, index) =>
+                    {popularForms.map((popularForm, index) =>
                       mobile ? (
                         <PopularServiceButton
                           key={popularForm.slug}
@@ -227,17 +243,18 @@ export const ServicesPanel = ({ children }) => {
               </div>
             )}
 
-            {/* Render a loader while services are loading */}
+            {/* Render a loader while services are loading, but don't render if
+                the popular services are loading so we don't have two loaders */}
             {!popularData.loading && servicesLoading && <Loading />}
 
             {/* Render the services for the current category */}
             {servicesData.initialized &&
               !servicesData.loading &&
-              servicesData.data?.length > 0 && (
+              servicesForms?.length > 0 && (
                 <div className="flex flex-col items-stretch gap-3">
                   <div className="h3 text-center">Services</div>
                   <div className={clsx('flex flex-col gap-2')}>
-                    {servicesData.data.map(form => (
+                    {servicesForms.map(form => (
                       <ServiceCard
                         key={form.slug}
                         form={form}
@@ -251,11 +268,11 @@ export const ServicesPanel = ({ children }) => {
 
             {/* Render all services if there are no categories */}
             {allServicesData.initialized &&
-              allServicesData.data?.length > 0 && (
+              allServicesData.response?.forms?.length > 0 && (
                 <div className="flex flex-col items-stretch gap-3">
                   <div className="h3 text-center">All Services</div>
                   <div className={clsx('flex flex-col gap-2')}>
-                    {allServicesData.data.map(form => (
+                    {allServicesData.response?.forms.map(form => (
                       <ServiceCard
                         key={form.slug}
                         form={form}

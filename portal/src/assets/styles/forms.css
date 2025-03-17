@@ -19,6 +19,9 @@
  *    or 4 columns.
  *    These classes don't work if you also use the vertical class on the same
  *    element.
+ *  .full-width
+ *    Use on a child of a section that uses one of the above column classes to
+ *    make this child span the full width.
  *  .align-right
  *    Use on a section to align its children to the right.
  *    Use on a button to align it and any buttons after it to the right.
@@ -117,6 +120,9 @@
               flex: 0 0 calc((100% - 1.25rem * 3) / 4);
             }
           }
+        }
+        > [data-element-type].full-width {
+          flex: 0 0 100%;
         }
       }
 

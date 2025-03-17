@@ -1,10 +1,10 @@
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
 import { ActionsList } from './ActionsList.jsx';
 import { ActionForm } from './ActionForm.jsx';
-import useDataList from '../../../helpers/useDataList.js';
-import { useMemo, useState } from 'react';
+import { usePaginatedData } from '../../../helpers/hooks/usePaginatedData.js';
 
 const buildActionsSearch = (profile, filters) => {
   // Start query builder
@@ -55,31 +55,34 @@ export const Actions = () => {
     assignment: { mine: false, teams: false },
   });
 
-  // Search object based on the current filters
-  const search = useMemo(
-    () => buildActionsSearch(profile, filters),
-    [profile, filters],
+  // Parameters for the query (if null, the query will not run)
+  const params = useMemo(
+    () => ({ kapp: kappSlug, search: buildActionsSearch(profile, filters) }),
+    [kappSlug, profile, filters],
   );
 
-  // Retrieve the actions list data
-  const [listData, listActions] = useDataList(
-    searchSubmissions,
-    [{ kapp: kappSlug, search }],
-    ({ submissions }) => submissions,
-  );
+  // Retrieve the data for the requests list
+  const { initialized, loading, response, pageNumber, actions } =
+    usePaginatedData(searchSubmissions, params);
 
   return (
     <Routes>
       <Route
         path=":submissionId"
-        element={<ActionForm listActions={listActions} />}
+        element={<ActionForm listActions={actions} />}
       />
       <Route
         path="*"
         element={
           <ActionsList
-            listData={listData}
-            listActions={listActions}
+            listData={{
+              initialized,
+              loading,
+              data: response?.submissions,
+              error: response?.error,
+              pageNumber,
+            }}
+            listActions={actions}
             filters={filters}
             setFilters={setFilters}
           />

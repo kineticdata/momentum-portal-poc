@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { callIfFn } from './index.js';
+import { callIfFn } from '../index.js';
 
 /**
  * Provides swipe functionality to allow triggering callbacks when an item is

@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useCallback,
+  useDeferredValue,
   useEffect,
   useMemo,
   useRef,
@@ -17,7 +18,7 @@ import { CloseButton } from '../../../atoms/Button.jsx';
 import { Icon } from '../../../atoms/Icon.jsx';
 import { executeIntegration } from '../../../helpers/api.js';
 import { callIfFn } from '../../../helpers/index.js';
-import useDataItem from '../../../helpers/useDataItem.js';
+import { useData } from '../../../helpers/hooks/useData.js';
 
 const fetchIntegrationOptions = ({
   integration: { kappSlug, formSlug, integrationName, parameters },
@@ -98,6 +99,8 @@ const SearchComponent = forwardRef(
     },
     ref,
   ) => {
+    // Is the SearchComponent using an integration
+    const usesIntegration = !options && !!integration;
     // Track whether the field is open so we can prevent searching when closed
     const [open, setOpen] = useState(false);
     // State for the selected value object of the search
@@ -110,41 +113,52 @@ const SearchComponent = forwardRef(
     );
     // State for the debounced query value to use in the search
     const [query, setQuery] = useState(inputValue);
+    // State to track previous query value
+    const previousQuery = useDeferredValue(query);
     // Function to update the query value with a debounce so we don't fire too
     // many queries as the user types
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedSetQuery = useCallback(
-      debounce(value => setQuery(value), 300),
-      [],
+    const debouncedSetQuery = useMemo(
+      () =>
+        usesIntegration ? debounce(value => setQuery(value), 300) : setQuery,
+      [usesIntegration],
     );
     // Set the query whenever the input changes
     useEffect(() => {
-      debouncedSetQuery(inputValue);
+      // Set the input value into the query after a delay, but only if an
+      // input value exists. If the input value is empty, the query is set
+      // immediately in the change handler so no need to set it again here.
+      if (inputValue) debouncedSetQuery(inputValue);
     }, [debouncedSetQuery, inputValue]);
-
-    // Is the SearchComponent using an integration
-    const usesIntegration = !options && !!integration;
     // Is the min search length met to trigger a search
     const canSearch =
-      minSearchLength === 0 || inputValue.length >= minSearchLength;
+      open && (minSearchLength === 0 || query.length >= minSearchLength);
+    // Has input changed since the last query was triggered
+    const isQueryStale = query !== inputValue || query !== previousQuery;
 
-    // Fetch or filter the options for the field, depending on whether we're
-    // using an integration or static options
-    const [{ loading, error, data }] = useDataItem(
-      usesIntegration ? fetchIntegrationOptions : filterStaticOptions,
-      canSearch &&
-        open &&
-        (usesIntegration
-          ? [{ integration, query }]
-          : [{ options, search, query }]),
-      usesIntegration
-        ? response => response[integration.listProperty]
-        : response => response.options,
+    // Parameters for the query
+    const params = useMemo(
+      () =>
+        canSearch
+          ? usesIntegration
+            ? { integration, query }
+            : { options, search, query }
+          : null,
+      [canSearch, usesIntegration, integration, options, search, query],
     );
+
+    const { loading, response } = useData(
+      usesIntegration ? fetchIntegrationOptions : filterStaticOptions,
+      params,
+    );
+    const error = response?.error;
+    const data = usesIntegration
+      ? response?.[integration.listProperty]
+      : response?.options;
 
     // Only show loading state for integration mode, because static search will
     // be too fast and will just flash the loading state which looks bad.
-    const isLoading = loading && usesIntegration;
+    const isLoading = usesIntegration && (loading || isQueryStale);
 
     // Define the collection to use for the combobox field
     const collection = useMemo(
@@ -161,10 +175,10 @@ const SearchComponent = forwardRef(
     const [isDisabled, setIsDisabled] = useState(!!disabled);
 
     // Determine if there is a status message we should show
-    const statusMessage = !canSearch
-      ? short
-      : isLoading
-        ? pending
+    const statusMessage = isLoading
+      ? pending
+      : !canSearch
+        ? short
         : data?.length === 0
           ? empty
           : null;
@@ -205,8 +219,11 @@ const SearchComponent = forwardRef(
         <Combobox.Root
           onOpenChange={({ open }) => setOpen(open)}
           collection={collection}
-          inputValue={inputValue}
-          onInputValueChange={({ inputValue }) => setInputValue(inputValue)}
+          onInputValueChange={({ inputValue }) => {
+            setInputValue(inputValue);
+            // If the input value is empty, set the query immediately
+            if (!inputValue) setQuery(inputValue);
+          }}
           value={selection.map(optionToValue)}
           onValueChange={handleChange}
           selectionBehavior={selectionBehavior}

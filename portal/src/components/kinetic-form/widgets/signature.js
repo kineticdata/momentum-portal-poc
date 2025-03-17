@@ -363,6 +363,12 @@ SignatureComponent.propTypes = {
   clearButtonLabel: t.string,
 };
 
+const SignatureProvider = forwardRef((props, ref) => (
+  <Provider store={store}>
+    <SignatureComponent {...props} ref={ref} />
+  </Provider>
+));
+
 /**
  * Function that initializes the Signature widget. This function validates the
  * provided parameters, and then registers the widget, which will create an
@@ -381,11 +387,7 @@ export const Signature = ({ container, field, config, id } = {}) => {
   ) {
     return registerWidget(Signature, {
       container,
-      Component: props => (
-        <Provider store={store}>
-          <SignatureComponent {...props} />
-        </Provider>
-      ),
+      Component: SignatureProvider,
       props: { ...config, field },
       id,
     });
