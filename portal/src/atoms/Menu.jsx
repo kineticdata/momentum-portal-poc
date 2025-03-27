@@ -13,7 +13,7 @@ const itemStyle =
  */
 const ButtonItem = ({ label, onClick, icon }) => (
   <ArkMenu.Item value={label} asChild tabIndex={-1}>
-    <button onClick={onClick} className={clsx(itemStyle)}>
+    <button type="button" onClick={onClick} className={clsx(itemStyle)}>
       {icon && <Icon name={icon} size={20}></Icon>}
       {label}
     </button>

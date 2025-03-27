@@ -1,6 +1,6 @@
 import { Link, useMatch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/logo-dark.svg';
+import logo from '../../assets/images/logo-full.svg';
 import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.jsx';
 import { HeaderPortal } from './HeaderPortal.jsx';

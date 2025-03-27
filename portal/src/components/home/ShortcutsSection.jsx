@@ -183,7 +183,7 @@ export const ShortcutsSection = () => {
                   'h-full w-full rounded-full transition',
                   'bg-primary-900 text-primary-100',
                   'group-hover:bg-gray-500 group-hover:text-white',
-                  'group-focus-visible:bg-secondary-400 group-focus-visible:text-primary-900',
+                  'group-focus-visible:bg-secondary-400 group-focus-visible:text-gray-950',
                 )}
               >
                 <Icon name="file-plus" size={48} />

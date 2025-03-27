@@ -39,15 +39,54 @@
 
     input[type='text'],
     input[type='password'],
+    input[type='number'],
     textarea {
       @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
-      @apply text-primary-900 bg-white border-primary-400;
+      @apply text-gray-950 bg-white border-primary-400;
       @apply hover:bg-primary-100;
       @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
       @apply disabled:text-gray-900 disabled:bg-gray-100;
     }
     textarea {
       @apply md:rounded-br-md;
+    }
+
+    label:has(> input[type='checkbox']),
+    label:has(> input[type='radio']) {
+      @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
+      @apply text-gray-950 bg-white border-primary-400;
+      @apply hover:bg-primary-100;
+      @apply focus-within:bg-white focus-within:ring focus-within:ring-secondary-400;
+      overflow-wrap: anywhere;
+
+      input[type='checkbox'],
+      input[type='radio'] {
+        @apply flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat;
+      }
+      input[type='checkbox'] {
+        @apply rounded;
+        background-size: 1.125rem;
+        &:checked {
+          background-image: url(icons/checkbox-checked.svg);
+          &:disabled {
+            background-image: url(icons/checkbox-checked_disabled.svg);
+          }
+        }
+      }
+      input[type='radio'] {
+        @apply rounded-full;
+        background-size: 0.75rem;
+        &:checked {
+          background-image: url(./icons/radio-checked.svg);
+          &:disabled {
+            background-image: url(./icons/radio-checked_disabled.svg);
+          }
+        }
+      }
+
+      &:has(input[disabled]) {
+        @apply text-gray-900 bg-gray-100;
+      }
     }
 
     &.has-error {
@@ -153,7 +192,7 @@
         textarea,
         select {
           @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
-          @apply text-primary-900 bg-white border-primary-400;
+          @apply text-gray-950 bg-white border-primary-400;
           @apply hover:bg-primary-100;
           @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
           @apply disabled:text-gray-900 disabled:bg-gray-100;
@@ -197,12 +236,12 @@
             .file-row {
               @apply table-row;
               span {
-                @apply pr-5 py-1 table-cell text-primary-900 max-md:text-sm;
+                @apply pr-5 py-1 table-cell text-gray-950 max-md:text-sm;
                 &:first-child {
                   overflow-wrap: anywhere;
                 }
                 a {
-                  @apply text-gray-900 font-medium italic hover:underline hover:text-primary-900 focus-visible:underline focus-visible:text-primary-900;
+                  @apply text-gray-900 font-medium italic hover:underline hover:text-gray-950 focus-visible:underline focus-visible:text-gray-950;
                 }
               }
             }
@@ -227,7 +266,7 @@
 
         label:not(.field-label) {
           @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
-          @apply text-primary-900 bg-white border-primary-400;
+          @apply text-gray-950 bg-white border-primary-400;
           @apply hover:bg-primary-100;
           @apply focus-within:bg-white focus-within:ring focus-within:ring-secondary-400;
           overflow-wrap: anywhere;

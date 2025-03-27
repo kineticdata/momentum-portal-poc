@@ -127,7 +127,7 @@ export const TicketCard = ({ submission, reload }) => {
         )}
         style={{ left, right }}
       >
-        <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+        <div className="bg-primary-100 border border-primary-400 text-gray-950 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
           <Icon name={icon} />
         </div>
         {mobile ? (
@@ -293,7 +293,7 @@ export const HomeTicketCard = ({
                 'bg-primary-900 text-primary-300': [0, 1, 3].includes(
                   index % 5,
                 ),
-                'bg-secondary-400 text-primary-900': [2, 4].includes(index % 5),
+                'bg-secondary-400 text-gray-950': [2, 4].includes(index % 5),
               },
             )}
           >

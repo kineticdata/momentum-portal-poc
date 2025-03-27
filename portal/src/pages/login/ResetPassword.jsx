@@ -29,7 +29,7 @@ export const ResetPassword = () => {
 
 const ResetPasswordRequestForm = () => {
   const kappSlug = useSelector(state => state.app.kappSlug);
-  const themeLogo = useSelector(state => state.theme.inverseLogo);
+  const themeLogo = useSelector(state => state.theme.logo);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
@@ -111,7 +111,7 @@ const ResetPasswordChangeForm = ({ token, username }) => {
   const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
-  const themeLogo = useSelector(state => state.theme.inverseLogo);
+  const themeLogo = useSelector(state => state.theme.logo);
 
   // State and change handlers for new password fields
   const [password, setPassword] = useState('');

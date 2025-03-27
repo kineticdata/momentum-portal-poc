@@ -74,7 +74,7 @@ export const Button = forwardRef(
       // Primary
       variant === 'primary' && [
         // Text
-        'text-primary-900 focus-visible:text-primary-200 data-[state=open]:text-primary-200 disabled:text-gray-900 font-medium',
+        'text-gray-950 focus-visible:text-primary-200 data-[state=open]:text-primary-200 disabled:text-gray-900 font-medium',
         // Background
         'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 data-[state=open]:bg-primary-900 disabled:bg-gray-200',
         // Border
@@ -84,7 +84,7 @@ export const Button = forwardRef(
       // Secondary
       variant === 'secondary' && [
         // Text
-        'text-primary-900 disabled:text-gray-900 font-semibold',
+        'text-gray-950 disabled:text-gray-900 font-semibold',
         // Background
         'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
         // Border
@@ -96,8 +96,8 @@ export const Button = forwardRef(
         // Text
         'font-semibold',
         {
-          'text-primary-900 disabled:text-gray-900': !inverse,
-          'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 data-[state=open]:text-primary-900 disabled:text-gray-900':
+          'text-gray-950 disabled:text-gray-900': !inverse,
+          'text-primary-100 hover:text-gray-950 focus-visible:text-gray-950 data-[state=open]:text-gray-950 disabled:text-gray-900':
             inverse,
         },
         // Background
@@ -196,7 +196,7 @@ export const ChipButton = ({
         // Not active
         !active && [
           // Text
-          'text-primary-900 font-medium',
+          'text-gray-950 font-medium',
           // Background
           'bg-white hover:bg-primary-100 focus-visible:bg-primary-100 disabled:bg-gray-200',
           // Border
@@ -311,7 +311,7 @@ export const CloseButton = ({
       'inline-flex gap-1 justify-center items-center transition',
       // Text
       {
-        'text-gray-900 hover:text-primary-900 focus-visible:text-primary-900 disabled:text-gray-900':
+        'text-gray-900 hover:text-gray-950 focus-visible:text-gray-950 disabled:text-gray-900':
           !inverse,
         'text-gray-200 hover:text-primary-300 focus-visible:text-primary-300 disabled:text-gray-200':
           inverse,
@@ -509,7 +509,7 @@ export const PopularServiceButton = ({
           'bg-primary-400': index % 4 === 3,
         },
         {
-          'text-primary-900': [0, 3].includes(index % 4),
+          'text-gray-950': [0, 3].includes(index % 4),
           'text-white': [1, 2].includes(index % 4),
         },
         'hover:scale-[1.02]',

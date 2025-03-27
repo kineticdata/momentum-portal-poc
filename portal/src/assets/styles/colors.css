@@ -1,18 +1,34 @@
 @layer base {
   :root {
-    --primary-100: 244, 70%, 96%;
-    --primary-200: 238, 80%, 94%;
-    --primary-300: 241, 66%, 87%;
-    --primary-400: 241, 66%, 83%;
-    --primary-500: 240, 65%, 74%;
-    --primary-900: 251, 100%, 18%;
-    --secondary-100: 55, 46%, 91%;
-    --secondary-400: 57, 83%, 75%;
-    --secondary-500: 53, 58%, 32%;
-    --gray-100: 248, 0%, 97.65%;
-    --gray-200: 248, 9%, 91%;
-    --gray-500: 248, 12%, 53%;
-    --gray-900: 248, 11%, 42%;
+    --def-primary-100: 244, 70%, 96%;
+    --def-primary-200: 238, 80%, 94%;
+    --def-primary-300: 241, 66%, 87%;
+    --def-primary-400: 241, 66%, 83%;
+    --def-primary-500: 240, 65%, 74%;
+    --def-primary-900: 251, 100%, 18%;
+    --def-secondary-100: 55, 46%, 91%;
+    --def-secondary-400: 57, 83%, 75%;
+    --def-secondary-500: 53, 58%, 32%;
+    --def-gray-100: 248, 0%, 97.65%;
+    --def-gray-200: 248, 9%, 91%;
+    --def-gray-500: 248, 12%, 53%;
+    --def-gray-900: 248, 11%, 42%;
+    --def-gray-950: 248, 10%, 12%;
+
+    --primary-100: var(--def-primary-100);
+    --primary-200: var(--def-primary-200);
+    --primary-300: var(--def-primary-300);
+    --primary-400: var(--def-primary-400);
+    --primary-500: var(--def-primary-500);
+    --primary-900: var(--def-primary-900);
+    --secondary-100: var(--def-secondary-100);
+    --secondary-400: var(--def-secondary-400);
+    --secondary-500: var(--def-secondary-500);
+    --gray-100: var(--def-gray-100);
+    --gray-200: var(--def-gray-200);
+    --gray-500: var(--def-gray-500);
+    --gray-900: var(--def-gray-900);
+    --gray-950: var(--def-gray-950);
     --warning-200: 0, 100%, 87%;
     --warning-400: 0, 65%, 58%;
     --warning-500: 0, 47%, 46%;

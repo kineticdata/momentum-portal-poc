@@ -25,7 +25,7 @@ export const LoginForm = loginProps => {
     username,
   } = loginProps;
 
-  const themeLogo = useSelector(state => state.theme.inverseLogo);
+  const themeLogo = useSelector(state => state.theme.logo);
 
   return (
     <form className="flex flex-col gap-5 items-stretch w-full p-5 max-w-96">
@@ -82,7 +82,7 @@ export const LoginForm = loginProps => {
         to="/reset-password"
         className={clsx(
           'flex justify-center items-center gap-1 text-gray-500 py-2.5 font-semibold',
-          'hover:underline hover:text-primary-900',
+          'hover:underline hover:text-gray-950',
         )}
       >
         Forgot your password?

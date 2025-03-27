@@ -49,7 +49,7 @@ export const Avatar = ({
           'bg-primary-900 text-primary-100 uppercase leading-none',
           isLink && 'group-hover:bg-gray-500 group-hover:text-white',
           isLink &&
-            'group-focus-visible:bg-secondary-400 group-focus-visible:text-primary-900',
+            'group-focus-visible:bg-secondary-400 group-focus-visible:text-gray-950',
           {
             'text-xs': size === 'sm',
             'text-base': size === 'md',

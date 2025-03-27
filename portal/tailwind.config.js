@@ -25,6 +25,7 @@ export default {
         200: 'hsl(var(--gray-200))',
         500: 'hsl(var(--gray-500))',
         900: 'hsl(var(--gray-900))',
+        950: 'hsl(var(--gray-950))',
       },
       warning: {
         200: 'hsl(var(--warning-200))',

@@ -139,6 +139,7 @@ export const App = ({
   useEffect(() => {
     if (kappInit && !kappLoading) {
       appActions.setKapp(kappData);
+      themeActions.setTheme(kappData);
     }
   }, [kappInit, kappLoading, kappData]);
 

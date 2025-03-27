@@ -117,7 +117,7 @@ export const generateFormLayout = ({
         <div
           className={clsx(
             // Common styles
-            'text-primary-900',
+            'text-gray-950',
             // Mobile first styles
             'flex-auto bg-white shadow-card rounded-t-2.5xl',
             // Non mobile styles
