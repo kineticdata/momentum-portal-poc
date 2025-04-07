@@ -38,7 +38,7 @@ export const SearchModal = ({ children }) => {
       query
         ? {
             kappSlug,
-            q: `type = "Service" AND name *=* "${query}"`,
+            q: `type = "Service" AND name *=* "${query}" AND (status = "Active" OR status = "New")`,
             limit: 10,
           }
         : null,

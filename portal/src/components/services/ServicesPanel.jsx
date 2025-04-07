@@ -127,7 +127,7 @@ export const ServicesPanel = ({ children }) => {
         ? {
             kappSlug,
             include: 'attributesMap',
-            q: 'type = "Service"',
+            q: 'type = "Service" AND (status = "Active" OR status = "New")',
           }
         : null,
     [opened, hasCategories, kappSlug],
