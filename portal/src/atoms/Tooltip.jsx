@@ -15,6 +15,7 @@ import { calcPlacement, getChildSlots } from '../helpers/atoms.js';
  * @param {boolean} [props.open] Is the tooltip open.
  * @param {number} [props.openDelay=80] Delay before the tooltip opens.
  * @param {number} [props.closeDelay=0] Delay before the tooltip closes.
+ * @param {boolean} [disabled] Is the tooltip disabled.
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
  *  available slots in the tooltip. Available slots are:
  * - trigger: Component that toggles the tooltip open state when interacted with.
@@ -30,6 +31,7 @@ export const Tooltip = ({
   onOpenChange,
   openDelay = 80,
   closeDelay = 0,
+  disabled,
   children,
 }) => {
   const slots = getChildSlots(children, {
@@ -48,12 +50,13 @@ export const Tooltip = ({
       open={open}
       onOpenChange={onOpenChange}
       positioning={{ placement }}
+      disabled={disabled}
     >
       {slots.trigger && (
         <ArkTooltip.Trigger asChild>{slots.trigger}</ArkTooltip.Trigger>
       )}
       <ArkTooltip.Positioner>
-        <ArkTooltip.Content className="px-4 py-2 bg-white border border-gray-600 rounded-2xl max-w-96 shadow-card">
+        <ArkTooltip.Content className="px-1 py-1.75 text-sm font-medium bg-primary-900 text-primary-100 rounded-lg max-w-96 shadow-card">
           {slots.content || content}
         </ArkTooltip.Content>
       </ArkTooltip.Positioner>
@@ -70,5 +73,6 @@ Tooltip.propTypes = {
   onOpenChange: t.func,
   openDelay: t.number,
   closeDelay: t.number,
+  disabled: t.bool,
   children: t.node,
 };

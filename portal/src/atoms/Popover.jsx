@@ -40,7 +40,9 @@ export const Popover = ({
       positioning={{ placement }}
     >
       {slots.trigger && (
-        <ArkPopover.Trigger asChild>{slots.trigger}</ArkPopover.Trigger>
+        <ArkPopover.Trigger asChild openable={true}>
+          {slots.trigger}
+        </ArkPopover.Trigger>
       )}
       <ArkPopover.Positioner>
         <ArkPopover.Content className="p-5 bg-white rounded-[40px] shadow-card w-[30rem] max-w-[calc(100vw-3rem)] z-30">
@@ -58,3 +60,5 @@ Popover.propTypes = {
   alignment: t.oneOf(['start', 'middle', 'end']),
   children: t.node,
 };
+
+Popover.CloseTrigger = ArkPopover.CloseTrigger;

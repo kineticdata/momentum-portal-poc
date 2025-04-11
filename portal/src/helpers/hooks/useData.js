@@ -23,7 +23,7 @@ export function useData(fn, params) {
       fn(params).then(response => {
         setData(([d, ts]) => {
           // If the timestamp in state matches the one for this call, set the
-          // response and reset the timestamp
+          // response and reset the timestamp to unset loading state
           if (ts === timestamp) {
             return [response, null];
           }

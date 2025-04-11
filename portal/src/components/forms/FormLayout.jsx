@@ -119,12 +119,12 @@ export const generateFormLayout = ({
             // Common styles
             'text-gray-950',
             // Mobile first styles
-            'flex-auto bg-white shadow-card rounded-t-2.5xl',
+            'flex-auto p-6 bg-white shadow-card rounded-t-2.5xl',
             // Non mobile styles
-            'md:rounded-2.5xl',
+            'md:p-10 md:rounded-2.5xl',
           )}
         >
-          <div className="mx-auto p-6 md:p-10 w-full max-w-screen-lg">
+          <div className="mx-auto w-full max-w-screen-lg">
             {content}
             {reviewPaginationControl}
           </div>

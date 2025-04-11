@@ -31,6 +31,7 @@ export const themeState = {
  * @param {string} themeConfig JSON string of theme configurations.
  * @param {string} name Namespace for the theme config
  * @param {boolean} updateLive Should the live styles be updated
+ * @param {boolean} init Is the theme being set as part of the initial load
  * @returns {Object}
  */
 export const calculateThemeState = (
@@ -38,6 +39,7 @@ export const calculateThemeState = (
   themeConfig,
   name = 'Space',
   updateLive = true,
+  init = false,
 ) => {
   state.ready = true;
 
@@ -51,12 +53,13 @@ export const calculateThemeState = (
   try {
     // Parse the provided attribute value
     const config = JSON.parse(themeConfig);
+    const isFirstTheme = !state.parsed[name].colors;
     state.parsed[name] = config;
 
     // Set logo into state
     state.logo = config?.logo?.standard;
 
-    if (updateLive) {
+    if (updateLive && (!init || isFirstTheme)) {
       // Create an array to store any css variable overrides
       const cssVars = [];
 

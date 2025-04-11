@@ -46,6 +46,7 @@ ButtonOrLink.propTypes = {
  *  button.
  * @param {string} [iconEnd] The name of an icon to render at the end of the
  *  button.
+ * @param {boolean} [openable] Should the button have styling for open state.
  * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
@@ -60,6 +61,7 @@ export const Button = forwardRef(
       underline,
       icon,
       iconEnd,
+      openable,
       children,
       ...passThroughProps
     },
@@ -67,18 +69,21 @@ export const Button = forwardRef(
   ) => {
     const styledClassName = clsx(
       // Common styles for all buttons
-      'border outline-0 transition',
+      'border outline-0 whitespace-nowrap transition',
       variant !== 'custom' &&
         'inline-flex gap-1 justify-center items-center text-center',
 
       // Primary
       variant === 'primary' && [
         // Text
-        'text-gray-950 focus-visible:text-primary-200 data-[state=open]:text-primary-200 disabled:text-gray-900 font-medium',
+        'text-gray-950 focus-visible:text-primary-200 disabled:text-gray-900 font-medium',
         // Background
-        'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 data-[state=open]:bg-primary-900 disabled:bg-gray-200',
+        'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 disabled:bg-gray-200',
         // Border
         'border-primary-500 disabled:border-primary-300',
+        // open data-state styling
+        openable &&
+          'data-[state=open]:text-primary-200 data-[state=open]:bg-primary-900',
       ],
 
       // Secondary
@@ -86,9 +91,11 @@ export const Button = forwardRef(
         // Text
         'text-gray-950 disabled:text-gray-900 font-semibold',
         // Background
-        'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
+        'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100',
         // Border
         'border-primary-300',
+        // open data-state styling
+        openable && 'data-[state=open]:bg-secondary-400',
       ],
 
       // Tertiary
@@ -96,20 +103,25 @@ export const Button = forwardRef(
         // Text
         'font-semibold',
         {
-          'text-gray-950 disabled:text-gray-900': !inverse,
-          'text-primary-100 hover:text-gray-950 focus-visible:text-gray-950 data-[state=open]:text-gray-950 disabled:text-gray-900':
+          'text-primary-900 disabled:text-gray-900': !inverse,
+          'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 disabled:text-gray-900':
             inverse,
         },
         // Background
-        'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 data-[state=open]:bg-secondary-400 disabled:bg-gray-100',
+        'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100',
         // Border
         'border-transparent',
+        // open data-state styling
+        openable &&
+          'data-[state=open]:text-primary-900 data-[state=open]:bg-secondary-400',
       ],
 
       // Underline
       {
-        'hover:underline focus-visible:underline data-[state=open]:underline disabled:no-underline':
+        'hover:underline focus-visible:underline disabled:no-underline':
           underline,
+        // open data-state styling
+        'data-[state=open]:underline': underline && openable,
       },
 
       // Sizing and radius
@@ -156,6 +168,7 @@ Button.propTypes = {
   underline: t.bool,
   icon: t.string,
   iconEnd: t.string,
+  openable: t.bool,
   children: t.node,
 };
 

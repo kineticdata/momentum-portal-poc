@@ -75,3 +75,63 @@ export const sortBy = key => (a, b) => {
   }
   return a?.[key] < b?.[key] ? -1 : a?.[key] > b?.[key] ? 1 : 0;
 };
+
+/**
+ * Converts a list of objects to a CSV and downloads it with the provided filename.
+ *
+ * @param {Object[]} data
+ * @param {string} filename
+ */
+export const downloadCSV = (data, filename) => {
+  // Validate data param
+  if (
+    !Array.isArray(data) ||
+    data.length === 0 ||
+    data.some(o => typeof o !== 'object')
+  ) {
+    console.error(
+      'The `downloadCSV` function was provided invalid `data`. Data must be an array of objects, and the array cannot be empty.',
+    );
+    return;
+  }
+
+  // Get headers from the first row
+  const headers = Object.keys(data[0]);
+  // Crate an array to store all the rows, and populate with the headers
+  const lines = [headers.join()];
+  // Map over the rows and convert each one to a string of comma separated values
+  for (const row of data) {
+    const values = headers.map(
+      key =>
+        `"${(((row[key] && typeof row[key]) === 'object' ? JSON.stringify(row[key]) : row[key]) || '').replace(/"/g, '""')}"`,
+    );
+    lines.push(values.join(','));
+  }
+
+  // Download the file
+  downloadBlob(
+    new Blob([lines.join('\n')], { type: 'text/csv' }),
+    filename,
+    'csv',
+  );
+};
+
+export const downloadBlob = (blob, filename, extension) => {
+  // Create an invisible A element
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  document.body.appendChild(a);
+
+  // Set the HREF to a Blob representation of the data to be downloaded
+  a.href = window.URL.createObjectURL(blob);
+
+  // Use download attribute to set set desired file name
+  a.setAttribute('download', `${filename || 'data'}.${extension || 'txt'}`);
+
+  // Trigger the download by simulating click
+  a.click();
+
+  // Cleanup
+  window.URL.revokeObjectURL(a.href);
+  document.body.removeChild(a);
+};

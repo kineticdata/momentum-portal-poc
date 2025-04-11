@@ -5,7 +5,7 @@
 The subform widget renders a Kinetic form in either a modal or inline, allowing users to provide additional information, and the builder to collect the data and store it however they find appropriate.
 
 ```js
-// Initialize the Markdown widget
+// Initialize the Subform widget
 bundle.widgets.Subform({ container, config, id });
 
 // Retrieve a reference to the widget's API
@@ -40,28 +40,76 @@ The slug of the form you want to render.
 ![type=string](https://img.shields.io/badge/string-e66e22)  
 The submission id of the submission you want to render.
 
+<details>
+<summary>
+  <img alt="name=fields" src="https://img.shields.io/badge/fields-gray">
+  <img alt="type=Object" src="https://img.shields.io/badge/Object[]-e66e22">
+  <br>
+  A list of custom field definitions to render as a form instead of using a Kinetic form.
+</summary>
+<br>
+<blockquote>
+
+![name=label](https://img.shields.io/badge/label-gray)
+![type=string](https://img.shields.io/badge/string-e66e22)  
+The label of the field.
+
+![name=property](https://img.shields.io/badge/property-gray)
+![type=string](https://img.shields.io/badge/string-e66e22)  
+The property name that this field's data will be stored under in the resulting data object.
+
+![name=type](https://img.shields.io/badge/type-gray)
+![type=string](https://img.shields.io/badge/string-e66e22)  
+The type of field to render. Available options are 'text', 'checkbox', 'date', 'datetime', or 'time'. Fields without a type will not be rendered.
+
+![name=defaultValue](https://img.shields.io/badge/defaultValue-gray)
+![type=*](https://img.shields.io/badge/*-e66e22)  
+The default value for the field, used if the `values` configuration is not provided.
+
+![name=required](https://img.shields.io/badge/required-gray)
+![type=boolean](https://img.shields.io/badge/boolean-e66e22)  
+Should the field be required. Defaults to false.
+
+![name=disabled](https://img.shields.io/badge/disabled-gray)
+![type=boolean](https://img.shields.io/badge/boolean-e66e22)  
+Should the field be disabled. Defaults to false.
+
+![name=validate](https://img.shields.io/badge/validate%28value,%20data%29-gray)
+![type=Function](https://img.shields.io/badge/Function-e66e22)  
+Validation function for validating this field. It should return an array of error messages if the field is invalid.
+
+</blockquote>
+</details>
+
 ![name=values](https://img.shields.io/badge/values-gray)
 ![type=Object](https://img.shields.io/badge/Object-e66e22)  
 Map of default field values to use for the form.
 
-![name=review](https://img.shields.io/badge/review-gray)
+![name=disabled](https://img.shields.io/badge/disabled-gray)
 ![type=boolean](https://img.shields.io/badge/boolean-e66e22)  
-Should the form be rendered in review mode.
+Should the form be rendered with disabled fields.
 
-![name=onLoad](https://img.shields.io/badge/onLoad%28subform,%20actions%29-gray)
+![name=onLoad](https://img.shields.io/badge/onLoad%28api%29-gray)
 ![type=Function](https://img.shields.io/badge/Function-e66e22)  
 Function that's called when the subform is loaded.  
-It is passed `subform` which is the Kinetic form object of the subform, and `actions` which is an object of action functions, containing `close` which closes the subform.
+It is passed an `api` object which contains the following properties:  
+`kForm`: A function that returns the kinetic form object. Only available if a Kinetic subform is loaded.
+`destroy`: A function that closes the subform.  
+`toasterId`: A string id that can be provided to the Toast functions to render a toast inside the context of the subform modal.
 
-![name=onSave](https://img.shields.io/badge/onSave%28subform,%20actions%29-gray)
+![name=onSave](https://img.shields.io/badge/onSave%28data,%20api%29-gray)
 ![type=Function](https://img.shields.io/badge/Function-e66e22)  
 Function that's called when the save button of the widget is clicked. If omitted, the save button will not be rendered.  
-It is passed `subform` which is the Kinetic form object of the subform, and `actions` which is an object of action functions, containing `close` which closes the subform.
+It is passed a `data` object representing the form data, and an `api` object which contains the following properties:  
+`destroy`: A function that closes the subform.  
+`toasterId`: A string id that can be provided to the Toast functions to render a toast inside the context of the subform modal.
 
-![name=onError](https://img.shields.io/badge/onError%28actions%29-gray)
+![name=onError](https://img.shields.io/badge/onError%28api%29-gray)
 ![type=Function](https://img.shields.io/badge/Function-e66e22)  
-Function that's called when the subform fails to load.  
-It is passed `actions` which is an object of action functions, containing `close` which closes the subform.
+Function that's called when the subform fails to load. Only called if attempting to load a Kinetic form.  
+It is passed an `api` object which contains the following properties:  
+`destroy`: A function that closes the subform.  
+`toasterId`: A string id that can be provided to the Toast functions to render a toast inside the context of the subform modal.
 
 ![name=inline](https://img.shields.io/badge/inline-gray)
 ![type=boolean](https://img.shields.io/badge/boolean-e66e22)  
@@ -84,19 +132,17 @@ A unique id that can be used to retrieve the API of the widget.
 
 ### API
 
-![name=subform](https://img.shields.io/badge/subform%28%29-gray)
+![name=data](https://img.shields.io/badge/data%28%29-gray)
 ![type=Function](https://img.shields.io/badge/Function-e66e22)  
-Returns the Kinetic form object of the subform.
+Returns the current data object.
 
-![name=toastSuccess](https://img.shields.io/badge/toastSuccess%28options%29-gray)
+![name=kForm](https://img.shields.io/badge/kForm%28%29-gray)
 ![type=Function](https://img.shields.io/badge/Function-e66e22)  
-Renders a success toast that's part of the modal's dom so it can be interacted with without the modal getting closed.  
-**This API function is only available if the subform is rendered in a modal.** See [Options Object Properties](TOAST.md#options-object-properties) in the Toast widget documentation for details on available options.
+Returns the Kinetic form object of the subform. Only available if a Kinetic subform was loaded.
 
-![name=toastError](https://img.shields.io/badge/toastError%28options%29-gray)
-![type=Function](https://img.shields.io/badge/Function-e66e22)  
-Renders an error toast that's part of the modal's dom so it can be interacted with without the modal getting closed.  
-**This API function is only available if the subform is rendered in a modal.** See [Options Object Properties](TOAST.md#options-object-properties) in the Toast widget documentation for details on available options.
+![name=toasterId](https://img.shields.io/badge/toasterId-gray)
+![type=string](https://img.shields.io/badge/string-e66e22)  
+Id that can be passed into the toast utilities to render a toast in the context of the subform modal. This should be done if you want to render a toast while the modal remains open.
 
 ### Examples
 
@@ -118,10 +164,10 @@ bundle.widgets.Subform({
 });
 
 // Get the Kinetic form object of the subform
-bundle.widgets.Subform.get('address-subform').subform();
+bundle.widgets.Subform.get('address-subform').kForm();
 
 // Get the data of the subform as JSON
-bundle.widgets.Subform.get('address-subform').subform().serialize();
+bundle.widgets.Subform.get('address-subform').data();
 ```
 
 ```js
@@ -137,32 +183,13 @@ bundle.widgets.Subform({
     modalTitle: 'Address Information',
     // Define an onSave function that will be triggered when the user clicks
     // the save button in the modal
-    onSave: function (subform, actions) {
-      // Validate the subform
-      const validation = subform.validate();
-      // If it's valid
-      if (Object.keys(validation).length === 0) {
-        // Store the stringified result of the subform into a text field
-        K('field[Address JSON]').value(JSON.stringify(subform.serialize()));
-        // Show a success toast
-        bundle.widgets.Toast.success({ title: 'Address added successfully' });
-        // Close the subform
-        actions.close();
-      }
-      // If there are invalid fields
-      else {
-        // Show an error toast; note that we're using the toast function from
-        // the subform here because we need the toast to be inside the modal so
-        // interacting with it doesn't close the modal
-        bundle.widgets.Subform.get('subform').toastError({
-          title: 'The form is invalid',
-          description: Object.values(validation)
-            .map(function (error) {
-              return error[0];
-            })
-            .join('\n'),
-        });
-      }
+    onSave: function (data, api) {
+      // Store the stringified result of the subform into a text field
+      K('field[Address JSON]').value(JSON.stringify(data));
+      // Show a success toast
+      bundle.utils.toastSuccess({ title: 'Address added successfully' });
+      // CLose the subform
+      api.destroy();
     },
   },
   id: 'address-subform',
@@ -170,8 +197,7 @@ bundle.widgets.Subform({
 ```
 
 ```js
-// Renders a subform in a modal, submits it to create a submission, and stores
-// the submission id in a field on the form
+// Renders a subform in a modal and submits it to create a submission
 bundle.widgets.Subform({
   // Render the widget into a Content element named "Subform Container"
   container: K('section[Subform Container]').element(),
@@ -181,19 +207,72 @@ bundle.widgets.Subform({
     formSlug: 'employee-address',
     // Define the title for the modal
     modalTitle: 'Address Information',
+    // Define the label for the modal save button
+    saveLabel: 'Submit Address',
     // Define an onSave function that will be triggered when the user clicks
     // the save button in the modal
-    onSave: function (subform, actions) {
+    onSave: function (data, api) {
       // Call the `submitPage` function to submit the subform
-      subform.submitPage(function (result) {
-        // Store the resulting submission id into a text field
-        K('field[Address Submission Id]').value(result.submission.id);
+      api.submit(function () {
         // Show a success toast
-        bundle.widgets.Toast.success({ title: 'Address added successfully' });
+        bundle.utils.toastSuccess({ title: 'Address added successfully' });
         // Close the subform
         actions.close();
       });
     },
+  },
+  id: 'address-subform',
+});
+```
+
+```js
+// Renders a form with custom fields in a modal
+bundle.widgets.Subform({
+  // Render the widget into a Content element named "Subform Container"
+  container: K('section[Subform Container]').element(),
+  config: {
+    // Define the fields we want to render
+    fields: [
+      {
+        label: 'Address',
+        property: 'address',
+        type: 'text',
+        required: true,
+        validate: function(value) {
+          if (!value.match(/$\d+'/)) {
+            return ['Address must start with a number'];
+          }
+        }
+      },
+      {
+        label: 'City, State, Zip',
+        property: 'address2',
+        type: 'text',
+        required: true
+      },
+      {
+        label: 'This is my current address',
+        property: 'current',
+        type: 'checkbox',
+        defaultValue: true
+      },
+      {
+        label: 'Date',
+        property: 'date',
+        type: 'date',
+        defaultValue: new Date().toISOString().slice(0,10),
+        disabled: true
+      },
+    ],
+    // Define the title for the modal
+    modalTitle: 'Address Information',
+    // Define an onSave function that will be triggered when the user clicks
+    // the save button in the modal
+    onSave: function(data, api) {
+      // TODO: Do something with the data 
+      // Then close the modal
+      api.destroy();
+    }
   },
   id: 'address-subform',
 });

@@ -14,6 +14,7 @@ export const themeActions = regRedux(
         getAttributeValue(payload.kapp || payload.space, 'Theme'),
         payload.kapp ? 'Kapp' : 'Space',
         payload.updateLive,
+        payload.init,
       );
     },
     enableEditor(state) {

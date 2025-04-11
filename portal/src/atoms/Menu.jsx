@@ -139,12 +139,12 @@ export const Menu = ({
       positioning={{ placement }}
     >
       {slots.trigger && (
-        <ArkMenu.Trigger asChild className="btn">
+        <ArkMenu.Trigger asChild openable={true} className="btn">
           {slots.trigger}
         </ArkMenu.Trigger>
       )}
       <ArkMenu.Positioner>
-        <ArkMenu.Content className="py-2 bg-white border border-gray-600 rounded min-w-[10rem] shadow-lg">
+        <ArkMenu.Content className="py-2 bg-white border border-gray-600 rounded min-w-[10rem] outline-0 shadow-lg">
           <Items items={items} />
         </ArkMenu.Content>
       </ArkMenu.Positioner>

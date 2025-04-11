@@ -19,7 +19,6 @@ const confirmActions = regRedux(
  * Opens a confirmation modal to allow the user to confirm an action.
  *
  * @param {object} options
- * @param {string} [options.id] ID of toast container to render this toast in.
  * @param {string} [options.title] Title of the confirmation modal.
  * @param {string} [options.description] Description of the confirmation modal.
  * @param {Function} [options.accept] Function that will be called when the

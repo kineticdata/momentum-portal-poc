@@ -94,7 +94,7 @@ export const App = ({
   useEffect(() => {
     if (spaceInit && !spaceLoading) {
       appActions.setSpace(spaceData);
-      themeActions.setTheme(spaceData);
+      themeActions.setTheme({ ...spaceData, init: true });
     }
   }, [spaceInit, spaceLoading, spaceData]);
 
@@ -139,7 +139,7 @@ export const App = ({
   useEffect(() => {
     if (kappInit && !kappLoading) {
       appActions.setKapp(kappData);
-      themeActions.setTheme(kappData);
+      themeActions.setTheme({ ...kappData, init: true });
     }
   }, [kappInit, kappLoading, kappData]);
 
