@@ -1129,8 +1129,15 @@ const TableComponent = forwardRef(
       ],
     );
 
+    // Define API ref
+    const api = useRef({ ...tableApi });
+    // Update API ref when its contents change
+    useEffect(() => {
+      Object.assign(api.current, tableApi);
+    }, [tableApi]);
+
     return (
-      <WidgetAPI ref={ref} api={tableApi}>
+      <WidgetAPI ref={ref} api={api.current}>
         <TableRenderer
           currentTableData={currentTableData}
           currentColumns={currentColumns}
@@ -1325,6 +1332,7 @@ const validateConfig = (config, field) => {
  * instance of the widget and render it into the provided container.
  *
  * @param {HTMLElement} container HTML Element into which to render the widget.
+ * @param {object} field Kinetic field object to store the data in.
  * @param {object} config Configuration object for the widget.
  * @param {string} [id] Optional id that can be used to retrieve a reference to
  *  the widget's API functions using the `Table.get` function.
@@ -1342,4 +1350,7 @@ export const Table = ({ container, field, config, id } = {}) => {
       id,
     });
   }
+  return Promise.reject(
+    'The Table widget parameters are invalid. See the console for more details.',
+  );
 };

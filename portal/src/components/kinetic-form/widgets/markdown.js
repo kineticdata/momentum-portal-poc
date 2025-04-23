@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import t from 'prop-types';
 import { Editor, Viewer } from '@toast-ui/react-editor';
 import clsx from 'clsx';
@@ -18,9 +18,12 @@ const MarkdownComponent = forwardRef(
     const editorRef = useRef();
 
     // Function to get the value from the Kinetic field
-    const getValue = () => field.value();
+    const getValue = useCallback(() => field.value(), [field]);
     // Function to update the value externally
-    const setValue = v => editorRef.current?.getInstance().setMarkdown(v);
+    const setValue = useCallback(
+      v => editorRef.current?.getInstance().setMarkdown(v),
+      [],
+    );
 
     // State for disabled state of the editor
     const [isDisabled, setIsDisabled] = useState(
@@ -32,16 +35,20 @@ const MarkdownComponent = forwardRef(
       field.value(editorRef.current.getInstance().getMarkdown());
     };
 
+    // Define API ref
+    const api = useRef({
+      enable: () => setIsDisabled(false),
+      disable: () => setIsDisabled(true),
+      getValue,
+      setValue,
+    });
+    // Update API ref when its contents change
+    useEffect(() => {
+      Object.assign(api.current, { getValue });
+    }, [getValue]);
+
     return (
-      <WidgetAPI
-        ref={ref}
-        api={{
-          getValue,
-          setValue,
-          enable: () => setIsDisabled(false),
-          disable: () => setIsDisabled(true),
-        }}
-      >
+      <WidgetAPI ref={ref} api={api.current}>
         <div
           className={clsx(className, 'w-full', {
             'markdown-editor': !isDisabled,
@@ -123,6 +130,9 @@ export const Markdown = ({ container, field, config, id } = {}) => {
       id,
     });
   }
+  return Promise.reject(
+    'The Markdown widget parameters are invalid. See the console for more details.',
+  );
 };
 
 /**

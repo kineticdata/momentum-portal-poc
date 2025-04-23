@@ -144,7 +144,7 @@ export const Menu = ({
         </ArkMenu.Trigger>
       )}
       <ArkMenu.Positioner>
-        <ArkMenu.Content className="py-2 bg-white border border-gray-600 rounded min-w-[10rem] outline-0 shadow-lg">
+        <ArkMenu.Content className="py-2 bg-white border border-gray-600 rounded min-w-[10rem] outline-0 shadow-lg z-30">
           <Items items={items} />
         </ArkMenu.Content>
       </ArkMenu.Positioner>

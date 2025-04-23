@@ -1,4 +1,4 @@
-import { useState, forwardRef, useRef } from 'react';
+import { useState, forwardRef, useRef, useCallback, useEffect } from 'react';
 import clsx from 'clsx';
 import t from 'prop-types';
 import { Modal } from '../../../atoms/Modal.jsx';
@@ -64,16 +64,14 @@ const SignatureComponent = forwardRef(
     );
 
     // Function to get the value
-    const getValue = () => {
-      return field.value();
-    };
+    const getValue = useCallback(() => field.value(), [field]);
 
     // Function to reset the value externally
-    const reset = () => {
+    const reset = useCallback(() => {
       setImageUrl('');
       setSavedSignature('');
       field.value([]);
-    };
+    }, [field]);
 
     const generateSignatureImage = () => {
       const canvas = canvasRef.current;
@@ -155,14 +153,15 @@ const SignatureComponent = forwardRef(
       (activeTab === 'draw' && !imageUrl) ||
       (activeTab === 'type' && (!selectedStyle || !fullName));
 
+    // Define API ref
+    const api = useRef({ getValue, reset });
+    // Update API ref when its contents change
+    useEffect(() => {
+      Object.assign(api.current, { getValue, reset });
+    }, [getValue, reset]);
+
     return (
-      <WidgetAPI
-        ref={ref}
-        api={{
-          getValue,
-          reset,
-        }}
-      >
+      <WidgetAPI ref={ref} api={api.current}>
         <div className={clsx('flex flex-col')}>
           <div className="flex items-center justify-between w-full">
             <button
@@ -392,6 +391,9 @@ export const Signature = ({ container, field, config, id } = {}) => {
       id,
     });
   }
+  return Promise.reject(
+    'The Signature widget parameters are invalid. See the console for more details.',
+  );
 };
 
 /**

@@ -174,8 +174,15 @@ const KineticSubformComponent = forwardRef(
       return kFormRef.current?.serialize();
     }, []);
 
+    // Define API ref
+    const api = useRef({ kForm, toasterId, data: getData });
+    // Update API ref when its contents change
+    useEffect(() => {
+      Object.assign(api.current, { toasterId });
+    }, [toasterId]);
+
     return (
-      <WidgetAPI ref={ref} api={{ kForm, toasterId, data: getData }}>
+      <WidgetAPI ref={ref} api={api.current}>
         <KineticLib globals={globals} locale="en">
           <SubformLayout
             inline={inline}
@@ -513,6 +520,9 @@ export const Subform = ({ container, config, id } = {}) => {
       id,
     });
   }
+  return Promise.reject(
+    'The Subform widget parameters are invalid. See the console for more details.',
+  );
 };
 
 /**

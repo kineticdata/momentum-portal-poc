@@ -92,7 +92,7 @@ export const registerWidget = (Widget, { container, Component, props, id }) => {
   // each container can only have one widget rendered in it
   let key = container.getAttribute('data-widget-key');
 
-  // If the key exists, then we just return the APi for the given id or key
+  // If the key exists, then we just return the API for the given id or key
   if (key) return Widget?.instances?.[id || key];
 
   // If the key doesn't exist, generate a random key
@@ -115,78 +115,92 @@ export const registerWidget = (Widget, { container, Component, props, id }) => {
     registry.init = true;
   }
 
-  // Render the component
-  state.root = createRoot(container);
-  state.root.render(
-    <HashRouter>
-      <Component
-        {...props}
-        // Use a custom ref function that will update the api state with any
-        // API functions or properties provided by the component
-        ref={el => {
-          if (typeof el?.api === 'object') {
-            Object.assign(state.api, el.api);
-          } else {
-            // If there is no element or api (such as after the element is
-            // unmounted) clear any API functions from the state
-            Object.keys(state.api).forEach(key => {
-              // Keep the container function since that's the initial API state
-              if (!['container'].includes(key)) {
-                delete state.api[key];
+  // Return a promise that we can resolve after the widget is instantiated
+  return new Promise(resolve => {
+    // Render the component
+    state.root = createRoot(container);
+    state.root.render(
+      <HashRouter>
+        <Component
+          {...props}
+          // Use a custom ref function that will update the api state with any
+          // API functions or properties provided by the component
+          ref={el => {
+            // If there is no element in the ref function, then we are
+            // unmounting the widget
+            if (!el) {
+              // Clear any API functions from the state
+              Object.keys(state.api).forEach(key => {
+                // Keep the container function
+                if (!['container'].includes(key)) {
+                  delete state.api[key];
+                }
+              });
+              // Add a destroyed flag after the component is unmounted
+              Object.assign(state.api, { destroyed: true });
+
+              resolve(state.api);
+              return;
+            }
+
+            // If an API object was provided to the WidgetAPI wrapper, use that
+            // object as the mutable state object
+            if (typeof el?.api === 'object') {
+              // Copy over existing API function from the API state object to
+              // the provided API object
+              Object.assign(el.api, state.api);
+              // Replace the state API object with the provided API object so
+              // it can be mutated by the widget
+              state.api = el.api;
+            }
+
+            // Register this widget by defining a cleanup function
+            registry[key] = force => {
+              // If the widget's container no longer exists in the dom or we are
+              // forcing it to be removed
+              if (force || !document.body.contains(container)) {
+                // Unmount the widget
+                state.root?.unmount();
+                // Remove the cleanup function from the registry
+                delete registry[key];
+                // If a Widget was provided, remove the instance of the widget, only if
+                // the container still matches (saving a form causes a rerender which
+                // creates new instances before the cleanup is triggered)
+                if (
+                  Widget?.instances?.[id || key] &&
+                  Widget.instances[id || key].container() === container
+                ) {
+                  delete Widget.instances[id || key];
+                }
               }
+            };
+
+            // Update the API to add a destroy function for removing the widget
+            Object.assign(state.api, {
+              destroy: () => {
+                // Trigger cleanup function if it exists,
+                if (typeof registry[key] === 'function') registry[key](true);
+                // Otherwise unmount the widget
+                else state.root?.unmount();
+                // Remove the key from the DOM container
+                container?.removeAttribute('data-widget-key');
+              },
             });
-            // Add a destroyed flag after the component is unmounted
-            Object.assign(state.api, { destroyed: true });
-          }
-        }}
-        // Pass a way to trigger the destroy function from within the component
-        destroy={() => callIfFn(state.api.destroy)}
-      />
-    </HashRouter>,
-  );
 
-  // Register this widget by defining a cleanup function
-  registry[key] = force => {
-    // If the widget's container no longer exists in the dom or we are
-    // forcing it to be removed
-    if (force || !document.body.contains(container)) {
-      // Unmount the widget
-      state.root?.unmount();
-      // Remove the cleanup function from the registry
-      delete registry[key];
-      // If a Widget was provided, remove the instance of the widget, only if
-      // the container still matches (saving a form causes a rerender which
-      // creates new instances before the cleanup is triggered)
-      if (
-        Widget?.instances?.[id || key] &&
-        Widget.instances[id || key].container() === container
-      ) {
-        delete Widget.instances[id || key];
-      }
-    }
-  };
+            // Store a reference to the api as an instance of the widget
+            if (Widget?.instances) {
+              Widget.instances[id || key] = state.api;
+            }
 
-  // Update the api state to add a destroy function for removing the widget
-  Object.assign(state.api, {
-    destroy: () => {
-      // Trigger cleanup function if it exists, otherwise unmount the widget
-      if (typeof registry[key] === 'function') {
-        registry[key](true);
-      } else {
-        state.root?.unmount();
-      }
-      // Remove the key from the DOM container
-      container?.removeAttribute('data-widget-key');
-    },
+            // Resolve the promise with the API object
+            resolve(state.api);
+          }}
+          // Pass a way to trigger the destroy function from within the component
+          destroy={() => callIfFn(state.api.destroy)}
+        />
+      </HashRouter>,
+    );
   });
-
-  // Store a reference to the api as an instance of the widget
-  if (Widget?.instances) {
-    Widget.instances[id || key] = state.api;
-  }
-
-  // Return a reference to the api
-  return state.api;
 };
 
 /**

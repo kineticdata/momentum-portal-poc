@@ -183,39 +183,49 @@ const SearchComponent = forwardRef(
           ? empty
           : null;
 
-    // Create a ref to store any data we need to access via the API, which
-    // we'll update when needed
-    const apiData = useRef({ value: selection });
-
     // Handler for when the selection is changed
-    const handleChange = ({ value, items }) => {
-      // Remove proxy wrapper from items
-      const selectedItems = structuredClone(items);
-      // Set value state
-      setSelection(selectedItems);
-      // Set API ref data
-      Object.assign(apiData.current, { value: selectedItems });
-      // Call onChange function if one was provided
-      callIfFn(onChange, undefined, [selectedItems[0], value[0]]);
-    };
+    const handleChange = useCallback(
+      ({ value, items }) => {
+        // Remove proxy wrapper from items
+        const selectedItems = structuredClone(items);
+        // Set value state
+        setSelection(selectedItems);
+        // Call onChange function if one was provided
+        callIfFn(onChange, undefined, [selectedItems[0], value[0]]);
+      },
+      [onChange],
+    );
+
+    // API function for setting the selection
+    const setSelectionAPI = useCallback(
+      v => {
+        const item = v && typeof v === 'object' ? v : undefined;
+        const value = (item && optionToValue(item)) || undefined;
+        handleChange({
+          value: value ? [value] : [],
+          items: item ? [item] : [],
+        });
+      },
+      [handleChange, optionToValue],
+    );
+
+    // Define API ref
+    const api = useRef({
+      enable: () => setIsDisabled(false),
+      disable: () => setIsDisabled(true),
+      getSelection: () => selection[0],
+      setSelection: setSelectionAPI,
+    });
+    // Update API ref when its contents change
+    useEffect(() => {
+      Object.assign(api.current, {
+        getSelection: () => selection[0],
+        setSelection: setSelectionAPI,
+      });
+    }, [selection, setSelectionAPI]);
 
     return (
-      <WidgetAPI
-        ref={ref}
-        api={{
-          getSelection: () => apiData.current.value[0],
-          setSelection: v => {
-            const item = v && typeof v === 'object' ? v : undefined;
-            const value = (item && optionToValue(item)) || undefined;
-            handleChange({
-              value: value ? [value] : [],
-              items: item ? [item] : [],
-            });
-          },
-          enable: () => setIsDisabled(false),
-          disable: () => setIsDisabled(true),
-        }}
-      >
+      <WidgetAPI ref={ref} api={api.current}>
         <Combobox.Root
           onOpenChange={({ open }) => setOpen(open)}
           collection={collection}
@@ -257,7 +267,7 @@ const SearchComponent = forwardRef(
                         className="absolute left-4 top-0 text-gray-500 my-2.5"
                       />
                     )}
-                    {showClear && (
+                    {showClear && !isDisabled && (
                       <Combobox.ClearTrigger
                         asChild
                         className="absolute right-0 top-0"
@@ -471,6 +481,9 @@ export const Search = ({ container, config, id } = {}) => {
       id,
     });
   }
+  return Promise.reject(
+    'The Search widget parameters are invalid. See the console for more details.',
+  );
 };
 
 /**

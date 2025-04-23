@@ -17,7 +17,7 @@ We define functions in a global `bundle.widgets` namespace to expose widgets, an
 Given a widget called `CustomWidget`, the following code will render the widget into the form.
 
 ```js
-const customWidget = bundle.widgets.CustomWidget({
+bundle.widgets.CustomWidget({
   // The container parameter must be an HTML element into which the widget should be rendered.
   // Here we are using a Kinetic section element.
   container: K('section[Widget Section]').element(),
@@ -29,22 +29,52 @@ const customWidget = bundle.widgets.CustomWidget({
 });
 ```
 
-After a widget is rendered using the above code, you can access any API functions the widget returns. Different widgets may expose additional API functions specific to their functionality.
+Widgets will return a Promise that is resolved after the widget is rendered. The promise will provide an API object, exposing data and functions to allow you to interact with the widget. Different widgets may expose additional API functions specific to their functionality.
+
+Chaining a `.then` function to the widget function will allow you to interact with the widget immediately after it is initialized.
 
 ```js
-// Get the container element that the widget is rendered in.
-customWidget.container();
-
-// Remove the widget from the form.
-customWidget.destroy();
+bundle.widgets
+  .CustomWidget({
+    /* config such as above */
+  })
+  .then(function (customWidgetAPI) {
+    // The `container` API function is available on all widgets, and returns the
+    // container element that the widget is rendered in.
+    customWidgetAPI.container();
+    // The `destroy` API function is available on all widgets, and removes the
+    // widget from the form.
+    customWidgetAPI.destroy();
+    // There will be additional API functions available that will be specific to
+    // each widget's functionality.
+  });
 ```
 
-**Most of the API functions (except for the above two) are added to the returned API object asynchronously and aren't immediately available until the widget fully loads.**
-
-If you provided an `id` when initializing the widget, you can also access the API functions without storing the result of the widget initialization function. This will let you easily access the API for a rendered widget throughout your entire form.
+If you need to access the widget's API elsewhere in your form, you can do so using the widget's static `get` function, as long as you provided an `id` parameter when initializing the widget.
 
 ```js
+// Get the API object for a widget by id
 const customWidgetAPI = bundle.widgets.CustomWidget.get('my-widget');
+// Use the API
+customWidgetAPI.container();
+customWidgetAPI.destroy();
+```
+
+You can also access a map of all instances of a widget using the static `instances` property.
+
+```js
+bundle.widgets.CustomWidget.instances;
+/**
+ * The above will result in the following object:
+ * {
+ *   'my-widget': {
+ *     container: Function,
+ *     destroy: Function,
+ *     // Other API functions
+ *   },
+ *   // Other Custom Widget instances
+ * }
+ */
 ```
 
 ---
@@ -75,11 +105,17 @@ The subform widget renders a Kinetic form in either a modal or inline, allowing 
 
 [Subform Widget Documentation &#x2B9E;](SUBFORM.md)
 
-### Toast
+### Table
 
-The toast widget provides access to toast functions, allowing builders to provide feedback to users. This widget doesn't render anything into the form dom, and thus works differently from the documentation above.
+The table widget renders a table with data sourced from either a static list, a Kinetic form field, or an integration. The table can be configured to render action buttons that can manage the data in the table, and provides support for filtering, sorting, column management, and pagination.
 
-[Toast Widget Documentation &#x2B9E;](TOAST.md)
+[Table Widget Documentation &#x2B9E;](TABLE.md)
+
+### Utils
+
+Utils are a collection of helper functions that provide various functionality, such as rendering toasts and confirmation modals. They are accessed through the `bundle.utils` namespace instead of `bundle.widgets`.
+
+[Utils Documentation &#x2B9E;](Utils.md)
 
 ---
 
@@ -97,26 +133,45 @@ To build a custom widget, you will create a new file in this directory for that 
 
 ### Defining the Custom Widget Functionality
 
-First you will create a component that will be rendered by the widget. This component is where you will implement all of your custom functionality. (If you need to split this into multiple components or files, that fine, but the result should be a single component that will be rendered by the widget.)
-
-```jsx
-const CustomWidgetComponent = React.forwardRef((props, ref) => {
-  return (
-    <WidgetAPI ref={ref} api={{}}>
-      Your custom JSX should be rendered here.
-    </WidgetAPI>
-  );
-});
-```
+First you will create a component that will be rendered by the widget. This component is where you will implement all of your custom functionality. (If you need to split this into multiple components or files, that's fine, but the result should be a single component that will be rendered by the widget.)
 
 Your component must follow the following rules:
 
 - It must use `React.forwardRef` so we can forward a `ref` to the `WidgetAPI` component that it will render.
 - It must render the `WidgetAPI` component, by wrapping it around the returned content.
   - The `WidgetAPI` component must be passed the forwarded `ref`.
-  - The `WidgetAPI` component may be passed an `api` prop which should be an object of functions or properties that the widget would like to expose when it is used.
+  - The `WidgetAPI` component may be passed an `api` prop which should be a mutable object of functions or properties that the widget would like to expose when it is used. Using a custom `ref` for the API object is recommended so that your component can mutate it as its state changes.
 
 Beyond the above rules, your component can add any additional logic it needs.
+
+```jsx
+const CustomWidgetComponent = React.forwardRef((props, ref) => {
+  // Define a ref as the API object so we can mutate it
+  const api = useRef({
+    /* initial API data and functions */
+  });
+
+  // Define an effect that will update the mutable `api` ref anytime a value or
+  // function that's part of the API changes
+  useEffect(
+    () => {
+      Object.assign(api.current, {
+        /* changed data or function */
+      });
+    },
+    [
+      /* data or functions that may change and are part of the api */
+    ],
+  );
+
+  return (
+    // Pass through the forwarded ref, and the custom api ref object
+    <WidgetAPI ref={ref} api={api.current}>
+      Your custom JSX should be rendered here.
+    </WidgetAPI>
+  );
+});
+```
 
 ### Defining the Custom Widget Function
 
@@ -128,10 +183,13 @@ export const CustomWidget = ({ container, config, id } = {}) => {
     return registerWidget(CustomWidget, {
       container,
       Component: CustomWidgetComponent,
-      props: {},
+      props: { ...config /*, otherProps? */ },
       id,
     });
   }
+  return Promise.reject(
+    'The Test widget parameters are invalid. See the console for more details.',
+  );
 };
 ```
 
@@ -140,7 +198,8 @@ The parameters that this function accepts are up to you, and will depend on the 
 This function must follow the following rules:
 
 - It must validate the parameters to make sure the user is providing valid data. There are helper functions for validating the container, as well as Kinetic field and form objects, but you may also add widget specific validations.
-- It must call `registerWidget` and return the response of that function. `registerWidget` accepts a reference to this function as the first parameter, and the following properties inside an object as the second parameter:
+  - If the validations fail, the function must return a rejected Promise.
+- If the parameters are valid, it must call `registerWidget` and return the response of that function. `registerWidget` accepts a reference to this function as the first parameter, and the following properties inside an object as the second parameter:
   - `container` The HTML element into which your widget component should be rendered.
   - `Component` The custom widget component you defined in the previous step.
   - `props` Any props that should be passed to the above component. Typically, you will pass in the config here.
