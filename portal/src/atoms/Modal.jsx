@@ -72,7 +72,7 @@ export const Modal = ({
         <Dialog.Trigger asChild>{slots.trigger}</Dialog.Trigger>
       )}
       <Portal>
-        <Dialog.Backdrop className="fixed inset-0 bg-black bg-opacity-20" />
+        <Dialog.Backdrop className="fixed inset-0 bg-black/20" />
         <Dialog.Positioner className="fixed inset-0 flex flex-col justify-around items-center">
           <Dialog.Content
             className={clsx(

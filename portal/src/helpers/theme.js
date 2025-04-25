@@ -69,7 +69,7 @@ export const calculateThemeState = (
       if (primaryVariants) {
         primaryVariants.forEach(([step, { hue, saturation, lightness }]) =>
           cssVars.push(
-            `--primary-${step}: ${hue} ${saturation}% ${lightness}%;`,
+            `--color-primary-${step}: hsl(${hue} ${saturation}% ${lightness}%);`,
           ),
         );
       }
@@ -82,7 +82,7 @@ export const calculateThemeState = (
       if (secondaryVariants) {
         secondaryVariants.forEach(([step, { hue, saturation, lightness }]) =>
           cssVars.push(
-            `--secondary-${step}: ${hue} ${saturation}% ${lightness}%;`,
+            `--color-secondary-${step}: hsl(${hue} ${saturation}% ${lightness}%);`,
           ),
         );
       }
@@ -92,7 +92,7 @@ export const calculateThemeState = (
       const grayVariants = createGrayVariants(config?.colors?.gray);
       if (grayVariants) {
         grayVariants.forEach(([step, { hue, saturation, lightness }]) =>
-          cssVars.push(`--gray-${step}: ${hue} ${saturation}% ${lightness}%;`),
+          cssVars.push(`--color-gray-${step}: hsl(${hue} ${saturation}% ${lightness}%;)`),
         );
       }
 

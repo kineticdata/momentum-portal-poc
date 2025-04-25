@@ -148,7 +148,7 @@ const TableRenderer = ({
                   'pl-10 pr-0.5 group-focus-within:px-12 group-[.is-filtered]:px-12',
                   'border border-primary-300 rounded-full outline-0',
                   'text-gray-950 bg-white hover:bg-primary-100',
-                  'focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400',
+                  'focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400',
                   'w-11 group-focus-within:w-48 group-[.is-filtered]:w-48',
                   'max-sm:group-focus-within:w-full max-sm:group-[.is-filtered]:w-full',
                   'cursor-pointer group-focus-within:cursor-auto group-[.is-filtered]:cursor-auto',
@@ -213,7 +213,7 @@ const TableRenderer = ({
                             checked={col.visible}
                             onChange={() => toggleColumn(col.property)}
                             aria-label="Set column visibility"
-                            className="peer absolute inset-0 appearance-none rounded-2.5xl outline-0 focus-visible:ring focus-visible:ring-secondary-400"
+                            className="peer absolute inset-0 appearance-none rounded-2.5xl outline-0 focus-visible:ring-3 focus-visible:ring-secondary-400"
                           />
                           <span
                             className={clsx(
@@ -350,7 +350,7 @@ const TableRenderer = ({
                     {sortable && column.sortable !== false && (
                       <>
                         <button
-                          className="peer absolute inset-0 focus-visible:ring focus-visible:ring-secondary-400 outline-0 rounded-xl"
+                          className="peer absolute inset-0 focus-visible:ring-3 focus-visible:ring-secondary-400 outline-0 rounded-xl"
                           type="button"
                           onClick={() =>
                             setSortData([
@@ -434,7 +434,7 @@ const TableRenderer = ({
                 key={row.key}
                 className={clsx(
                   'group rounded-xl shadow-card',
-                  'has-[td.selectable>button:focus]:ring',
+                  'has-[td.selectable>button:focus]:ring-3',
                   'has-[td.selectable>button:focus]:ring-secondary-400',
                 )}
                 onClick={

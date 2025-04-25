@@ -32,7 +32,7 @@ export const ColorField = ({
             className={clsx('!absolute top-0 left-0 m-1.25')}
           >
             <ColorPicker.ValueSwatch
-              className={clsx('block p-4 border-1 border rounded-full')}
+              className={clsx('block p-4 border-1 rounded-full')}
             />
           </ColorPicker.Trigger>
           <ColorPicker.ChannelInput channel="hex" className={clsx('!pl-12')} />
@@ -40,7 +40,7 @@ export const ColorField = ({
         <ColorPicker.Positioner>
           <ColorPicker.Content
             tabIndex={-1}
-            className="p-4 bg-white border border-gray-600 rounded min-w-[18rem] shadow-lg z-30"
+            className="p-4 bg-white border border-gray-200 rounded-sm min-w-[18rem] shadow-lg z-30"
           >
             <div className="flex flex-col gap-4">
               <ColorPicker.Area className="w-full h-32">
@@ -54,7 +54,7 @@ export const ColorField = ({
               <ColorPicker.View format="rgba" className={clsx('flex gap-4')}>
                 <ColorPicker.ChannelInput
                   channel="hex"
-                  className={clsx('flex-shrink !w-1 flex-1')}
+                  className={clsx('shrink !w-1 flex-1')}
                 />
                 <ColorPicker.EyeDropperTrigger asChild>
                   <Button variant="secondary" icon="color-picker" />

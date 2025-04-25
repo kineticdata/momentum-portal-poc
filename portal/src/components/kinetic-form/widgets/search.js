@@ -282,7 +282,7 @@ const SearchComponent = forwardRef(
                     <Combobox.Positioner>
                       <Combobox.Content
                         className={clsx(
-                          'py-2 bg-white border border-gray-600 rounded min-w-[10rem] shadow-lg z-30',
+                          'py-2 bg-white border border-gray-200 rounded-sm min-w-[10rem] shadow-lg z-30',
                         )}
                       >
                         <Combobox.ItemGroup>

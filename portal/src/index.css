@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+@import './assets/styles/font.css' layer(base);
+@import './assets/styles/colors.css' layer(base);
+@import './assets/styles/layout.css';
+@import './assets/styles/toasts.css';
+@import './assets/styles/panels.css';
+@import './assets/styles/buttons.css';
+@import './assets/styles/forms.css';
+@import './assets/styles/scrollbar.css';
+@import './assets/styles/typography.css';
+
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-currentColor: currentColor;
+  --color-white: hsl(0, 0%, 100%);
+  --color-black: hsl(0, 0%, 0%);
+  --color-primary-100: hsl(var(--def-primary-100));
+  --color-primary-200: hsl(var(--def-primary-200));
+  --color-primary-300: hsl(var(--def-primary-300));
+  --color-primary-400: hsl(var(--def-primary-400));
+  --color-primary-500: hsl(var(--def-primary-500));
+  --color-primary-900: hsl(var(--def-primary-900));
+  --color-secondary-100: hsl(var(--def-secondary-100));
+  --color-secondary-400: hsl(var(--def-secondary-400));
+  --color-secondary-500: hsl(var(--def-secondary-500));
+  --color-gray-100: hsl(var(--def-gray-100));
+  --color-gray-200: hsl(var(--def-gray-200));
+  --color-gray-500: hsl(var(--def-gray-500));
+  --color-gray-900: hsl(var(--def-gray-900));
+  --color-gray-950: hsl(var(--def-gray-950));
+  --color-warning-200: hsl(0, 100%, 87%);
+  --color-warning-400: hsl(0, 65%, 58%);
+  --color-warning-500: hsl(0, 47%, 46%);
+  --color-success-200: hsl(145, 46%, 91%);
+  --color-success-400: hsl(127, 45%, 57%);
+  --color-success-500: hsl(128, 58%, 32%);
+
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+
+  --drop-shadow-card: -2px 13px 19px rgba(53, 51, 51, 0.14);
+  --drop-shadow-card-hover: -2px 6px 9px rgba(53, 51, 51, 0.14);
+
+  --font-sans: 'Mona Sans Expanded';
+
+  --radius-2\.5xl: 1.25rem;
+
+  --shadow-card: -2px 8px 17px 4px rgba(123, 119, 119, 0.15);
+  --shadow-card-hover: -2px 4px 8px 3px rgba(123, 119, 119, 0.15);
+  --shadow-footer: 0px -5px 30px 0px rgba(54, 41, 183, 0.07);
+  --shadow-icon: 0px 3.5px 21px 0px rgba(0, 0, 0, 0.05);
+  --shadow-category: 4px 4px 22px 0 rgba(0, 0, 0, 0.13);
+  --shadow-category-hover: 25px 25px 11px -15px rgba(0, 0, 0, 0.13);
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.75rem;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 2rem;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 2rem;
+  --text-h1: 2rem;
+  --text-h1--line-height: 2.5rem;
+  --text-d2: 2.5rem;
+  --text-d2--line-height: 2.75rem;
+  --text-d1: 4rem;
+  --text-d1--line-height: 1;
+
+  --width-screen-sm: var(--breakpoint-sm);
+  --width-screen-md: var(--breakpoint-md);
+  --width-screen-lg: var(--breakpoint-lg);
+  --width-screen-xl: var(--breakpoint-xl);
+}

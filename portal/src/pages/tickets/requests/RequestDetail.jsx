@@ -79,7 +79,7 @@ const WorkNotes = ({ id }) => {
             size="custom"
             className={clsx(
               'max-md:text-sm font-medium flex gap-2 border-0',
-              'rounded hover:bg-primary-100 focus-visible:bg-primary-100',
+              'rounded-sm hover:bg-primary-100 focus-visible:bg-primary-100',
             )}
             onClick={() => setOpen(o => !o)}
           >

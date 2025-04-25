@@ -167,7 +167,7 @@ export const Profile = () => {
                 required={true}
                 value={newPassword}
                 onChange={e => setNewPassword(e.target.value)}
-                className="w-full px-4 pr-10 py-2"
+                className="pr-12"
               />
               <Button
                 type="button"
@@ -225,7 +225,7 @@ export const Profile = () => {
 
         {profile.spaceAdmin && (
           <>
-            <hr />
+            <hr className="border-gray-200" />
             <div className="field">
               <label htmlFor="">Current Portal Kapp</label>
               <Menu

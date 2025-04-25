@@ -47,7 +47,7 @@
       @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
       @apply text-gray-950 bg-white border-primary-400;
       @apply hover:bg-primary-100;
-      @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
+      @apply focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400;
       @apply disabled:text-gray-900 disabled:bg-gray-100;
     }
     textarea {
@@ -59,7 +59,7 @@
       @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
       @apply text-gray-950 bg-white border-primary-400;
       @apply hover:bg-primary-100;
-      @apply focus-within:bg-white focus-within:ring focus-within:ring-secondary-400;
+      @apply focus-within:bg-white focus-within:ring-3 focus-within:ring-secondary-400;
       overflow-wrap: anywhere;
 
       input[type='checkbox'],
@@ -200,7 +200,7 @@
           @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
           @apply text-gray-950 bg-white border-primary-400;
           @apply hover:bg-primary-100;
-          @apply focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400;
+          @apply focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400;
           @apply disabled:text-gray-900 disabled:bg-gray-100;
         }
         select {
@@ -221,7 +221,7 @@
 
         /* Attachments */
         .fileinput-button {
-          @apply btn-secondary border-dashed border-primary-900 bg-no-repeat pl-11 focus-within:bg-secondary-400;
+          @apply btn-secondary border-dashed border-primary-900 bg-no-repeat !pl-11 focus-within:bg-secondary-400;
           background-image: url(./icons/file-plus.svg);
           background-position: left 1rem center;
           background-size: 1.5rem;
@@ -274,7 +274,7 @@
           @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
           @apply text-gray-950 bg-white border-primary-400;
           @apply hover:bg-primary-100;
-          @apply focus-within:bg-white focus-within:ring focus-within:ring-secondary-400;
+          @apply focus-within:bg-white focus-within:ring-3 focus-within:ring-secondary-400;
           overflow-wrap: anywhere;
 
           input[type='checkbox'],
@@ -353,4 +353,17 @@
       }
     }
   }
+}
+
+@utility checkbox-checked-bg {
+  background-image: url(icons/checkbox-checked.svg);
+}
+@utility checkbox-disabled-bg {
+  background-image: url(icons/checkbox-checked_disabled.svg);
+}
+@utility radio-checked-bg {
+  background-image: url(icons/radio-checked.svg);
+}
+@utility radio-disabled-bg {
+  background-image: url(icons/radio-checked_disabled.svg);
 }

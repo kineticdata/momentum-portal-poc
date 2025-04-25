@@ -167,7 +167,7 @@ export const TicketCard = ({ submission, reload }) => {
               icon="trash"
               size="md"
               className={clsx(
-                'relative -my-1 hidden group-hover:block group-focus-within:block',
+                'relative -my-1 not-group-hover:not-group-focus-within:hidden',
               )}
               onClick={() => handleDelete(submission.id, reload)}
             />

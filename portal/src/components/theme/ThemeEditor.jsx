@@ -228,7 +228,7 @@ export const ThemeEditor = () => {
           className={clsx(
             'fixed right-0 top-24 h-28 w-10 rounded-l-2.5xl',
             'flex justify-center items-center border-primary-500 bg-gray-200',
-            'hover:ring hover:ring-secondary-400 focus-visible:ring focus-visible:ring-secondary-400',
+            'hover:ring-3 hover:ring-secondary-400 focus-visible:ring-3 focus-visible:ring-secondary-400',
           )}
         >
           <Icon name="brush" />
@@ -282,7 +282,7 @@ export const ThemeEditor = () => {
             </div>
           </div>
 
-          <hr />
+          <hr className="border-gray-200" />
 
           {themeName === 'Space' && !spaceHasTheme ? (
             <div className="py-1.5 px-4 min-w-full text-warning-500">
@@ -350,7 +350,7 @@ export const ThemeEditor = () => {
                 ]}
               />
 
-              <hr />
+              <hr className="border-gray-200" />
 
               <p className="text-sm text-gray-900">
                 You can set a URL for the logo image to use in the portal.

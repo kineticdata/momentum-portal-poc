@@ -56,16 +56,22 @@
     }
 
     /* Set the gutter widths for the design on the wrapper elements. */
-    @apply px-[--gutter-size];
-
-    .stretch-wide {
-      @apply mx-[--gutter-inv-size];
-    }
-    .stretch {
-      @apply mx-[--gutter-inv-size] px-[--gutter-size];
-    }
-    .w-stretch {
-      width: calc(100% + var(--gutter-size) * 2);
-    }
+    @apply px-(--gutter-size);
   }
+
+  hr {
+    @apply border-gray-200;
+  }
+}
+
+@utility stretch {
+  @apply mx-(--gutter-inv-size) px-(--gutter-size);
+}
+
+@utility stretch-wide {
+  @apply mx-(--gutter-inv-size);
+}
+
+@utility w-stretch {
+  width: calc(100% + var(--gutter-size, 0) * 2);
 }

@@ -15,6 +15,8 @@ import { getCsrfToken } from '@kineticdata/react';
 import { toastError } from '../../../helpers/toasts.js';
 import { Provider, useSelector } from 'react-redux';
 import { store } from '../../../redux.js';
+import radioChecked from '../../../assets/styles/icons/radio-checked.svg';
+import radioDisabled from '../../../assets/styles/icons/radio-checked_disabled.svg';
 
 /**
  * @param {Object} props.field Kinetic field object
@@ -241,7 +243,7 @@ const SignatureComponent = forwardRef(
                     className={clsx(
                       'border border-primary-400 bg-gray-100 relative rounded-2.5xl transition-all',
                       'hover:bg-primary-100',
-                      'focus-within:ring focus-within:ring-secondary-400',
+                      'focus-within:ring-3 focus-within:ring-secondary-400',
                     )}
                   >
                     <SignaturePad.Segment />
@@ -257,7 +259,7 @@ const SignatureComponent = forwardRef(
                       >
                         <Icon name="refresh" aria-label="reset"></Icon>
                       </SignaturePad.ClearTrigger>
-                      <div className="flex justify-between items-center absolute bottom-4 left-5 right-6 border-t-2 border-gray-400"></div>
+                      <div className="flex justify-between items-center absolute bottom-4 left-5 right-6 border-t-2 border-gray-200"></div>
                     </SignaturePad.Guide>
                   </SignaturePad.Control>
                 </SignaturePad.Root>
@@ -277,7 +279,7 @@ const SignatureComponent = forwardRef(
                       onChange={e => setFullName(e.target.value)}
                       className="block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-semibold
                text-primary-900 bg-white border-primary-400
-               hover:bg-primary-100 focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400
+               hover:bg-primary-100 focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400
                disabled:text-gray-900 disabled:bg-gray-100"
                     />
                   </div>
@@ -289,7 +291,7 @@ const SignatureComponent = forwardRef(
                       key={style.font}
                       className="flex items-center justify-between border rounded-2.5xl p-4 w-[18rem] h-16 cursor-pointer transition-all
              text-primary-900 bg-white border-primary-400 hover:bg-primary-100
-             focus-within:bg-white focus-within:ring focus-within:ring-secondary-400
+             focus-within:bg-white focus-within:ring-3 focus-within:ring-secondary-400
              overflow-wrap-anywhere disabled:text-gray-900 disabled:bg-gray-100"
                       onClick={() => setSelectedStyle(style.font)}
                     >
@@ -312,8 +314,11 @@ const SignatureComponent = forwardRef(
                         value={style.font}
                         checked={selectedStyle === style.font}
                         onChange={() => setSelectedStyle(style.font)}
-                        className="flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat rounded-full
-               checked:bg-[url('./icons/radio-checked.svg')] disabled:checked:bg-[url('./icons/radio-checked_disabled.svg')] bg-[length:0.75rem]"
+                        className={clsx(
+                          'flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat rounded-full bg-[length:0.75rem]',
+                          `checked:radio-checked-bg`,
+                          `disabled:checked:radio-disabled-bg`,
+                        )}
                       />
                     </label>
                   ))}
@@ -321,28 +326,30 @@ const SignatureComponent = forwardRef(
               </Tabs.Content>
             </Tabs.Root>
           </div>
-          <div slot="footer" className="flex flex-col items-center">
-            <p className="text-center text-small text-gray-900">
-              {agreementText}
-            </p>
-            <button
-              type="button"
-              onClick={onSave}
-              disabled={isSaveDisabled}
-              className={clsx(
-                'w-full rounded-2.5xl bg-secondary-400 button-text py-2 font-semibold border border-primary-500',
-                {
-                  'disabled:bg-gray-200 text-gray-900 font-medium': !imageUrl,
-                },
-              )}
-            >
-              {savedButtonLabel}
-            </button>
-            <canvas
-              ref={canvasRef}
-              id="signature-canvas"
-              style={{ display: 'none' }}
-            ></canvas>
+          <div slot="footer">
+            <div className="flex flex-col items-center gap-2 w-full">
+              <p className="text-center text-small text-gray-900">
+                {agreementText}
+              </p>
+              <button
+                type="button"
+                onClick={onSave}
+                disabled={isSaveDisabled}
+                className={clsx(
+                  'w-full rounded-2.5xl bg-secondary-400 button-text py-2 font-semibold border border-primary-500',
+                  {
+                    'disabled:bg-gray-200 text-gray-900 font-medium': !imageUrl,
+                  },
+                )}
+              >
+                {savedButtonLabel}
+              </button>
+              <canvas
+                ref={canvasRef}
+                id="signature-canvas"
+                style={{ display: 'none' }}
+              ></canvas>
+            </div>
           </div>
         </Modal>
       </WidgetAPI>
@@ -358,7 +365,6 @@ SignatureComponent.propTypes = {
   agreementText: t.string,
   savedButtonLabel: t.string,
   savedFileName: t.string,
-  buttonLabel: t.string,
   clearButtonLabel: t.string,
 };
 

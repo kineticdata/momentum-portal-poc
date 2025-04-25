@@ -44,7 +44,7 @@ const LinkItem = ({ label, to, icon, target }) => (
  * Renderer for a divider menu item.
  */
 const DividerItem = () => (
-  <ArkMenu.Separator className="my-2 border-gray-600" />
+  <ArkMenu.Separator className="my-2 border-gray-200" />
 );
 
 /**
@@ -144,7 +144,7 @@ export const Menu = ({
         </ArkMenu.Trigger>
       )}
       <ArkMenu.Positioner>
-        <ArkMenu.Content className="py-2 bg-white border border-gray-600 rounded min-w-[10rem] outline-0 shadow-lg z-30">
+        <ArkMenu.Content className="py-2 bg-white border border-gray-200 rounded-sm min-w-[10rem] outline-0 shadow-lg z-30">
           <Items items={items} />
         </ArkMenu.Content>
       </ArkMenu.Positioner>

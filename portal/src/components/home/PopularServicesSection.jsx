@@ -32,7 +32,7 @@ export const PopularServicesSection = () => {
     initialized && popularForms?.length > 0 && (
       <div
         className={clsx(
-          'flex gap-2 max-md:-mx-[--gutter-size] max-md:px-[--gutter-size] max-md:overflow-x-auto',
+          'flex gap-2 max-md:-mx-(--gutter-size) max-md:px-(--gutter-size) max-md:overflow-x-auto',
           'md:max-xl:justify-evenly',
           'xl:grid xl:grid-cols-2 xl:gap-6',
         )}

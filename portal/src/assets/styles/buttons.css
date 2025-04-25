@@ -4,36 +4,35 @@
  * Styling for button elements and the Kinetic form.
  ******************************************************************************/
 
-@layer components {
-  .btn {
-    @apply inline-flex gap-1 justify-center items-center text-center py-2.25 px-4 border outline-0 rounded-2.5xl;
-  }
+@utility btn {
+  @apply inline-flex gap-1 justify-center items-center text-center py-2.25 px-4 border outline-0 rounded-2.5xl;
+}
+@utility btn-primary {
+  @apply btn;
+  @apply text-gray-950 focus-visible:text-primary-200 disabled:text-gray-900 font-medium;
+  @apply bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 disabled:bg-gray-200;
+  @apply border-primary-500 disabled:border-primary-300;
+}
 
-  .btn-primary {
-    @apply btn;
-    @apply text-gray-950 focus-visible:text-primary-200 disabled:text-gray-900 font-medium;
-    @apply bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 disabled:bg-gray-200;
-    @apply border-primary-500 disabled:border-primary-300;
-  }
+@utility btn-secondary {
+  @apply btn;
+  @apply text-gray-950 disabled:text-gray-900 font-semibold;
+  @apply bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
+  @apply border-primary-300;
+}
 
-  .btn-secondary {
-    @apply btn;
-    @apply text-gray-950 disabled:text-gray-900 font-semibold;
-    @apply bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
-    @apply border-primary-300;
-  }
+@utility btn-tertiary {
+  @apply btn;
+  @apply text-gray-950 disabled:text-gray-900 font-semibold;
+  @apply bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
+  @apply border-transparent;
+}
 
-  .btn-tertiary {
-    @apply btn;
-    @apply text-gray-950 disabled:text-gray-900 font-semibold;
-    @apply bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
-    @apply border-transparent;
-  }
+@utility btn-underline {
+  @apply hover:underline focus-visible:underline disabled:no-underline;
+}
 
-  .btn-underline {
-    @apply hover:underline focus-visible:underline disabled:no-underline;
-  }
-
+@layer base {
   .embedded-core-form form {
     [data-element-type='button'] {
       &[data-button-type='submit-page'] {
@@ -46,33 +45,31 @@
   }
 }
 
-@layer utilities {
-  .bg-glassmorphism-border {
-    --glassmorphism-angle: 100deg;
-    background-image: linear-gradient(
-      var(--glassmorphism-angle),
-      white 0%,
-      transparent 54%,
-      rgba(255, 255, 255, 77%) 100%
-    );
-    background-blend-mode: overlay;
-  }
-  .bg-glassmorphism-linear {
-    --glassmorphism-angle: 122deg;
-    background-image: linear-gradient(
-      var(--glassmorphism-angle),
-      rgba(255, 255, 255, 50%) 12%,
-      transparent 61%
-    );
-    background-blend-mode: overlay;
-  }
-  .bg-glassmorphism-circular {
-    background-image: radial-gradient(
-      164% 148% at -5% 9%,
-      rgba(0, 0, 0, 10%) 18%,
-      rgba(255, 255, 255, 15%) 62%,
-      rgba(0, 0, 0, 20%) 96%
-    );
-    background-blend-mode: overlay;
-  }
+@utility bg-glassmorphism-border {
+  --glassmorphism-angle: 100deg;
+  background-image: linear-gradient(
+    var(--glassmorphism-angle),
+    white 0%,
+    transparent 54%,
+    rgba(255, 255, 255, 77%) 100%
+  );
+  background-blend-mode: overlay;
+}
+@utility bg-glassmorphism-linear {
+  --glassmorphism-angle: 122deg;
+  background-image: linear-gradient(
+    var(--glassmorphism-angle),
+    rgba(255, 255, 255, 50%) 12%,
+    transparent 61%
+  );
+  background-blend-mode: overlay;
+}
+@utility bg-glassmorphism-circular {
+  background-image: radial-gradient(
+    164% 148% at -5% 9%,
+    rgba(0, 0, 0, 10%) 18%,
+    rgba(255, 255, 255, 15%) 62%,
+    rgba(0, 0, 0, 20%) 96%
+  );
+  background-blend-mode: overlay;
 }

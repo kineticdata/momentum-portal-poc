@@ -19,7 +19,7 @@ export const WelcomeSection = () => {
           className={clsx(
             'inline-flex justify-start items-center gap-6 rounded-full',
             'text-gray-500 bg-white border-primary-400 font-medium',
-            'hover:bg-primary-100 focus-visible:bg-white focus-visible:ring focus-visible:ring-secondary-400',
+            'hover:bg-primary-100 focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400',
           )}
           aria-label="Open Search"
         >

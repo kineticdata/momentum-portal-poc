@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import './assets/styles/index.css';
+import './index.css';
 import ReactDOM from 'react-dom/client';
 import { KineticLib } from '@kineticdata/react';
 import { App } from './App.jsx';

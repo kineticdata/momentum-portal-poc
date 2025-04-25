@@ -45,8 +45,8 @@
 
     /* Style each panel content element. */
     [data-scope='dialog'][data-part='content'] {
-      @apply max-md:w-full max-md:h-[--panel-height] max-md:rounded-t-[2.5rem];
-      @apply md:h-full md:w-[--panel-width] md:max-w-[--panel-max-width];
+      @apply max-md:w-full max-md:h-(--panel-height) max-md:rounded-t-[2.5rem];
+      @apply md:h-full md:w-(--panel-width) md:max-w-(--panel-max-width);
       box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.16);
 
       /* Add slide in and out animations to the dialog component of the panel. */
@@ -68,7 +68,7 @@
 
     /* Style the backdrop panel element. */
     [data-scope='dialog'][data-part='backdrop'] {
-      @apply fixed inset-0 bg-black bg-opacity-50;
+      @apply fixed inset-0 bg-black/50;
 
       /* Add fade in and out animations to the backdrop of the panel. */
       &[data-state='open'] {
@@ -81,7 +81,7 @@
         &:has(
             ~ [data-scope='dialog'][data-part='backdrop'][data-state='open']
           ) {
-          @apply bg-opacity-10;
+          @apply bg-black/10;
         }
       }
       &[data-state='closed'] {
@@ -99,36 +99,38 @@
   }
 }
 
-@layer utilities {
+@utility panelSlideIn {
   @media (max-width: 767px) {
-    .panelSlideIn {
-      animation: panelSlideInBottom var(--anim-duration) var(--anim-timing) 1
-        forwards;
-    }
-    .panelSlideOut {
-      animation: panelSlideOutBottom var(--anim-duration) var(--anim-timing) 1
-        forwards;
-    }
+    animation: panelSlideInBottom var(--anim-duration) var(--anim-timing) 1
+      forwards;
   }
+}
+@utility panelSlideOut {
+  @media (max-width: 767px) {
+    animation: panelSlideOutBottom var(--anim-duration) var(--anim-timing) 1
+      forwards;
+  }
+}
+@utility panelSlideIn {
   @media (min-width: 768px) {
-    .panelSlideIn {
-      animation: panelSlideInRight var(--anim-duration) var(--anim-timing) 1
-        forwards;
-    }
-    .panelSlideOut {
-      animation: panelSlideOutRight var(--anim-duration) var(--anim-timing) 1
-        forwards;
-    }
+    animation: panelSlideInRight var(--anim-duration) var(--anim-timing) 1
+      forwards;
   }
+}
+@utility panelSlideOut {
+  @media (min-width: 768px) {
+    animation: panelSlideOutRight var(--anim-duration) var(--anim-timing) 1
+      forwards;
+  }
+}
 
-  .panelBackdropFadeIn {
-    animation: panelBackdropFadeIn var(--anim-duration) var(--anim-timing) 1
-      forwards;
-  }
-  .panelBackdropFadeOut {
-    animation: panelBackdropFadeOut var(--anim-duration) var(--anim-timing) 1
-      forwards;
-  }
+@utility panelBackdropFadeIn {
+  animation: panelBackdropFadeIn var(--anim-duration) var(--anim-timing) 1
+    forwards;
+}
+@utility panelBackdropFadeOut {
+  animation: panelBackdropFadeOut var(--anim-duration) var(--anim-timing) 1
+    forwards;
 }
 
 @keyframes panelSlideInBottom {
