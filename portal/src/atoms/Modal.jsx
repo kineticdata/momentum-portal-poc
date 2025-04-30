@@ -73,25 +73,16 @@ export const Modal = ({
       )}
       <Portal>
         <Dialog.Backdrop className="fixed inset-0 bg-black/20" />
-        <Dialog.Positioner className="fixed inset-0 flex flex-col justify-around items-center">
+        <Dialog.Positioner className="kmodal">
           <Dialog.Content
-            className={clsx(
-              // Common styles
-              'data-[state=open]:flex flex-col items-stretch py-3 bg-white',
-              'max-h-[calc(100vh-3rem)] rounded-[40px] shadow-lg',
-              // Mobile first styles
-              'max-md:w-screen',
-              // Non mobile styles
-              'md:max-w-[calc(100vw-3rem)]',
-              {
-                'md:w-screen-sm': size === 'sm',
-                'md:w-screen-md': size === 'md',
-                'md:w-screen-lg': size === 'lg',
-                'md:w-screen': size === 'xl',
-              },
-            )}
+            className={clsx('kmodal-box', {
+              'md:w-screen-sm': size === 'sm',
+              'md:w-screen-md': size === 'md',
+              'md:w-screen-lg': size === 'lg',
+              'md:w-screen': size === 'xl',
+            })}
           >
-            <div className="flex justify-between items-center gap-2 py-3 px-6">
+            <div className="flex justify-between items-center gap-2">
               <Dialog.Title className="flex-auto" asChild={!!slots.title}>
                 {slots.title || title}
               </Dialog.Title>
@@ -102,7 +93,7 @@ export const Modal = ({
             {slots.description && (
               <Dialog.Description
                 asChild
-                className="overflow-auto scrollbar-white py-3 px-6"
+                className="overflow-auto scrollbar-white"
               >
                 {slots.description}
               </Dialog.Description>
@@ -110,7 +101,7 @@ export const Modal = ({
             {slots.body && (
               <ark.div
                 asChild
-                className="overflow-auto scrollbar-white py-3 px-6"
+                className="overflow-auto scrollbar-white -m-4 p-4"
               >
                 {slots.body}
               </ark.div>
@@ -118,7 +109,7 @@ export const Modal = ({
             {slots.footer && (
               <ark.div
                 asChild
-                className="flex justify-start flex-row-reverse gap-2 py-3 px-6"
+                className="flex justify-start flex-row-reverse gap-2"
               >
                 {slots.footer}
               </ark.div>

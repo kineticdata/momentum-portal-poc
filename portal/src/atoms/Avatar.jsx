@@ -29,44 +29,31 @@ export const Avatar = ({
   return (
     <Tag
       className={clsx(
-        'group flex justify-center items-center rounded-full outline-0 transition',
-        'bg-primary-900 bg-glassmorphism-border [--glassmorphism-angle:145deg]',
-        isLink && 'hover:bg-gray-500 focus-visible:bg-secondary-400',
-        asButton &&
-          'group/btn:bg-gray-500 group-focus-visible/btn:bg-secondary-400',
+        'group flex justify-center items-center rounded-full transition uppercase leading-none',
+        (isLink || asButton) && 'kbtn kbtn-accent kbtn-circle',
+        !isLink && !asButton && 'bg-accent text-accent-content',
         {
           'h-4 w-4': size === 'sm',
           'h-6 w-6': size === 'md',
           'h-10 w-10': size === 'lg',
           'h-12 w-12': size === 'xl',
           'h-16 w-16': size === '2xl',
+          'h-24 w-24': size === '3xl',
+        },
+        {
+          'text-xs': size === 'sm',
+          'text-base': size === 'md',
+          'text-h3 font-medium': size === 'lg',
+          'text-h2 font-medium': size === 'xl',
+          'text-h1 font-medium': size === '2xl',
+          'text-5xl font-semibold': size === '3xl',
         },
         className,
       )}
       {...additionalProps}
       {...passThroughProps}
     >
-      <div
-        className={clsx(
-          'flex justify-center items-center h-full w-full rounded-full transition',
-          'bg-primary-900 text-primary-100 uppercase leading-none',
-          isLink && 'group-hover:bg-gray-500 group-hover:text-white',
-          isLink &&
-            'group-focus-visible:bg-secondary-400 group-focus-visible:text-gray-950',
-          asButton && 'group-hover/btn:bg-gray-500 group-hover/btn:text-white',
-          asButton &&
-            'group-focus-visible/btn:bg-secondary-400 group-focus-visible/btn:text-gray-950',
-          {
-            'text-xs': size === 'sm',
-            'text-base': size === 'md',
-            'text-h3 font-medium': size === 'lg',
-            'text-h2 font-medium': size === 'xl',
-            'text-h1 font-medium': size === '2xl',
-          },
-        )}
-      >
-        {username.slice(0, 1)}
-      </div>
+      {username.slice(0, 1)}
     </Tag>
   );
 };

@@ -20,7 +20,7 @@ const ReviewPaginationControl = ({ index, actions }) => {
         Previous{!mobile ? ' Page' : ''}
       </Button>
       <div
-        className="flex justify-center items-center w-11 h-11 bg-secondary-400 rounded-full font-semibold"
+        className="flex justify-center items-center w-11 h-11 bg-accent text-accent-content rounded-full font-semibold"
         title="Current Page"
       >
         {index + 1}

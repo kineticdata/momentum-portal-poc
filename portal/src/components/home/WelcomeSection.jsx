@@ -15,15 +15,14 @@ export const WelcomeSection = () => {
       </div>
       <SearchModal>
         <Button
-          variant="custom"
+          variant="secondary"
           className={clsx(
-            'inline-flex justify-start items-center gap-6 rounded-full',
-            'text-gray-500 bg-white border-primary-400 font-medium',
-            'hover:bg-primary-100 focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400',
+            'inline-flex justify-start items-center gap-6 text-base-content/60',
           )}
+          size="xl"
           aria-label="Open Search"
         >
-          <span className="rounded-full flex justify-center items-center bg-primary-900 text-primary-200 p-1.25">
+          <span className="rounded-full flex justify-center items-center bg-accent text-accent-content p-1.25">
             <Icon name="search" size={18} />
           </span>
           How can we help?

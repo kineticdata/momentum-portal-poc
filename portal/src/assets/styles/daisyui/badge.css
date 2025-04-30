@@ -1,0 +1,35 @@
+@utility kbadge-xs {
+  --ksize: calc(var(--size-selector, 0.25rem) * 6);
+  font-size: 0.75rem;
+  padding-inline: calc(0.25rem * 3 - var(--border));
+}
+
+@utility kbadge-sm {
+  --ksize: calc(var(--size-selector, 0.25rem) * 7);
+  font-size: 0.875rem;
+  padding-inline: calc(0.25rem * 3.5 - var(--border));
+}
+
+@utility kbadge {
+  --ksize: calc(var(--size-selector, 0.25rem) * 8);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding-inline: calc(0.25rem * 4 - var(--border));
+}
+@utility kbadge-md {
+  --ksize: calc(var(--size-selector, 0.25rem) * 8);
+  font-size: 0.875rem;
+  padding-inline: calc(0.25rem * 4 - var(--border));
+}
+
+@utility kbadge-lg {
+  --ksize: calc(var(--size-selector, 0.25rem) * 9);
+  font-size: 1rem;
+  padding-inline: calc(0.25rem * 4.5 - var(--border));
+}
+
+@utility kbadge-xl {
+  --ksize: calc(var(--size-selector, 0.25rem) * 10);
+  font-size: 1rem;
+  padding-inline: calc(0.25rem * 5 - var(--border));
+}

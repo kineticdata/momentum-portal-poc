@@ -28,19 +28,19 @@ export const ColorField = ({
         positioning={{ placement }}
       >
         <ColorPicker.Control className={clsx('relative')}>
+          <ColorPicker.ChannelInput channel="hex" className={clsx('!pl-12')} />
           <ColorPicker.Trigger
-            className={clsx('!absolute top-0 left-0 m-1.25')}
+            className={clsx('!absolute top-0 left-0 m-1.25 z-1')}
           >
             <ColorPicker.ValueSwatch
               className={clsx('block p-4 border-1 rounded-full')}
             />
           </ColorPicker.Trigger>
-          <ColorPicker.ChannelInput channel="hex" className={clsx('!pl-12')} />
         </ColorPicker.Control>
         <ColorPicker.Positioner>
           <ColorPicker.Content
             tabIndex={-1}
-            className="p-4 bg-white border border-gray-200 rounded-sm min-w-[18rem] shadow-lg z-30"
+            className="p-4 bg-base-100 border border-base-300 rounded-sm min-w-[18rem] shadow-lg z-30"
           >
             <div className="flex flex-col gap-4">
               <ColorPicker.Area className="w-full h-32">

@@ -1,0 +1,98 @@
+@import './badge.css';
+@plugin "daisyui" {
+  prefix: 'k';
+}
+
+:root {
+  /* Theme Colors */
+  --theme-base-100: #f7f9fa;
+  --theme-base-200: #f1f2f4;
+  --theme-base-300: #d0d4db;
+  --theme-base-content: #101828;
+  --theme-primary: #ffce74;
+  --theme-primary-content: #272117;
+  --theme-secondary: #1f3d5a;
+  --theme-secondary-content: #d4dfeb;
+  --theme-accent: #8bc2ff;
+  --theme-accent-content: #162455;
+  --theme-neutral: #162455;
+  --theme-neutral-content: #d4dfeb;
+  --theme-info: #c7dfff;
+  --theme-info-content: #1d2229;
+  --theme-success: #d3edd3;
+  --theme-success-content: #383f38;
+  --theme-warning: #fcfae6;
+  --theme-warning-content: #eeaf00;
+  --theme-error: #fec8c8;
+  --theme-error-content: #801518;
+
+  /* Theme Colors 2 */
+  /*--theme-base-100: #030712;*/
+  /*--theme-base-200: #101828;*/
+  /*--theme-base-300: #1c2737;*/
+  /*--theme-base-content: #f1f2f4;*/
+  /*--theme-primary: #a683ff;*/
+  /*--theme-primary-content: #2e0c67;*/
+  /*--theme-secondary: #99e600;*/
+  /*--theme-secondary-content: #182d02;*/
+  /*--theme-accent: #7c85ff;*/
+  /*--theme-accent-content: #1c184b;*/
+  /*--theme-neutral: #314157;*/
+  /*--theme-neutral-content: #f7f8fa;*/
+  /*--theme-info: #00b6d9;*/
+  /*--theme-info-content: #ebfdfe;*/
+  /*--theme-success: #7acc00;*/
+  /*--theme-success-content: #4c6723;*/
+  /*--theme-warning: #eeaf00;*/
+  /*--theme-warning-content: #fcfae6;*/
+  /*--theme-error: #fcfae6;*/
+  /*--theme-error-content: #fceeef;*/
+
+  /* DaisyUI Colors */
+  --color-base-100: oklch(from var(--theme-base-100) l c h);
+  --color-base-200: oklch(from var(--theme-base-200) l c h);
+  --color-base-300: oklch(from var(--theme-base-300) l c h);
+  --color-base-content: oklch(from var(--theme-base-content) l c h);
+  --color-primary: oklch(from var(--theme-primary) l c h);
+  --color-primary-content: oklch(from var(--theme-primary-content) l c h);
+  --color-secondary: oklch(from var(--theme-secondary) l c h);
+  --color-secondary-content: oklch(from var(--theme-secondary-content) l c h);
+  --color-accent: oklch(from var(--theme-accent) l c h);
+  --color-accent-content: oklch(from var(--theme-accent-content) l c h);
+  --color-neutral: oklch(from var(--theme-neutral) l c h);
+  --color-neutral-content: oklch(from var(--theme-neutral-content) l c h);
+  --color-info: oklch(from var(--theme-info) l c h);
+  --color-info-content: oklch(from var(--theme-info-content) l c h);
+  --color-success: oklch(from var(--theme-success) l c h);
+  --color-success-content: oklch(from var(--theme-success-content) l c h);
+  --color-warning: oklch(from var(--theme-warning) l c h);
+  --color-warning-content: oklch(from var(--theme-warning-content) l c h);
+  --color-error: oklch(from var(--theme-error) l c h);
+  --color-error-content: oklch(from var(--theme-error-content) l c h);
+
+  /* DaisyUI Theme Overrides */
+  --radius-selector: 1.5rem;
+  --radius-field: 1.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@utility kmodal {
+  &:has(> [data-state='open']) {
+    @apply pointer-events-auto visible opacity-100;
+    .kmodal-box {
+      translate: 0 0;
+      scale: 1;
+      opacity: 1;
+    }
+  }
+}
+
+@utility kmodal-box {
+  @apply flex flex-col gap-6 max-md:w-screen md:max-w-[calc(100vw-3rem)] shadow-lg rounded-4xl;
+  max-height: calc(100vh - 3rem);
+}

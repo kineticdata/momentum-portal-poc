@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/images/logo-full.svg';
+import { Icon } from '../../atoms/Icon.jsx';
 
 export const Login = loginProps => (
   <div className="flex justify-center items-center min-h-screen">
-    <div className="flex flex-col items-center gap-6 w-[36rem] bg-white rounded-xl shadow-lg">
+    <div className="flex flex-col items-center gap-6 w-[36rem] bg-base-100 rounded-xl shadow-lg">
       <LoginForm {...loginProps} />
     </div>
   </div>
@@ -56,7 +57,12 @@ export const LoginForm = loginProps => {
           onChange={onChangePassword}
         />
       </div>
-      {error && <p className="text-warning-500">{error}</p>}
+      {error && (
+        <p className="flex items-center gap-2 text-base-content/80">
+          <span className="kstatus kstatus-error"></span>
+          {error}
+        </p>
+      )}
       <Button
         type="submit"
         onClick={onLogin}
@@ -66,10 +72,10 @@ export const LoginForm = loginProps => {
       </Button>
       {onSso && (
         <>
-          <div className="flex justify-center items-center gap-2.5 text-gray-900 font-semibold leading-4">
-            <hr className="inline w-16 border-gray-500" />
+          <div className="flex justify-center items-center gap-2.5 text-base-content/60 font-semibold leading-4">
+            <hr className="inline w-16 text-base-content/50" />
             OR
-            <hr className="inline w-16 border-gray-500" />
+            <hr className="inline w-16 text-base-content/50" />
           </div>
           <Button
             variant="secondary"
@@ -84,8 +90,8 @@ export const LoginForm = loginProps => {
       <Link
         to="/reset-password"
         className={clsx(
-          'flex justify-center items-center gap-1 text-gray-500 py-2.5 font-semibold',
-          'hover:underline hover:text-gray-950',
+          'flex justify-center items-center gap-1 text-base-content/60 py-2.5 font-semibold',
+          'hover:underline hover:text-base-content',
         )}
       >
         Forgot your password?

@@ -89,19 +89,19 @@ export const SearchModal = ({ children }) => {
                     <ServiceCard
                       key={form.slug}
                       form={form}
-                      className="!shadow-none !border-gray-200"
+                      className="!shadow-none !border-base-300"
                       onClick={() => setOpen(false)}
                     />
                   ))
                 : null}
               {data?.length === 0 && (
-                <p className="text-gray-900 text-center italic my-5">
+                <p className="text-base-content/60 text-center italic my-5">
                   No results found.
                 </p>
               )}
 
               {(actions.previousPage || actions.nextPage) && (
-                <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-white rounded-xl min-h-16">
+                <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-base-100 rounded-xl min-h-16">
                   <Button
                     variant="secondary"
                     onClick={actions.previousPage}
@@ -113,7 +113,7 @@ export const SearchModal = ({ children }) => {
                   {loading ? (
                     <Loading xsmall size={36} />
                   ) : (
-                    <div className="flex justify-center items-center flex-none w-11 h-11 bg-secondary-400 rounded-full font-semibold">
+                    <div className="flex justify-center items-center flex-none w-11 h-11 bg-accent text-accent-content rounded-full font-semibold">
                       {pageNumber}
                     </div>
                   )}

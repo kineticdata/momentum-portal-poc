@@ -123,7 +123,9 @@ export const Profile = () => {
         </div>
 
         <div
-          className={clsx('field', { 'has-error': validationErrors.newEmail })}
+          className={clsx('field required', {
+            'has-error': validationErrors.newEmail,
+          })}
         >
           <label htmlFor="email">Email</label>
           <input
@@ -135,10 +137,15 @@ export const Profile = () => {
             value={newEmail}
             onChange={e => setNewEmail(e.target.value)}
           />
-          {validationErrors.newEmail && <p>{validationErrors.newEmail}</p>}
+          {validationErrors.newEmail && (
+            <p className="flex items-center gap-2 text-base-content/80">
+              <span className="kstatus kstatus-error"></span>
+              {validationErrors.newEmail}
+            </p>
+          )}
         </div>
         <div
-          className={clsx('field', {
+          className={clsx('field required', {
             'has-error': validationErrors.newDisplayName,
           })}
         >
@@ -153,12 +160,15 @@ export const Profile = () => {
             onChange={e => setNewDisplayName(e.target.value)}
           />
           {validationErrors.newDisplayName && (
-            <p>{validationErrors.newDisplayName}</p>
+            <p className="flex items-center gap-2 text-base-content/80">
+              <span className="kstatus kstatus-error"></span>
+              {validationErrors.newDisplayName}
+            </p>
           )}
         </div>
         {showChangedPassword && (
           <div
-            className={clsx('field', {
+            className={clsx('field required', {
               'has-error': validationErrors.newPassword,
             })}
           >
@@ -175,38 +185,28 @@ export const Profile = () => {
               />
               <Button
                 type="button"
-                variant="tertiary"
+                variant="custom"
                 icon={`${showPassword ? 'eye-off' : 'eye'}`}
                 aria-label={`${showPassword ? 'Hide Password' : 'Show Password'}`}
-                className="absolute w-5 h-5 top-3 right-2.5 mr-3 flex items-center justify-center"
+                className="absolute w-5 h-5 top-3 right-2.5 mr-3 flex items-center justify-center z-1 cursor-pointer"
                 onClick={() => setShowPassword(prev => !prev)}
               />
             </div>
             {validationErrors.newPassword && (
-              <span className="text-warning-500 mr-4">
+              <p className="flex items-center gap-2 text-base-content/80">
+                <span className="kstatus kstatus-error"></span>
                 {validationErrors.newPassword}
-              </span>
+              </p>
             )}
-            <Button
-              type="button"
-              variant="tertiary"
-              className="block font-semibold text-sm pl-0 !py-1 !justify-start !bg-transparent"
-              onClick={() => setShowChangedPassword(false)}
-            >
-              Cancel
-            </Button>
           </div>
         )}
-        {showChangedPassword === false && (
-          <Button
-            type="button"
-            variant="tertiary"
-            className="font-semibold text-sm text-left pl-0 !justify-start !bg-transparent"
-            onClick={() => setShowChangedPassword(true)}
-          >
-            Change password
-          </Button>
-        )}
+        <button
+          type="button"
+          className="kbtn kbtn-ghost kbtn-xs self-end -mt-3"
+          onClick={() => setShowChangedPassword(!showChangedPassword)}
+        >
+          {showChangedPassword === false ? 'Change password' : 'Cancel'}
+        </button>
 
         <Button
           type="submit"
@@ -223,7 +223,7 @@ export const Profile = () => {
 
         {profile.spaceAdmin && (
           <>
-            <hr className="border-gray-200" />
+            <hr className="border-base-300" />
             <div className="field">
               <label htmlFor="">Current Portal Kapp</label>
               <Menu

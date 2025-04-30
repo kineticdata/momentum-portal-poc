@@ -62,7 +62,7 @@ export const Panel = ({
         <Dialog.Backdrop />
         <Dialog.Positioner>
           <Dialog.Content
-            className="p-6 md:py-8 md:px-10 bg-white overflow-auto scrollbar-white"
+            className="p-6 md:py-8 md:px-10 bg-base-100 overflow-auto scrollbar-white z-30"
             asChild
           >
             {slots.content}

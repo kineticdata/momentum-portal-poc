@@ -6,7 +6,7 @@ import { Icon } from './Icon.jsx';
 import clsx from 'clsx';
 
 const itemStyle =
-  'flex gap-1 items-center py-1.5 px-4 min-w-full hover:bg-gray-200 data-[highlighted]:bg-gray-200';
+  'flex gap-1 items-center py-1.5 px-4 min-w-full hover:bg-base-200 data-[highlighted]:bg-base-200';
 
 /**
  * Renderer for a button menu item.
@@ -49,7 +49,7 @@ const LinkItem = ({ label, to, href, icon, target }) => (
  * Renderer for a divider menu item.
  */
 const DividerItem = () => (
-  <ArkMenu.Separator className="my-2 border-gray-200" />
+  <ArkMenu.Separator className="my-2 border-base-300" />
 );
 
 /**
@@ -147,7 +147,7 @@ export const Menu = ({
         <ArkMenu.Trigger asChild>{slots.trigger}</ArkMenu.Trigger>
       )}
       <ArkMenu.Positioner>
-        <ArkMenu.Content className="py-2 bg-white border border-gray-200 rounded-sm min-w-[10rem] outline-0 shadow-lg z-30">
+        <ArkMenu.Content className="py-3 bg-base-100 border border-base-300 rounded-box min-w-[10rem] outline-0 shadow-lg z-30">
           <Items items={items} />
         </ArkMenu.Content>
       </ArkMenu.Positioner>

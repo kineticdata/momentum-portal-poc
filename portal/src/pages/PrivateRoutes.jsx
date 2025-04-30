@@ -8,6 +8,7 @@ import { Profile } from './profile/Profile.jsx';
 import { SettingsRouting } from './settings/index.jsx';
 import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
 import { MobileFooter } from '../components/footer/MobileFooter.jsx';
+import { Theme } from './theme/index.jsx';
 
 const Redirect = ({ to }) => {
   const params = useParams();
@@ -21,6 +22,7 @@ const Redirect = ({ to }) => {
 
 export const PrivateRoutes = () => {
   const { mobile } = useSelector(state => state.view);
+  const spaceAdmin = useSelector(state => state.app.profile?.spaceAdmin);
   return (
     <>
       {!mobile && <DesktopHeader></DesktopHeader>}
@@ -43,6 +45,9 @@ export const PrivateRoutes = () => {
         />
         {/* Canonical route for kapps */}
         <Route path="/kapps/:kappSlug" element={<Redirect to="/" />} />
+
+        {/* Theme page */}
+        {spaceAdmin && <Route path="/theme" element={<Theme />} />}
 
         {/* Portal routes */}
         <Route path="/actions/*" element={<Actions />} />

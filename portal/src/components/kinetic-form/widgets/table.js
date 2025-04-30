@@ -74,8 +74,8 @@ const TableRenderer = ({
   );
 
   const commonCellClasses = clsx(
-    'bg-white first:rounded-l-xl first:border-l-[0.75rem] last:rounded-r-xl last:border-r-[0.75rem] border-transparent px-3 py-2.5 font-medium h-16',
-    'group-has-[td.selectable]:group-[&:not(:has(button:hover))]:group-hover:bg-primary-100',
+    'bg-base-100 first:rounded-l-xl first:border-l-[0.75rem] last:rounded-r-xl last:border-r-[0.75rem] border-transparent px-3 py-2.5 font-medium h-16',
+    'group-has-[td.selectable]:group-[&:not(:has(button:hover))]:group-hover:bg-base-200',
     'group-has-[td.selectable]:group-[&:not(:has(button:hover))]:group-hover:cursor-pointer',
   );
 
@@ -103,7 +103,7 @@ const TableRenderer = ({
     <div
       className={clsx(
         // Common styles
-        'flex flex-col bg-gray-100',
+        'flex flex-col bg-base-200',
         // Mobile first styles
         'gap-2 py-5 px-6 max-md:-mx-6 w-screen',
         // Non mobile styles
@@ -146,9 +146,9 @@ const TableRenderer = ({
                 className={clsx(
                   'py-2.75 md:py-2.25 max-md:text-sm font-medium md:transition-all',
                   'pl-10 pr-0.5 group-focus-within:px-12 group-[.is-filtered]:px-12',
-                  'border border-primary-300 rounded-full outline-0',
-                  'text-gray-950 bg-white hover:bg-primary-100',
-                  'focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400',
+                  'border border-base-300 rounded-full outline-0',
+                  'text-base-content bg-base-100 hover:bg-base-300',
+                  'focus-visible:bg-base-100 focus-visible:ring-3 focus-visible:ring-primary/40',
                   'w-11 group-focus-within:w-48 group-[.is-filtered]:w-48',
                   'max-sm:group-focus-within:w-full max-sm:group-[.is-filtered]:w-full',
                   'cursor-pointer group-focus-within:cursor-auto group-[.is-filtered]:cursor-auto',
@@ -163,14 +163,14 @@ const TableRenderer = ({
               <Icon
                 name="search"
                 className={clsx(
-                  'absolute top-0 pointer-events-none my-2.5',
+                  'absolute top-0 pointer-events-none my-2.5 z-1',
                   'left-2.5 group-focus-within:left-4 group-[.is-filtered]:left-4',
-                  'text-gray-950 group-focus-within:text-gray-500 group-[.is-filtered]:text-gray-500',
+                  'text-base-content group-focus-within:text-base-content/60 group-[.is-filtered]:text-base-content/60',
                 )}
               />
               {query && (
                 <CloseButton
-                  className="absolute right-0 top-0"
+                  className="absolute right-0 top-0 z-1"
                   aria-label="Clear Filter"
                   onClick={() => {
                     onQueryChange();
@@ -204,7 +204,7 @@ const TableRenderer = ({
                       <div className="w-full" key={col.property}>
                         <label
                           htmlFor={`${col.property}-vis`}
-                          className="relative inline-flex w-full"
+                          className="unstyled relative inline-flex w-full"
                         >
                           <input
                             id={`${col.property}-vis`}
@@ -213,22 +213,21 @@ const TableRenderer = ({
                             checked={col.visible}
                             onChange={() => toggleColumn(col.property)}
                             aria-label="Set column visibility"
-                            className="peer absolute inset-0 appearance-none rounded-2.5xl outline-0 focus-visible:ring-3 focus-visible:ring-secondary-400"
+                            className="peer unstyled absolute inset-0 appearance-none rounded-2.5xl outline-0 focus-visible:ring-3 focus-visible:ring-primary/40"
                           />
                           <span
                             className={clsx(
-                              'font-medium text-primary-900 peer-disabled:text-gray-900 truncate mr-2',
+                              'font-medium peer-disabled:text-base-content/60 truncate mr-2',
                             )}
                           >
                             {col.label}
                           </span>
                           <span
                             className={clsx(
-                              'ml-auto relative flex border rounded-2.5xl text-primary-900 peer-disabled:text-gray-900 p-0.25 gap-0.25 w-12 pointer-events-none',
+                              'ml-auto relative flex border border-transparent rounded-2.5xl peer-disabled:text-base-content/60 p-0.25 gap-0.25 w-12 pointer-events-none',
                               {
-                                'border-primary-500 bg-secondary-400':
-                                  col.visible,
-                                'border-primary-300 bg-gray-200': !col.visible,
+                                'bg-primary text-primary-content': col.visible,
+                                'bg-neutral text-neutral-content': !col.visible,
                               },
                             )}
                           >
@@ -338,8 +337,8 @@ const TableRenderer = ({
                     className={clsx(
                       'group relative bg-transparent p-3 font-medium text-left whitespace-nowrap',
                       {
-                        'text-gray-950': sortColumn === column.property,
-                        'text-gray-900': sortColumn !== column.property,
+                        'text-base-content': sortColumn === column.property,
+                        'text-base-content/60': sortColumn !== column.property,
                       },
                       column.headerCellClass,
                     )}
@@ -350,7 +349,7 @@ const TableRenderer = ({
                     {sortable && column.sortable !== false && (
                       <>
                         <button
-                          className="peer absolute inset-0 focus-visible:ring-3 focus-visible:ring-secondary-400 outline-0 rounded-xl"
+                          className="peer absolute inset-0 focus-visible:ring-3 focus-visible:ring-primary/40 outline-0 rounded-xl"
                           type="button"
                           onClick={() =>
                             setSortData([
@@ -396,8 +395,9 @@ const TableRenderer = ({
               <tr className={'group rounded-xl shadow-card'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-warning-500')}
+                  className={clsx(commonCellClasses, 'text-base-content/60')}
                 >
+                  <span className="kstatus kstatus-error mr-2"></span>
                   {error}
                 </td>
               </tr>
@@ -405,7 +405,10 @@ const TableRenderer = ({
               <tr className={'group rounded-xl shadow-card'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-gray-900 italic')}
+                  className={clsx(
+                    commonCellClasses,
+                    'text-base-content/60 italic',
+                  )}
                 >
                   {messages?.loading || 'Loading...'}
                 </td>
@@ -414,7 +417,10 @@ const TableRenderer = ({
               <tr className={'group rounded-xl shadow-card'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-gray-900 italic')}
+                  className={clsx(
+                    commonCellClasses,
+                    'text-base-content/60 italic',
+                  )}
                 >
                   {messages?.empty || 'No rows found.'}
                 </td>
@@ -423,7 +429,10 @@ const TableRenderer = ({
               <tr className={'group rounded-xl shadow-card'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-gray-900 italic')}
+                  className={clsx(
+                    commonCellClasses,
+                    'text-base-content/60 italic',
+                  )}
                 >
                   {messages?.noMatches || 'No rows match your filter.'}
                 </td>
@@ -435,7 +444,7 @@ const TableRenderer = ({
                 className={clsx(
                   'group rounded-xl shadow-card',
                   'has-[td.selectable>button:focus]:ring-3',
-                  'has-[td.selectable>button:focus]:ring-secondary-400',
+                  'has-[td.selectable>button:focus]:ring-primary/40',
                 )}
                 onClick={
                   selectAction
@@ -522,7 +531,7 @@ const TableRenderer = ({
                     <th
                       key={column.property}
                       className={clsx(
-                        'bg-transparent text-gray-900 px-3 py-1.5 font-normal text-sm text-left',
+                        'bg-transparent text-text-content/60 px-3 py-1.5 font-normal text-sm text-left',
                         column.footerCellClass,
                       )}
                       style={column.footerCellStyles}
@@ -542,7 +551,7 @@ const TableRenderer = ({
 
       <div
         className={clsx(
-          'flex justify-center items-center gap-2 lg:gap-5 bg-white px-3 py-2.5 font-medium rounded-xl shadow-card',
+          'flex justify-center items-center gap-2 lg:gap-5 bg-base-100 px-3 py-2.5 font-medium rounded-xl shadow-card',
         )}
       >
         <span className="max-md:hidden flex-1 text-balance">

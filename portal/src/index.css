@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './assets/styles/daisyui/index.css';
 @import './assets/styles/font.css' layer(base);
 @import './assets/styles/colors.css' layer(base);
 @import './assets/styles/layout.css';
@@ -10,32 +11,6 @@
 @import './assets/styles/typography.css';
 
 @theme {
-  --color-*: initial;
-  --color-transparent: transparent;
-  --color-currentColor: currentColor;
-  --color-white: hsl(0, 0%, 100%);
-  --color-black: hsl(0, 0%, 0%);
-  --color-primary-100: hsl(var(--def-primary-100));
-  --color-primary-200: hsl(var(--def-primary-200));
-  --color-primary-300: hsl(var(--def-primary-300));
-  --color-primary-400: hsl(var(--def-primary-400));
-  --color-primary-500: hsl(var(--def-primary-500));
-  --color-primary-900: hsl(var(--def-primary-900));
-  --color-secondary-100: hsl(var(--def-secondary-100));
-  --color-secondary-400: hsl(var(--def-secondary-400));
-  --color-secondary-500: hsl(var(--def-secondary-500));
-  --color-gray-100: hsl(var(--def-gray-100));
-  --color-gray-200: hsl(var(--def-gray-200));
-  --color-gray-500: hsl(var(--def-gray-500));
-  --color-gray-900: hsl(var(--def-gray-900));
-  --color-gray-950: hsl(var(--def-gray-950));
-  --color-warning-200: hsl(0, 100%, 87%);
-  --color-warning-400: hsl(0, 65%, 58%);
-  --color-warning-500: hsl(0, 47%, 46%);
-  --color-success-200: hsl(145, 46%, 91%);
-  --color-success-400: hsl(127, 45%, 57%);
-  --color-success-500: hsl(128, 58%, 32%);
-
   --breakpoint-sm: 40rem;
   --breakpoint-md: 48rem;
   --breakpoint-lg: 64rem;

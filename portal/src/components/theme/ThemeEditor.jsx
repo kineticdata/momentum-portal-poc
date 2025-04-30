@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { produce } from 'immer';
@@ -23,12 +23,7 @@ const SampleColorIndicator = ({ bg, className, error }) => (
     style={{ backgroundColor: bg }}
   >
     {error && (
-      <Icon
-        name="exclamation-circle"
-        size={36}
-        filled
-        className="text-warning-400"
-      />
+      <Icon name="exclamation-circle" size={36} filled className="text-error" />
     )}
   </div>
 );
@@ -56,14 +51,14 @@ const ColorFieldGroup = ({
         ) : !variants ? (
           <>
             <SampleColorIndicator error />
-            <div className="text-warning-500">Invalid hex color value</div>
+            <div className="text-error">Invalid hex color value</div>
           </>
         ) : (
           variants.map(([, variant], i) => (
             <SampleColorIndicator key={i} bg={variant} />
           ))
         )}
-        <label htmlFor={`${id}-customize`} className="ml-auto">
+        <label htmlFor={`${id}-customize`} className="ml-auto text-sm">
           <input
             type="checkbox"
             checked={enabled}
@@ -227,8 +222,8 @@ export const ThemeEditor = () => {
           size="custom"
           className={clsx(
             'fixed right-0 top-24 h-28 w-10 rounded-l-2.5xl',
-            'flex justify-center items-center border-primary-500 bg-gray-200',
-            'hover:ring-3 hover:ring-secondary-400 focus-visible:ring-3 focus-visible:ring-secondary-400',
+            'flex justify-center items-center border border-r-0 border-base-300 bg-base-100',
+            'hover:bg-base-300 focus-visible:ring-3 focus-visible:ring-primary/40',
           )}
         >
           <Icon name="brush" />
@@ -245,7 +240,7 @@ export const ThemeEditor = () => {
             <div
               className={clsx(
                 // Mobile first styles
-                'px-1 py-1 rounded-2xl flex gap-6 flex-none bg-primary-100 max-md:self-center mb-4',
+                'px-1 py-1 rounded-2xl flex gap-6 flex-none bg-base-300 max-md:self-center mb-4',
                 // Non mobile styles
                 'md:px-6 md:py-3 md:rounded-full md:gap-8',
               )}
@@ -282,21 +277,21 @@ export const ThemeEditor = () => {
             </div>
           </div>
 
-          <hr className="border-gray-200" />
+          <hr className="border-base-300" />
 
           {themeName === 'Space' && !spaceHasTheme ? (
-            <div className="py-1.5 px-4 min-w-full text-warning-500">
+            <div className="py-1.5 px-4 min-w-full">
               Create a &#34;Theme&#34; <strong>space</strong> attribute
               definition to be able to customize the space theme.
             </div>
           ) : themeName === 'Kapp' && !kappHasTheme ? (
-            <div className="py-1.5 px-4 min-w-full text-warning-500">
+            <div className="py-1.5 px-4 min-w-full">
               Create a &#34;Theme&#34; <strong>kapp</strong> attribute
               definition to be able to customize the kapp theme.
             </div>
           ) : (
             <>
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-base-content/60">
                 You can enter hex color values for the primary, secondary, and
                 gray colors, and the portal will use the hue and saturation of
                 those colors to define several shades and tints of the colors to
@@ -350,9 +345,9 @@ export const ThemeEditor = () => {
                 ]}
               />
 
-              <hr className="border-gray-200" />
+              <hr className="border-base-300" />
 
-              <p className="text-sm text-gray-900">
+              <p className="text-sm text-base-content/60">
                 You can set a URL for the logo image to use in the portal.
               </p>
 

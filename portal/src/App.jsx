@@ -18,25 +18,6 @@ import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
 import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 import { useData } from './helpers/hooks/useData.js';
 
-const useBackgroundGradient = mobile => {
-  const matchesHome = useMatch('/');
-  const matchesProfile = useMatch('/profile');
-  const matchesForm = useMatch('/forms/:kappSlug/*');
-  const matchesForm2 = useMatch('/kapps/:kappSlug/forms/:kappSlug/*');
-  const matchesForm3 = useMatch('/requests/:id/:formMode');
-  const className = 'bg-gradient-to-b from-transparent from-85% to-primary-300';
-
-  // Only add gradient to home and profile pages for mobile
-  if (mobile) {
-    if (matchesHome || matchesProfile) return className;
-    return '';
-  }
-
-  // Add gradiant to all pages except form pages for non mobile
-  if (matchesForm || matchesForm2 || matchesForm3) return '';
-  return className;
-};
-
 export const App = ({
   initialized,
   loggedIn,
@@ -151,8 +132,6 @@ export const App = ({
     closeConfirm();
   }, []);
 
-  const bgGradient = useBackgroundGradient(mobile);
-
   return (
     <>
       <div className="flex flex-col flex-auto overflow-auto">
@@ -163,7 +142,6 @@ export const App = ({
           id="app-main"
           className={clsx(
             'flex flex-col flex-auto relative overflow-y-auto overflow-x-hidden scrollbar',
-            bgGradient,
           )}
         >
           {serverError || error ? (

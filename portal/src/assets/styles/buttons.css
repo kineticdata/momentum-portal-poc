@@ -4,43 +4,79 @@
  * Styling for button elements and the Kinetic form.
  ******************************************************************************/
 
-@utility btn {
-  @apply inline-flex gap-1 justify-center items-center text-center py-2.25 px-4 border outline-0 rounded-2.5xl;
-}
-@utility btn-primary {
-  @apply btn;
-  @apply text-gray-950 focus-visible:text-primary-200 disabled:text-gray-900 font-medium;
-  @apply bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 disabled:bg-gray-200;
-  @apply border-primary-500 disabled:border-primary-300;
-}
-
-@utility btn-secondary {
-  @apply btn;
-  @apply text-gray-950 disabled:text-gray-900 font-semibold;
-  @apply bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
-  @apply border-primary-300;
-}
-
-@utility btn-tertiary {
-  @apply btn;
-  @apply text-gray-950 disabled:text-gray-900 font-semibold;
-  @apply bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100;
-  @apply border-transparent;
-}
-
-@utility btn-underline {
-  @apply hover:underline focus-visible:underline disabled:no-underline;
-}
-
 @layer base {
   .embedded-core-form form {
     [data-element-type='button'] {
       &[data-button-type='submit-page'] {
-        @apply btn-primary;
+        @apply kbtn kbtn-primary;
       }
       &:not([data-button-type='submit-page']) {
-        @apply btn-secondary;
+        @apply kbtn kbtn-outline;
       }
+    }
+  }
+}
+
+@utility kbtn-xs {
+  --ksize: calc(var(--size-field, 0.25rem) * 8);
+  --kfontsize: 0.875rem;
+  --kbtn-p: 0.75rem;
+}
+
+@utility kbtn-sm {
+  --ksize: calc(var(--size-field, 0.25rem) * 9);
+  --kfontsize: 1rem;
+  --kbtn-p: 0.75rem;
+}
+
+@utility kbtn-md {
+  --ksize: calc(var(--size-field, 0.25rem) * 10);
+  --kfontsize: 1rem;
+  --kbtn-p: 1rem;
+}
+
+@utility kbtn {
+  --ksize: calc(var(--size-field, 0.25rem) * 11);
+  --kfontsize: 1rem;
+  --kbtn-p: 1rem;
+  @apply font-medium gap-1;
+  @apply focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-primary/40;
+}
+@utility kbtn-lg {
+  --ksize: calc(var(--size-field, 0.25rem) * 11);
+  --kfontsize: 1rem;
+  --kbtn-p: 1rem;
+}
+
+@utility kbtn-xl {
+  --ksize: calc(var(--size-field, 0.25rem) * 12);
+  --kfontsize: 1rem;
+  --kbtn-p: 1rem;
+}
+
+@utility kbtn-outline {
+  &:not(
+      .kbtn-active,
+      :hover,
+      :active:focus,
+      :focus-visible,
+      :disabled,
+      [disabled],
+      .kbtn-disabled,
+      :checked
+    ) {
+    --kbtn-bg: var(--color-base-100);
+    &:not(
+        .kbtn-primary,
+        .kbtn-secondary,
+        .kbtn-accent,
+        .kbtn-neutral,
+        .kbtn-info,
+        .kbtn-success,
+        .kbtn-warning,
+        .kbtn-error
+      ) {
+      --kbtn-border: var(--color-base-300);
     }
   }
 }

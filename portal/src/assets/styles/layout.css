@@ -29,7 +29,7 @@
   }
 
   #root {
-    @apply flex h-full bg-gray-100 text-gray-950 overflow-hidden;
+    @apply flex h-full bg-base-200 text-base-content overflow-hidden;
     /*
      * For mobile screens, set the flex direction to column so that panels
      * render at the bottom instead of on the right.
@@ -60,7 +60,7 @@
   }
 
   hr {
-    @apply border-gray-200;
+    @apply border-base-300;
   }
 }
 

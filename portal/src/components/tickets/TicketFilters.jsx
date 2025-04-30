@@ -162,13 +162,14 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
             <CloseButton onClick={() => setOpen(false)}></CloseButton>
           </div>
 
-          <div className="px-4 pt-1 pb-3 flex flex-col gap-4 border-b border-primary-300">
-            <div className="flex gap-5">
+          <div className="px-4 pt-1 pb-3 flex flex-col gap-4 border-b border-base-300">
+            <div className="flex gap-5 flex-wrap">
               <ChipButton
                 active={hasNoneTemp}
                 icon={hasNoneTemp ? 'check' : null}
                 onClick={handleTempFilterClearAll}
                 disabled={hasNoneTemp}
+                className="disabled:text-base-content"
               >
                 All {type}
               </ChipButton>
@@ -176,9 +177,9 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
           </div>
 
           {tempFilters.assignment && (
-            <div className="px-4 pt-1 pb-3 flex flex-col gap-4 border-b border-primary-300">
+            <div className="px-4 pt-1 pb-3 flex flex-col gap-4 border-b border-base-300">
               <span className="font-medium">Assigned to</span>
-              <div className="flex gap-5">
+              <div className="flex gap-5 flex-wrap">
                 <ChipButton
                   active={tempFilters.assignment.mine}
                   icon={tempFilters.assignment.mine ? 'check' : null}
@@ -208,7 +209,7 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
           {tempFilters.status && (
             <div className="px-4 pt-1 pb-3 flex flex-col gap-4">
               <span className="font-medium">Status</span>
-              <div className="flex gap-5">
+              <div className="flex gap-5 flex-wrap">
                 <ChipButton
                   active={tempFilters.status.open}
                   icon={tempFilters.status.open ? 'check' : null}

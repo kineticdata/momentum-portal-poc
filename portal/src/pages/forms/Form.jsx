@@ -25,7 +25,6 @@ const generateDeleteDraftButton =
     return (
       <Button
         variant="tertiary"
-        inverse
         icon="trash"
         onClick={() => {
           openConfirm({

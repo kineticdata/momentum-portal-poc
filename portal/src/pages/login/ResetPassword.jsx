@@ -12,7 +12,7 @@ export const ResetPassword = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col items-center w-[36rem] bg-white rounded-xl shadow-lg">
+      <div className="flex flex-col items-center w-[36rem] bg-base-100 rounded-xl shadow-lg">
         {token ? (
           <ResetPasswordChangeForm
             token={token}
@@ -93,7 +93,12 @@ const ResetPasswordRequestForm = () => {
             password reset link shortly.
           </p>
         )}
-        {error && <p className="text-warning-500">{error}</p>}
+        {error && (
+          <p className="flex items-center gap-2 text-base-content/80">
+            <span className="kstatus kstatus-error"></span>
+            {error}
+          </p>
+        )}
         <Button
           type="submit"
           onClick={submitRequest}
@@ -221,9 +226,17 @@ const ResetPasswordChangeForm = ({ token, username }) => {
             />
           </div>
           {passwordMismatch && (
-            <p className="text-warning-500">Passwords must match.</p>
+            <p className="flex items-center gap-2 text-base-content/80">
+              <span className="kstatus kstatus-error"></span>
+              Passwords must match.
+            </p>
           )}
-          {error && <p className="text-warning-500">{error}</p>}
+          {error && (
+            <p className="flex items-center gap-2 text-base-content/80">
+              <span className="kstatus kstatus-error"></span>
+              {error}
+            </p>
+          )}
 
           <Button
             type="submit"

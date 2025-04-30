@@ -25,7 +25,7 @@ export const MobileFooter = props => {
 
   return (
     <FooterPortal>
-      <div className="stretch py-2 flex justify-between items-center bg-white text-xs shadow-footer">
+      <div className="stretch py-2 flex justify-between items-center bg-base-100 text-xs shadow-footer">
         <Link
           to="/"
           className="flex flex-col justify-center items-center gap-1 ml-4"
@@ -35,7 +35,7 @@ export const MobileFooter = props => {
         </Link>
         <ServicesPanel>
           <button className="flex flex-col justify-center items-center gap-1">
-            <span className="bg-secondary-400 p-2.5 rounded-2.5xl border border-primary-500">
+            <span className="bg-primary text-primary-content p-2.5 rounded-2.5xl">
               <Icon name="plus"></Icon>
             </span>
             <span>New Request</span>

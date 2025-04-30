@@ -84,7 +84,7 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
 
               {/* Non mobile pagination UI */}
               {!mobile && (data?.length > 0 || previousPage) && (
-                <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-white rounded-xl shadow-card min-h-16">
+                <div className="col-start-1 col-end-5 py-2.5 px-6 flex justify-center items-center gap-6 bg-base-100 rounded-xl shadow-card min-h-16">
                   <Button
                     variant="secondary"
                     onClick={previousPage}
@@ -96,7 +96,7 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
                   {loading ? (
                     <Loading xsmall size={36} />
                   ) : (
-                    <div className="flex justify-center items-center w-11 h-11 bg-secondary-400 rounded-full font-semibold">
+                    <div className="flex justify-center items-center w-11 h-11 bg-accent text-accent-content rounded-full font-semibold">
                       {pageNumber}
                     </div>
                   )}

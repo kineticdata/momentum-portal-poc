@@ -20,13 +20,13 @@ export const ServiceCard = ({ form, className, ...passThroughProps }) => {
     <div
       className={clsx(
         'relative flex py-0.75 md:py-2.75 px-1 md:px-6 gap-3 items-center min-h-16 rounded-xl',
-        'bg-white shadow-card border border-transparent transition',
-        'hover:border-primary-500 hover:bg-gray-100 hover:shadow-card-hover',
-        'focus-within:border-primary-500 focus-within:bg-gray-100 focus-within:shadow-card-hover',
+        'bg-base-100 shadow-card border border-transparent transition',
+        'hover:border-text-content hover:bg-base-200 hover:shadow-card-hover',
+        'focus-within:border-text-content focus-within:bg-base-200 focus-within:shadow-card-hover',
         className,
       )}
     >
-      <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+      <div className="bg-base-200 border border-base-300 text-base-content/60 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
         <Icon name={icon} />
       </div>
       <div className="flex flex-col gap-1 min-w-0">
@@ -38,7 +38,7 @@ export const ServiceCard = ({ form, className, ...passThroughProps }) => {
         >
           {form.name}
         </Link>
-        <div className="text-xs text-gray-900 line-clamp-2">
+        <div className="text-xs text-base-content/60 line-clamp-2">
           {form.description}
         </div>
       </div>

@@ -84,7 +84,7 @@ export const TicketsSection = () => {
     actionsData.response || {};
 
   return (
-    <div className={clsx('md:p-10 md:pt-5 md:bg-white md:rounded-2xl')}>
+    <div>
       {mobile && (
         <div className="flex justify-center font-semibold mb-2">
           Recent Activity
@@ -132,7 +132,7 @@ export const TicketsSection = () => {
               {!requestsData.loading && requests?.length === 0 && (
                 <div
                   className={clsx(
-                    'flex justify-center items-center italic text-gray-900 py-6',
+                    'flex justify-center items-center italic text-base-content/60 py-6',
                   )}
                 >
                   There are no requests to show.
@@ -163,7 +163,7 @@ export const TicketsSection = () => {
               {!actionsData.loading && actions?.length === 0 && (
                 <div
                   className={clsx(
-                    'flex justify-center items-center italic text-gray-900 py-6',
+                    'flex justify-center items-center italic text-base-content/60 py-6',
                   )}
                 >
                   There are no actions to show.

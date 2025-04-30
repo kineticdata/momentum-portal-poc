@@ -228,10 +228,9 @@ export const ServicesPanel = ({ children }) => {
                     'md:justify-evenly': currentCategory,
                   })}
                 >
-                  {currentCategories.map((category, index) => (
+                  {currentCategories.map(category => (
                     <CategoryButton
                       key={category.slug}
-                      index={index}
                       icon={getAttributeValue(category, 'Icon')}
                       className="w-[8.4375rem]"
                       onClick={() => handleEnterCategory(category.slug)}

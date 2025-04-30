@@ -10,7 +10,7 @@ export const UserMenu = ({ username, size = 'xl' }) => (
       { label: 'Logout', href: '/app/logout', icon: 'logout' },
     ]}
   >
-    <button slot="trigger" className="group/btn outline-0">
+    <button slot="trigger" className="outline-0">
       <Avatar
         username={username}
         size={size}

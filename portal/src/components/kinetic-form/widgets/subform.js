@@ -14,6 +14,7 @@ import { Loading as Pending } from '../../states/Loading.jsx';
 import { registerWidget, validateContainer, WidgetAPI } from './index.js';
 import { asArray, callIfFn } from '../../../helpers/index.js';
 import { Modal } from '../../../atoms/Modal.jsx';
+import clsx from 'clsx';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -204,7 +205,7 @@ const KineticSubformComponent = forwardRef(
             {errors?.length > 0 && (
               <div
                 slot="errors"
-                className="text-warning-500 w-full mb-5"
+                className="kalert kalert-error kalert-vertical w-full justify-start justify-items-start text-left gap-1 mb-5"
                 role="alert"
                 aria-live="assertive"
                 tabIndex={0}
@@ -264,12 +265,7 @@ const Label = ({ label, id, required, children }) => (
   <label htmlFor={id}>
     {children}
     {label}
-    {required && (
-      <>
-        <span className="text-warning-500">*</span>
-        <em className="sr-only">Required</em>
-      </>
-    )}
+    {required && <em className="sr-only">Required</em>}
   </label>
 );
 
@@ -278,7 +274,7 @@ const buildInputField =
   ({ label, value, required, disabled, onChange }) => {
     const id = useMemo(() => generateKey(12), []);
     return (
-      <div className="field">
+      <div className={clsx('field', { required })}>
         <Label label={label} id={id} required={required} />
         <input
           type={type}
@@ -300,7 +296,7 @@ const TimeField = buildInputField('time');
 const CheckboxField = ({ label, value, required, disabled, onChange }) => {
   const id = useMemo(() => generateKey(12), []);
   return (
-    <div className="field">
+    <div className={clsx('field', { required })}>
       <Label label={label} id={id} required={required}>
         <input
           type="checkbox"
@@ -418,7 +414,7 @@ const CustomSubformComponent = forwardRef(
           {errors?.length > 0 && (
             <div
               slot="errors"
-              className="text-warning-500 w-full mb-5"
+              className="kalert kalert-error kalert-vertical w-full justify-start justify-items-start text-left gap-1 mb-5"
               role="alert"
               aria-live="assertive"
               tabIndex={0}

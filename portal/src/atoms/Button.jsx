@@ -37,11 +37,7 @@ ButtonOrLink.propTypes = {
  * @param {string} [className]
  * @param {('primary'|'secondary'|'tertiary'|'custom')} [variant=primary]
  *  The styled look of the button.
- * @param {('sm'|'md'|'lg'|'custom')} [size=lg] The size of the button.
- * @param {boolean} [inverse] If true, the button will invert the colors to
- *  work on a reverse color background. Only available for tertiary variant.
- * @param {boolean} [underline] If true, the button's text will be underlined
- *  on hover, focus, and active.
+ * @param {('xs'|'sm'|'md'|'lg'|'xl'|'custom')} [size=lg] The size of the button.
  * @param {string} [icon] The name of an icon to render at the start of the
  *  button.
  * @param {string} [iconEnd] The name of an icon to render at the end of the
@@ -57,8 +53,6 @@ export const Button = forwardRef(
       className,
       variant = 'primary',
       size = 'lg',
-      inverse,
-      underline,
       icon,
       iconEnd,
       openable,
@@ -68,72 +62,18 @@ export const Button = forwardRef(
     ref,
   ) => {
     const styledClassName = clsx(
-      // Common styles for all buttons
-      'border outline-0 whitespace-nowrap transition',
-      variant !== 'custom' &&
-        'inline-flex gap-1 justify-center items-center text-center',
-
-      // Primary
-      variant === 'primary' && [
-        // Text
-        'text-gray-950 focus-visible:text-primary-200 disabled:text-gray-900 font-medium',
-        // Background
-        'bg-secondary-400 hover:bg-secondary-100 focus-visible:bg-primary-900 disabled:bg-gray-200',
-        // Border
-        'border-primary-500 disabled:border-primary-300',
-        // open data-state styling
-        openable &&
-          'data-[state=open]:text-primary-200 data-[state=open]:bg-primary-900',
-      ],
-
-      // Secondary
-      variant === 'secondary' && [
-        // Text
-        'text-gray-950 disabled:text-gray-900 font-semibold',
-        // Background
-        'bg-white hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100',
-        // Border
-        'border-primary-300',
-        // open data-state styling
-        openable && 'data-[state=open]:bg-secondary-400',
-      ],
-
-      // Tertiary
-      variant === 'tertiary' && [
-        // Text
-        'font-semibold',
-        {
-          'text-primary-900 disabled:text-gray-900': !inverse,
-          'text-primary-100 hover:text-primary-900 focus-visible:text-primary-900 disabled:text-gray-900':
-            inverse,
-        },
-        // Background
-        'bg-transparent hover:bg-primary-100 focus-visible:bg-secondary-400 disabled:bg-gray-100',
-        // Border
-        'border-transparent',
-        // open data-state styling
-        openable &&
-          'data-[state=open]:text-primary-900 data-[state=open]:bg-secondary-400',
-      ],
-
-      // Underline
-      {
-        'hover:underline focus-visible:underline disabled:no-underline':
-          underline,
-        // open data-state styling
-        'data-[state=open]:underline': underline && openable,
-      },
-
-      // Sizing and radius
+      variant !== 'custom' && 'kbtn',
+      variant === 'primary' && ['kbtn-primary'],
+      variant === 'secondary' && ['kbtn-outline'],
+      variant === 'tertiary' && ['kbtn-ghost'],
+      openable && 'data-[state=open]:kbtn-active',
       size !== 'custom' && {
-        'px-4 rounded-2.5xl': !!children,
-        'rounded-full': !children,
-        'py-1.25': size === 'sm',
-        'px-1.25': size === 'sm' && !children,
-        'py-1.75': size === 'md',
-        'px-1.75': size === 'md' && !children,
-        'py-2.25': size === 'lg',
-        'px-2.25': size === 'lg' && !children,
+        'kbtn-circle': !children,
+        'kbtn-xs': size === 'xs',
+        'kbtn-sm': size === 'sm',
+        'kbtn-md': size === 'md',
+        'kbtn-lg': size === 'lg',
+        'kbtn-xl': size === 'xl',
       },
       className,
     );
@@ -163,7 +103,7 @@ export const Button = forwardRef(
 Button.propTypes = {
   className: t.string,
   variant: t.oneOf(['primary', 'secondary', 'tertiary', 'custom']),
-  size: t.oneOf(['sm', 'md', 'lg', 'custom']),
+  size: t.oneOf(['xs', 'sm', 'md', 'lg', 'xl', 'custom']),
   inverse: t.bool,
   underline: t.bool,
   icon: t.string,
@@ -194,30 +134,9 @@ export const ChipButton = ({
     <button
       type="button"
       className={clsx(
-        // Common styles
-        'inline-flex gap-2 justify-center items-center text-center border outline-0 transition max-md:text-xs',
-        // Active
-        active && [
-          // Text
-          'text-primary-200 font-medium',
-          // Background
-          'bg-primary-900 hover:bg-gray-900 focus-visible:bg-gray-900 disabled:bg-gray-900',
-          // Border
-          'border-transparent',
-        ],
-
-        // Not active
-        !active && [
-          // Text
-          'text-gray-950 font-medium',
-          // Background
-          'bg-white hover:bg-primary-100 focus-visible:bg-primary-100 disabled:bg-gray-200',
-          // Border
-          'border-gray-900',
-        ],
-
-        // Sizing and radius
-        'rounded-2.5xl px-2 md:px-3 py-0.75 md:py-1.25',
+        'kbtn kbtn-sm',
+        active && 'kbtn-neutral',
+        !active && 'kbtn-outline',
         className,
       )}
       {...passThroughProps}
@@ -257,30 +176,9 @@ export const TabButton = ({
   ...passThroughProps
 }) => {
   const styledClassName = clsx(
-    // Common styles
-    'inline-flex gap-2 justify-center items-center text-center border outline-0 max-md:text-sm transition',
-    // Active
-    active && [
-      // Text
-      'text-primary-100 font-medium',
-      // Background
-      'bg-primary-900 disabled:bg-gray-900',
-      // Border
-      'border-transparent',
-    ],
-
-    // Not active
-    !active && [
-      // Text
-      'text-gray-900 font-medium',
-      // Background
-      'bg-transparent hover:bg-white focus-visible:bg-white disabled:bg-transparent',
-      // Border
-      'border-transparent',
-    ],
-
-    // Sizing and radius
-    'rounded-2.5xl px-3 py-1.75 md:py-1.25',
+    'kbtn kbtn-sm',
+    active && 'kbtn-neutral',
+    !active && 'kbtn-ghost hover:bg-base-100 focus-visible:bg-base-100',
     className,
   );
 
@@ -306,35 +204,19 @@ TabButton.propTypes = {
  *
  * @param {string} [className]
  * @param {('sm'|'md'|'lg')} [size=lg] The size of the button.
- * @param {boolean} [inverse] If true, the button will invert the colors to
- *  work on a reverse color background.
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
  */
 export const CloseButton = ({
   className,
   size = 'lg',
-  inverse,
   ...passThroughProps
 }) => (
   <button
     type="button"
     className={clsx(
-      // Common styles
-      'inline-flex gap-1 justify-center items-center transition',
-      // Text
-      {
-        'text-gray-900 hover:text-gray-950 focus-visible:text-gray-950 disabled:text-gray-900':
-          !inverse,
-        'text-gray-200 hover:text-primary-300 focus-visible:text-primary-300 disabled:text-gray-200':
-          inverse,
-      },
-      // Background
-      'bg-transparent',
-      // Border
-      'border border-transparent outline-0',
-      // Sizing and radius
-      'rounded-full p-1.25',
+      'kbtn kbtn-ghost kbtn-circle bg-transparent border-transparent',
+      'opacity-70 hover:opacity-100 focus-visible:opacity-100',
       className,
     )}
     aria-label="Close"
@@ -358,8 +240,6 @@ CloseButton.propTypes = {
  * Component for rendering a styled category button or link.
  *
  * @param {string} [className]
- * @param {number} [index] The index of the button in a list, used to pick one
- *  of several styles for the button.
  * @param {string} [icon] The name of an icon to render in the button.
  * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
  * @param {Object} [passThroughProps] Any additional props will we passed
@@ -367,7 +247,6 @@ CloseButton.propTypes = {
  */
 export const CategoryButton = ({
   className,
-  index = 0,
   icon = 'category',
   children,
   ...passThroughProps
@@ -381,65 +260,20 @@ export const CategoryButton = ({
   >
     <span
       className={clsx(
-        'flex-none flex justify-center items-center transition',
-        'h-[4.75rem] w-[4.75rem] rounded-2.5xl rotate-45 m-4 p-0.5',
-        'bg-glassmorphism-border [--glassmorphism-angle:55deg] shadow-category',
-        'group-hover:bg-none group-hover:border group-hover:border-primary-500 group-hover:shadow-category-hover',
-        'group-focus-visible:bg-none group-focus-visible:border group-focus-visible:border-primary-500 group-focus-visible:shadow-category-hover',
-        {
-          'bg-primary-200': [0, 5].includes(index % 8),
-          'bg-secondary-400': [1, 4].includes(index % 8),
-          'bg-warning-200': [2, 7].includes(index % 8),
-          'bg-primary-300': [3, 6].includes(index % 8),
-        },
+        'flex-none flex justify-center items-center transition bg-base-300',
+        'h-[4.75rem] w-[4.75rem] rounded-2.5xl rotate-45 m-4 p-0.5 shadow-category',
+        'group-hover:bg-none group-hover:border group-hover:border-base-content group-hover:shadow-category-hover',
+        'group-focus-visible:bg-none group-focus-visible:border group-focus-visible:border-base-content group-focus-visible:shadow-category-hover',
       )}
     >
       <span
         className={clsx(
           'flex-none flex justify-center items-center',
-          'h-full w-full rounded-[1.125rem]',
-          {
-            'bg-primary-200': [0, 5].includes(index % 8),
-            'bg-secondary-400': [1, 4].includes(index % 8),
-            'bg-warning-200': [2, 7].includes(index % 8),
-            'bg-primary-300': [3, 6].includes(index % 8),
-          },
+          'h-[3.25rem] w-[3.25rem] rounded-full -rotate-45 p-0.5',
+          'bg-base-200',
         )}
       >
-        <span
-          className={clsx(
-            'flex-none flex justify-center items-center',
-            'h-[3.25rem] w-[3.25rem] rounded-full -rotate-45 p-0.5 bg-glassmorphism-border [--glassmorphism-angle:135deg]',
-            {
-              'bg-gray-900': [0, 5].includes(index % 8),
-              'bg-primary-900': [1, 4].includes(index % 8),
-              'bg-warning-400': [2, 7].includes(index % 8),
-              'bg-primary-200': [3, 6].includes(index % 8),
-            },
-          )}
-        >
-          <span
-            className={clsx(
-              'flex-none flex justify-center items-center',
-              'h-full w-full rounded-full',
-              {
-                'bg-gray-900': [0, 5].includes(index % 8),
-                'bg-primary-900': [1, 4].includes(index % 8),
-                'bg-warning-400': [2, 7].includes(index % 8),
-                'bg-primary-200': [3, 6].includes(index % 8),
-              },
-            )}
-          >
-            <Icon
-              name={icon}
-              size={34}
-              className={clsx({
-                'text-gray-900': [3, 6].includes(index % 8),
-                'text-white': ![3, 6].includes(index % 8),
-              })}
-            />
-          </span>
-        </span>
+        <Icon name={icon} size={34} />
       </span>
     </span>
     <span>{children}</span>
@@ -457,8 +291,6 @@ CategoryButton.propTypes = {
  * Component for rendering a styled popular service button or link.
  *
  * @param {string} [className]
- * @param {number} [index] The index of the button in a list, used to pick one
- *  of several styles for the button.
  * @param {string} [icon] The name of an icon to render in the button.
  * @param {string} [category] The name of the category the service is in.
  * @param {boolean} [small] Should the button use the small design.
@@ -468,7 +300,6 @@ CategoryButton.propTypes = {
  */
 export const PopularServiceButton = ({
   className,
-  index = 0,
   icon = 'forms',
   category,
   small = false,
@@ -487,24 +318,16 @@ export const PopularServiceButton = ({
         className={clsx(
           'flex-none flex justify-center items-center transition',
           'h-[4.25rem] w-[4.25rem] rounded-full p-0.5',
-          'bg-gray-500 bg-glassmorphism-border [--glassmorphism-angle:135deg] shadow-icon',
-          'group-hover:p-0 group-hover:border group-hover:border-primary-500',
-          'group-focus-visible:p-0 group-focus-visible:border group-focus-visible:border-primary-500',
+          'bg-base-100 border border-base-300 shadow-icon',
+          'group-hover:p-0 group-hover:border group-hover:border-base-content',
+          'group-focus-visible:p-0 group-focus-visible:border group-focus-visible:border-base-content',
         )}
       >
-        <span
-          className={clsx(
-            'flex-none flex justify-center items-center',
-            'h-full w-full rounded-full',
-            'bg-gray-500 bg-glassmorphism-linear',
-          )}
-        >
-          <Icon name={icon} size={34} className={clsx('text-primary-200')} />
-        </span>
+        <Icon name={icon} size={34} className={clsx('text-base-content/60')} />
       </span>
       <span className="text-center line-clamp-2">{children}</span>
       {category && (
-        <span className="px-2 py-0.5 rounded-lg bg-secondary-100 text-gray-900 text-center line-clamp-1 mt-auto">
+        <span className="px-2 py-0.5 rounded-lg bg-base-300 text-center line-clamp-1 mt-auto">
           {category}
         </span>
       )}
@@ -513,74 +336,38 @@ export const PopularServiceButton = ({
     <ButtonOrLink
       className={clsx(
         className,
-        'group inline-flex items-stretch outline-0 transition rounded-2xl p-0.5 min-h-[10.75rem]',
-        'bg-glassmorphism-border [--glassmorphism-angle:155deg] shadow-card',
-        {
-          'bg-secondary-400': index % 4 === 0,
-          'bg-gray-500': index % 4 === 1,
-          'bg-primary-900': index % 4 === 2,
-          'bg-primary-400': index % 4 === 3,
-        },
-        {
-          'text-gray-950': [0, 3].includes(index % 4),
-          'text-white': [1, 2].includes(index % 4),
-        },
-        'hover:scale-[1.02]',
-        'focus:scale-[1.02]',
+        'group inline-flex flex-col gap-1 rounded-2xl px-5.5 py-4 min-h-[10.75rem]',
+        'shadow-card border border-base-300 bg-base-100',
+        'transition hover:scale-[1.02] focus:scale-[1.02]',
       )}
       {...passThroughProps}
     >
-      <div
-        className={clsx(
-          'flex-auto max-w-full flex flex-col gap-1 rounded-[0.875rem] px-5.5 py-4',
-          'bg-glassmorphism-circular',
-          {
-            'bg-secondary-400': index % 4 === 0,
-            'bg-gray-500': index % 4 === 1,
-            'bg-primary-900': index % 4 === 2,
-            'bg-primary-400': index % 4 === 3,
-          },
-        )}
-      >
-        <div className="flex items-start gap-8">
-          {category && (
-            <span
-              className={clsx(
-                'px-3 py-1.75 text-h3 font-medium rounded-full border line-clamp-1',
-                {
-                  'border-primary-900': [0, 3].includes(index % 4),
-                  'border-white': [1, 2].includes(index % 4),
-                },
-              )}
-            >
-              {category}
-            </span>
-          )}
+      <div className="flex items-start gap-8">
+        {category && (
           <span
             className={clsx(
-              'flex-none flex justify-center items-center transition',
-              'h-[4.25rem] w-[4.25rem] rounded-full p-0.5 ms-auto',
-              'bg-gray-500 bg-glassmorphism-border [--glassmorphism-angle:135deg] shadow-icon',
+              'px-3 py-1.25 text-h5 font-medium rounded-full border border-base-300 bg-base-200 line-clamp-1',
             )}
           >
-            <span
-              className={clsx(
-                'flex-none flex justify-center items-center',
-                'h-full w-full rounded-full',
-                'bg-gray-500 bg-glassmorphism-linear',
-              )}
-            >
-              <Icon
-                name={icon}
-                size={34}
-                className={clsx('text-primary-200')}
-              />
-            </span>
+            {category}
           </span>
-        </div>
-        <div className="text-left text-h2 font-medium line-clamp-2">
-          {children}
-        </div>
+        )}
+        <span
+          className={clsx(
+            'flex-none flex justify-center items-center transition',
+            'h-[4.25rem] w-[4.25rem] rounded-full p-0.5 ms-auto',
+            'bg-base-200 border border-base-300 shadow-icon',
+          )}
+        >
+          <Icon
+            name={icon}
+            size={34}
+            className={clsx('text-base-content/60')}
+          />
+        </span>
+      </div>
+      <div className="text-left text-h2 font-medium line-clamp-2">
+        {children}
       </div>
     </ButtonOrLink>
   );

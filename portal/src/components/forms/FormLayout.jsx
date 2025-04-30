@@ -47,7 +47,7 @@ export const generateFormLayout = ({
       <div
         className={clsx(
           // Common styles
-          'flex flex-col bg-primary-900 text-primary-300 shadow-card max-w-screen-xl self-center',
+          'flex flex-col bg-neutral text-neutral-content shadow-card max-w-screen-xl self-center',
           // Mobile first styles
           'max-md:stretch-wide max-md:flex-auto max-md:w-stretch',
           // Non mobile styles
@@ -67,14 +67,13 @@ export const generateFormLayout = ({
               {(backTo || backPath) && (
                 <Button
                   variant="tertiary"
-                  inverse
                   icon="arrow-left"
                   to={backTo || backPath}
                   aria-label="Back"
                 />
               )}
             </span>
-            <div className="bg-primary-100 border border-primary-400 text-primary-900 rounded-[10px] shadow-icon flex-none p-2.25">
+            <div className="bg-neutral-content text-neutral rounded-[10px] shadow-icon flex-none p-2.25">
               <Icon name={form ? icon : 'blank'} />
             </div>
             <span className="flex-1 text-right">
@@ -91,7 +90,7 @@ export const generateFormLayout = ({
             {form?.name}{' '}
             {form && spaceAdmin && (
               <a
-                className="outline-0 hover:text-secondary-400 focus-visible:text-secondary-400"
+                className="outline-0 hover:text-neutral-content/80 focus-visible:text-neutral-content/80"
                 href={`/app/console#/kapps/${form.kapp?.slug}/forms/edit/${form.slug}/general`}
                 target="_blank"
                 rel="noreferrer"
@@ -117,9 +116,9 @@ export const generateFormLayout = ({
         <div
           className={clsx(
             // Common styles
-            'text-gray-950',
+            'text-base-content',
             // Mobile first styles
-            'flex-auto p-6 bg-white shadow-card rounded-t-2.5xl',
+            'flex-auto p-6 bg-base-100 shadow-card rounded-t-2.5xl',
             // Non mobile styles
             'md:p-10 md:rounded-2.5xl',
           )}

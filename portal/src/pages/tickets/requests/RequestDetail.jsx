@@ -75,12 +75,8 @@ const WorkNotes = ({ id }) => {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <Button
-            variant="custom"
-            size="custom"
-            className={clsx(
-              'max-md:text-sm font-medium flex gap-2 border-0',
-              'rounded-sm hover:bg-primary-100 focus-visible:bg-primary-100',
-            )}
+            variant="secondary"
+            size="xs"
             onClick={() => setOpen(o => !o)}
           >
             <span>Work Notes</span>
@@ -92,7 +88,7 @@ const WorkNotes = ({ id }) => {
           {open && (
             <Button
               variant="tertiary"
-              size="custom"
+              size="xs"
               className="rounded-full p-1"
               onClick={reloadData}
               disabled={loading}
@@ -106,16 +102,16 @@ const WorkNotes = ({ id }) => {
           <>
             {loading && <Loading size={28} xsmall />}
             {!loading && (!data || data.length === 0) && (
-              <div className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3 text-gray-900 italic">
+              <div className="bg-base-200 rounded-[7px] px-2 py-1.5 md:py-3 text-base-content/60 italic">
                 There are no work notes.
               </div>
             )}
             {(data || []).map((note, i) => (
               <div
                 key={`${note?.['Created On']}-${i}`}
-                className="bg-gray-100 rounded-[7px] px-2 py-1.5 md:py-3"
+                className="bg-base-200 rounded-[7px] px-2 py-1.5 md:py-3"
               >
-                <div className="text-xs md:text-sm text-gray-900 mb-2">
+                <div className="text-xs md:text-sm text-base-content/60 mb-2">
                   {timeAgo(note?.['Created On'])}
                 </div>
                 <div className="max-md:text-sm">{note?.['Value']}</div>
@@ -183,7 +179,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
     <div
       className={clsx(
         // Common styles
-        'relative bg-white border border-primary-200 rounded-[7px] shadow-card',
+        'relative bg-base-100 border border-base-300 rounded-[7px] shadow-card',
         'flex flex-col items-stretch',
         // Mobile first styles
         'px-2 py-3 ml-6 gap-3',
@@ -193,7 +189,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
     >
       <div
         className={clsx(
-          'absolute w-1 bg-success-500',
+          'absolute w-1 bg-success',
           '-left-4',
           'md:-left-[3.875rem]',
           {
@@ -209,14 +205,12 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
       <div
         className={clsx(
           'absolute flex justify-center items-center',
-          'border top-1/2 -translate-y-1/2 -left-6 w-5 h-5 rounded-[5px]',
+          'border border-base-300 top-1/2 -translate-y-1/2 -left-6 w-5 h-5 rounded-[5px]',
           'md:-left-20 md:w-10 md:h-10 md:rounded-[10px]',
           {
-            'bg-gray-200 text-gray-500 border-gray-500': status === null,
-            'bg-success-200 text-success-500 border-success-400':
-              status === true,
-            'bg-warning-200 text-warning-500 border-warning-400':
-              status === false,
+            'bg-base-100 text-base-content': status === null,
+            'bg-success text-success-content': status === true,
+            'bg-warning text-warning-content': status === false,
           },
         )}
       >
@@ -241,7 +235,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
       <div className="flex gap-3 items-center">
         <div className="flex-auto flex flex-col items-stretch gap-1 md:gap-2.5">
           {activity.createdAt && (
-            <div className="text-xs md:text-sm text-gray-900">
+            <div className="text-xs md:text-sm text-base-content/60">
               {timeAgo(activity.createdAt)}
             </div>
           )}
@@ -252,16 +246,14 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
             className={clsx(
               'flex-none',
               // Mobile first styles
-              'max-md:text-xs px-3 py-0.75 rounded-full border font-medium text-center',
+              'max-md:text-xs px-3 py-0.75 rounded-full font-medium text-center',
               // Non mobile styles
               'md:py-1.25 md:min-w-32',
               // Colors
               {
-                'bg-gray-200 text-gray-900 border-gray-500': status === null,
-                'bg-success-200 text-success-500 border-success-400':
-                  status === true,
-                'bg-warning-200 text-warning-500 border-warning-400':
-                  status === false,
+                'bg-base-300': status === null,
+                'bg-success text-base-content': status === true,
+                'bg-warning text-warning-content': status === false,
               },
             )}
           >
@@ -270,7 +262,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
         )}
       </div>
       {data && (
-        <div className="bg-primary-100 rounded-[7px] px-2 py-1.5 md:py-3">
+        <div className="bg-base-200 rounded-[7px] px-2 py-1.5 md:py-3">
           {typeof data === 'string' ? (
             data
           ) : (
@@ -282,7 +274,7 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
                 ([key, value]) =>
                   key !== 'Status' && (
                     <div key={key} className="flex flex-col gap-0.5 md:gap-1">
-                      <dt className="text-gray-900">{key}</dt>
+                      <dt className="text-base-content/60 font-medium">{key}</dt>
                       <dd>{value}</dd>
                     </div>
                   ),
