@@ -32,68 +32,6 @@ def import_workflows(core_path, core_sdk)
   end
 end
 
-
-def export_workflows(core_path, core_sdk, task_sdk)
-  # space workflows
-  res = core_sdk.find_space_workflows
-  if res.status == 200
-    space_wf_path = "#{core_path}/space/workflows"
-    res.content["workflows"].each do |workflow|
-      # retrieve the workflow tree json
-      res = core_sdk.find_space_workflow(workflow["id"])
-      if res.status == 200
-        write_workflow_file(space_wf_path, workflow, res.content["treeJson"])
-      else
-        raise "(#{res.code}) Error retrieving space workflow tree: #{res.message}"
-      end
-    end
-  else
-    raise "(#{res.code}) Error retrieving space workflows: #{res.message}"
-  end
-
-  # kapp / form workflows
-  kapps_path = "#{core_path}/space/kapps"
-  Dir.children(kapps_path).keep_if{ |f| File.directory?("#{kapps_path}/#{f}") }.each do |kapp_slug|
-    res = core_sdk.find_kapp_workflows(kapp_slug)
-    if res.status == 200
-      kapp_wf_path = "#{kapps_path}/#{kapp_slug}/workflows"
-      res.content["workflows"].each do |workflow|
-        # retrieve the workflow tree json
-        res = core_sdk.find_kapp_workflow(kapp_slug, workflow["id"])
-        if res.status == 200
-          write_workflow_file(kapp_wf_path, workflow, res.content["treeJson"])
-        else
-          raise "(#{res.code}) Error retrieving kapp workflow tree: #{res.message}"
-        end
-      end
-    else
-      raise "(#{res.code}) Error retrieving kapp workflows: #{res.message}"
-    end
-
-    forms_path = "#{kapps_path}/#{kapp_slug}/forms"
-    Dir.children(forms_path).keep_if{ |f| File.extname("#{forms_path}/#{f}") == ".json" }.each do |form_file|
-      form_content = JSON.parse(File.read("#{forms_path}/#{form_file}"))
-      form_slug = form_content["slug"]
-      res = core_sdk.find_form_workflows(kapp_slug, form_slug)
-      if res.status == 200
-        form_wf_path = "#{forms_path}/workflows/#{form_slug}"
-        res.content["workflows"].each do |workflow|
-          # retrieve the workflow tree json
-          res = core_sdk.find_form_workflow(kapp_slug, form_slug, workflow["id"])
-          if res.status == 200
-            write_workflow_file(form_wf_path, workflow, res.content["treeJson"])
-          else
-            raise "(#{res.code}) Error retrieving form workflow tree: #{res.message}"
-          end
-        end
-      else
-        raise "(#{res.code}) Error retrieving form workflows: #{res.message}"
-      end
-    end
-  end
-end
-
-
 def workflow_payload(filename, event)
   tree = JSON.parse(File.read(filename))
   name = tree["name"]
@@ -104,20 +42,6 @@ def workflow_payload(filename, event)
     "treeJson" => tree
   }
 end
-
-
-def write_workflow_file(workflows_path, workflow_summary, tree_json)
-  id = workflow_summary["id"]
-  event = encode_event(workflow_summary["event"])
-  name = tree_json["name"]
-
-  event_path = "#{workflows_path}/#{event}"
-  file_name = name.split(" ").map{ |s| s.downcase }.join(".") + ".json"
-
-  FileUtils.mkdir_p(event_path)
-  File.write("#{event_path}/#{file_name}", JSON.pretty_generate(tree_json))
-end
-
 
 def decode_event(evt)
   evt.split(".").map{ |s| s.capitalize }.join(" ")

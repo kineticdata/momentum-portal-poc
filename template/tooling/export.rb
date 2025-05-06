@@ -87,8 +87,8 @@ integrator_sdk = KineticSdk::Integrator.new({
   password: vars["core"]["service_user_password"],
   options: http_options.merge({
     export_directory: "#{integrator_path}",
-    oauth_client_id: vars["core"]["service_user_username"],
-    oauth_client_secret: vars["core"]["service_user_password"]
+    oauth_client_id: vars["http_options"]["oauth_client_id"],
+    oauth_client_secret: vars["http_options"]["oauth_client_secret"]
   })
 })
 task_sdk = KineticSdk::Task.new({
@@ -109,9 +109,6 @@ logger.info "Exporting the core components for the \"#{template_name}\" template
 logger.info "  exporting with api: #{space_sdk.api_url}"
 logger.info "   - exporting configuration data (Kapps,forms, etc)"
 space_sdk.export_space
-
-# export workflows as these are not included in the export_space method
-export_workflows(core_path, space_sdk, task_sdk)
 
 # cleanup properties that should not be committed with export
 # bridge keys
