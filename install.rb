@@ -108,7 +108,6 @@ Dir.chdir(tooling_path) { system("bundle", "install") }
 require "deep_merge"
 require "kinetic_sdk"
 require File.join(tooling_path, "integrator.rb")
-require File.join(tooling_path, "workflows.rb")
 
 
 # ------------------------------------------------------------------------------
@@ -314,7 +313,7 @@ task_sdk.import_categories
 task_sdk.import_trees(true)
 
 # import workflows
-import_workflows(core_path, space_sdk)
+space_sdk.import_workflows(core_path)
 
 
 # ------------------------------------------------------------------------------
