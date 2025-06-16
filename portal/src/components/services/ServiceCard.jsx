@@ -32,7 +32,7 @@ export const ServiceCard = ({ form, className, ...passThroughProps }) => {
       <div className="flex flex-col gap-1 min-w-0">
         <Link
           className="text-sm font-medium leading-4 line-clamp-1 after:absolute after:inset-0 outline-0"
-          to={`/forms/${form.slug}`}
+          to={form.slug ? `/forms/${form.slug}` : undefined}
           state={{ backPath: location.pathname }}
           {...passThroughProps}
         >

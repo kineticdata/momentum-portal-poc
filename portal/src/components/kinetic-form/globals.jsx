@@ -19,4 +19,4 @@ window.jQuery = jquery;
 window.moment = moment;
 
 // Import widgets so they're available when compiling
-import './widgets/index.js';
+import './widgets/widgets.js';

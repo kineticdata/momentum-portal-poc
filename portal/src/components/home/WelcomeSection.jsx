@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
-import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
 import { SearchModal } from '../search/SearchModal.jsx';
+import { UserMenu } from '../header/UserMenu.jsx';
 
 export const WelcomeSection = () => {
   const { mobile, desktop } = useSelector(state => state.view);
@@ -32,13 +32,7 @@ export const WelcomeSection = () => {
     </div>
   ) : (
     <div className="flex items-center gap-4">
-      <Avatar
-        username={profile.username}
-        size="lg"
-        to="/profile"
-        className="flex-none"
-        aria-label="Profile"
-      />
+      <UserMenu username={profile.username} size="lg" />
       <span className="font-medium line-clamp-2 leading-5">
         Hi {profile.displayName || ''}
       </span>

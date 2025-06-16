@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import { produce } from 'immer';
+import { useLocation } from 'react-router-dom';
 import { updateProfile, updateSpace } from '@kineticdata/react';
 import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.jsx';
@@ -27,6 +28,9 @@ export const Profile = () => {
     newDisplayName: '',
     newPassword: '',
   });
+
+  const location = useLocation();
+  const backPath = location.state?.backPath;
 
   const portalKappSlug = getAttributeValue(
     space,
@@ -107,7 +111,7 @@ export const Profile = () => {
         <Button
           variant="tertiary"
           icon="arrow-left"
-          to=".."
+          to={backPath || '..'}
           aria-label="Back"
           className={clsx(!mobile && 'absolute left-0')}
         />
@@ -115,7 +119,7 @@ export const Profile = () => {
       </div>
       <form className="self-center flex flex-col gap-5 items-stretch w-full max-w-lg">
         <div className="flex justify-center items-center mb-5 mt-8">
-          <Avatar username={profile.username} size="xxl" />
+          <Avatar username={profile.username} size="2xl" />
         </div>
 
         <div
@@ -216,12 +220,6 @@ export const Profile = () => {
         >
           Save
         </Button>
-        <div className="flex items-center justify-center">
-          <a className="btn-tertiary" href="/app/logout">
-            <Icon name="logout" aria-label="Logout"></Icon>
-            <span>Logout</span>
-          </a>
-        </div>
 
         {profile.spaceAdmin && (
           <>

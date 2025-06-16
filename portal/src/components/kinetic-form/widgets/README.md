@@ -209,4 +209,4 @@ This function must follow the following rules:
 
 Once the widget function has been created, it needs to be exposed via the `bundles.widgets` namespace.
 
-To do this, go into the `./index.js` file, import your new widget function, and add it to the `AVAILABLE_WIDGETS` map. And that's it! You can now access your new widget from the `bundles.widgets` global variable.
+To do this, go into the `./widgets.js` file, import your new widget function, and add it to the `AVAILABLE_WIDGETS` map. And that's it! You can now access your new widget from the `bundles.widgets` global variable.

@@ -1,11 +1,11 @@
 import { Link, useMatch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/images/logo-full.svg';
-import { Avatar } from '../../atoms/Avatar.jsx';
 import { Button } from '../../atoms/Button.jsx';
 import { HeaderPortal } from './HeaderPortal.jsx';
 import { ServicesPanel } from '../services/ServicesPanel.jsx';
 import { SearchModal } from '../search/SearchModal.jsx';
+import { UserMenu } from './UserMenu.jsx';
 
 export const DesktopHeader = () => {
   const matchesHome = useMatch('/');
@@ -20,7 +20,7 @@ export const DesktopHeader = () => {
           <img
             src={themeLogo || logo}
             alt="Logo"
-            className="h-12 max-w-80 object-contain"
+            className="h-10 max-w-45 object-contain"
           />
         </Link>
         <Button variant="tertiary" to="requests">
@@ -43,13 +43,7 @@ export const DesktopHeader = () => {
             </ServicesPanel>
           </>
         )}
-        <Avatar
-          username={username}
-          size="xl"
-          to="/profile"
-          className="flex-none"
-          aria-label="Profile"
-        />
+        <UserMenu username={username} />
       </nav>
     </HeaderPortal>
   );

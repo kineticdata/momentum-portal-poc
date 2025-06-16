@@ -1,4 +1,3 @@
-
 import { Button } from '../../atoms/Button.jsx';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
@@ -29,7 +28,11 @@ export const LoginForm = loginProps => {
 
   return (
     <form className="flex flex-col gap-5 items-stretch w-full p-5 max-w-96">
-      <img src={themeLogo || logo} alt="Logo" className="h-12 object-contain mb-5 mt-5" />
+      <img
+        src={themeLogo || logo}
+        alt="Logo"
+        className="h-10 max-w-45 object-contain mb-5 mt-5 self-center"
+      />
       <div className="field">
         <label htmlFor="username">Username</label>
         <input

@@ -75,3 +75,22 @@
 @utility w-stretch {
   width: calc(100% + var(--gutter-size, 0) * 2);
 }
+
+@utility layout-row {
+  @apply flex items-center;
+}
+@utility layout-row-center {
+  @apply flex justify-center items-center;
+}
+@utility layout-row-end {
+  @apply flex justify-end items-center;
+}
+@utility layout-row-between {
+  @apply flex justify-between items-center;
+}
+@utility layout-column {
+  @apply flex flex-col;
+}
+@utility flex-full {
+  flex: 1 0 auto;
+}

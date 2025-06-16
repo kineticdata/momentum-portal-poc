@@ -1,10 +1,11 @@
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Home } from './home/Home.jsx';
 import { Actions } from './tickets/actions/Actions.jsx';
 import { Requests } from './tickets/requests/Requests.jsx';
 import { Form } from './forms/Form.jsx';
 import { Profile } from './profile/Profile.jsx';
-import { useSelector } from 'react-redux';
+import { SettingsRouting } from './settings/index.jsx';
 import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
 import { MobileFooter } from '../components/footer/MobileFooter.jsx';
 
@@ -48,6 +49,7 @@ export const PrivateRoutes = () => {
         <Route path="/requests/*" element={<Requests />} />
         <Route path="/forms/:formSlug/:submissionId?" element={<Form />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/settings/*" element={<SettingsRouting />} />
         <Route path="/login" element={<Navigate to="/" />} />
         <Route path="/*" element={<Home />} />
       </Routes>

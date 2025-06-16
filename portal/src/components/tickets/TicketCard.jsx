@@ -252,7 +252,7 @@ export const HomeTicketCard = ({
           <div className="flex-auto min-w-0">
             <Link
               className="block md:text-h3 font-medium text-right truncate after:absolute after:inset-0 outline-0"
-              to={`/${page}/${getToPath(submission)}`}
+              to={page ? `/${page}/${getToPath(submission)}` : undefined}
               state={{ backPath: `/${page}` }}
               onClick={e => {
                 if (mobile) {

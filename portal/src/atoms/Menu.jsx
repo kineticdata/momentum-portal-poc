@@ -24,10 +24,15 @@ const ButtonItem = ({ label, onClick, icon }) => (
  * Renderer for a link manu item, which can be relative (internal) or absolute
  * (external).
  */
-const LinkItem = ({ label, to, icon, target }) => (
+const LinkItem = ({ label, to, href, icon, target }) => (
   <ArkMenu.Item value={label} asChild>
-    {to.startsWith('http') ? (
-      <a href={to} target={target} className={clsx(itemStyle)} tabIndex={-1}>
+    {href || to.startsWith('http') ? (
+      <a
+        href={href || to}
+        target={target}
+        className={clsx(itemStyle)}
+        tabIndex={-1}
+      >
         {icon && <Icon name={icon} size={20}></Icon>}
         {label}
       </a>
@@ -72,7 +77,7 @@ const Items = ({ items = [] }) =>
       return <DividerItem key={`divider-${index}`} />;
     } else if (typeof item.onClick === 'function') {
       return <ButtonItem {...item} key={`button-${index}`} />;
-    } else if (typeof item.to === 'string') {
+    } else if (typeof item.to === 'string' || typeof item.href === 'string') {
       return <LinkItem {...item} key={`link-${index}`} />;
     } else {
       return null;
@@ -139,9 +144,7 @@ export const Menu = ({
       positioning={{ placement }}
     >
       {slots.trigger && (
-        <ArkMenu.Trigger asChild openable={true} className="btn">
-          {slots.trigger}
-        </ArkMenu.Trigger>
+        <ArkMenu.Trigger asChild>{slots.trigger}</ArkMenu.Trigger>
       )}
       <ArkMenu.Positioner>
         <ArkMenu.Content className="py-2 bg-white border border-gray-200 rounded-sm min-w-[10rem] outline-0 shadow-lg z-30">

@@ -748,7 +748,7 @@ const createDataFilter = (filterable, columns) => {
   return undefined;
 };
 
-const TableComponent = forwardRef(
+export const TableComponent = forwardRef(
   (
     {
       field,
