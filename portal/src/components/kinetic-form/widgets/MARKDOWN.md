@@ -36,6 +36,10 @@ The Kinetic field object of a text field with 2+ rows that should be used to sto
 ![type=string](https://img.shields.io/badge/string-e66e22)  
 Additional class names to add to the wrapper of the widget.
 
+![name=content](https://img.shields.io/badge/content-gray)
+![type=string](https://img.shields.io/badge/string-e66e22)  
+If you don't provide a field that stores the data, you can pass in content to render instead. Passing in content will render the markdown content instead of an editor.
+
 ![name=disabled](https://img.shields.io/badge/disabled-gray)
 ![type=boolean](https://img.shields.io/badge/boolean-e66e22)  
 Should the editor be disabled. If omitted, this will be set to `true` if the form is in review mode. When `disabled` is `true`, this widget will render the markdown content instead of an editor.
