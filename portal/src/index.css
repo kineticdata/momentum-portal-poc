@@ -3,6 +3,7 @@
 @import './assets/styles/colors.css' layer(base);
 @import './assets/styles/layout.css';
 @import './assets/styles/toasts.css';
+@import './assets/styles/modal.css';
 @import './assets/styles/panels.css';
 @import './assets/styles/buttons.css';
 @import './assets/styles/forms.css';

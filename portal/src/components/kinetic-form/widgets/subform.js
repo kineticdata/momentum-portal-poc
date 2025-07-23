@@ -21,7 +21,14 @@ import { Modal } from '../../../atoms/Modal.jsx';
 // CoreForm component will wait for this to be loaded.
 const globals = import('../globals.jsx');
 
-const SubformLayout = ({ inline, title, toasterId, destroy, children }) => {
+const SubformLayout = ({
+  inline,
+  title,
+  modalSize,
+  toasterId,
+  destroy,
+  children,
+}) => {
   const slots = getChildSlots(children, {
     componentName: 'SubformLayout',
     requiredSlots: ['content'],
@@ -39,7 +46,24 @@ const SubformLayout = ({ inline, title, toasterId, destroy, children }) => {
       open={true}
       onOpenChange={({ open }) => !open && destroy()}
       title={title}
+      size={modalSize}
       toasterId={toasterId}
+      onInteractOutside={e => {
+        if (
+          // Allow outside interactions for datetime picker
+          e.detail?.originalEvent?.target?.closest?.('.xdsoft_datetimepicker')
+        )
+          e.preventDefault();
+      }}
+      onEscapeKeyDown={() => {
+        const openDatePicker = document.querySelector(
+          '.xdsoft_datetimepicker[style*="display: block"]',
+        );
+        if (openDatePicker) {
+          // Hide any open date/time pickers since they don't close on escape
+          openDatePicker.style.display = 'none';
+        }
+      }}
     >
       <div slot="body">
         {slots.errors}
@@ -92,6 +116,7 @@ SubformComponent.propTypes = {
   onError: t.func,
   inline: t.bool,
   modalTitle: t.string,
+  modalSize: t.string,
   saveLabel: t.string,
   destroy: t.func,
 };
@@ -109,6 +134,7 @@ const KineticSubformComponent = forwardRef(
       onError,
       inline,
       modalTitle,
+      modalSize,
       saveLabel = 'Save',
       destroy,
     },
@@ -187,6 +213,7 @@ const KineticSubformComponent = forwardRef(
           <SubformLayout
             inline={inline}
             title={modalTitle || kFormRef.current?.name() || 'Loading...'}
+            modalSize={modalSize}
             toasterId={toasterId}
             destroy={destroy}
           >
@@ -331,6 +358,7 @@ const CustomSubformComponent = forwardRef(
       onSave,
       inline,
       modalTitle,
+      modalSize,
       saveLabel = 'Save',
       destroy,
     },
@@ -399,6 +427,7 @@ const CustomSubformComponent = forwardRef(
         <SubformLayout
           inline={inline}
           title={modalTitle || 'Loading...'}
+          modalSize={modalSize}
           toasterId={toasterId}
           destroy={destroy}
         >
@@ -507,7 +536,7 @@ const validateConfig = config => {
  * instance of the widget and render it into the provided container.
  *
  * @param {HTMLElement} container HTML Element into which to render the widget.
- * @param {MarkdownWidgetConfig} config Configuration object for the widget.
+ * @param {SubformWidgetConfig} config Configuration object for the widget.
  * @param {string} [id] Optional id that can be used to retrieve a reference to
  *  the widget's API functions using the `Subform.get` function.
  */
@@ -546,6 +575,7 @@ export const Subform = ({ container, config, id } = {}) => {
  *  modal.
  * @property {string} [modalTitle] The title for the modal when the subform is
  *  rendered in a modal.
+ * @property {string} [modalSize] The size of the modal.
  * @property {string} [saveLabel] The label for the save button.
  */
 
