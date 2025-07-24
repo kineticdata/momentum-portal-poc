@@ -48,22 +48,6 @@ const SubformLayout = ({
       title={title}
       size={modalSize}
       toasterId={toasterId}
-      onInteractOutside={e => {
-        if (
-          // Allow outside interactions for datetime picker
-          e.detail?.originalEvent?.target?.closest?.('.xdsoft_datetimepicker')
-        )
-          e.preventDefault();
-      }}
-      onEscapeKeyDown={() => {
-        const openDatePicker = document.querySelector(
-          '.xdsoft_datetimepicker[style*="display: block"]',
-        );
-        if (openDatePicker) {
-          // Hide any open date/time pickers since they don't close on escape
-          openDatePicker.style.display = 'none';
-        }
-      }}
     >
       <div slot="body">
         {slots.errors}

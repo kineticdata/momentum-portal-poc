@@ -48,9 +48,7 @@ export const Modal = ({
   title,
   size = 'sm',
   closeOnEscape,
-  onEscapeKeyDown,
   closeOnInteractOutside,
-  onInteractOutside,
   toasterId,
   children,
 }) => {
@@ -66,9 +64,7 @@ export const Modal = ({
       onOpenChange={onOpenChange}
       onExitComplete={onExitComplete}
       closeOnEscape={closeOnEscape}
-      onEscapeKeyDown={onEscapeKeyDown}
       closeOnInteractOutside={closeOnInteractOutside}
-      onInteractOutside={onInteractOutside}
       lazyMount
       unmountOnExit
     >

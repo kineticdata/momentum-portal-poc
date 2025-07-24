@@ -1,6 +1,0 @@
-@layer base {
-  /* Allow pointer events for CoreForm's datetime picker when open in a modal */
-  [data-scope='dialog'][data-part='positioner'] ~ .xdsoft_datetimepicker {
-    pointer-events: all;
-  }
-}
