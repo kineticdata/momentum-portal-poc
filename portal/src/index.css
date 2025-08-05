@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 @import './assets/styles/daisyui/index.css';
 @import './assets/styles/font.css' layer(base);
-@import './assets/styles/colors.css' layer(base);
+@import './assets/styles/colors.css' layer(base); /* TODO delete */
 @import './assets/styles/layout.css';
 @import './assets/styles/toasts.css';
 @import './assets/styles/panels.css';
@@ -11,25 +11,25 @@
 @import './assets/styles/typography.css';
 
 @theme {
-  --breakpoint-sm: 40rem;
-  --breakpoint-md: 48rem;
-  --breakpoint-lg: 64rem;
-  --breakpoint-xl: 80rem;
-  --breakpoint-2xl: 96rem;
+  /*--breakpoint-sm: 40rem;*/
+  /*--breakpoint-md: 48rem;*/
+  /*--breakpoint-lg: 64rem;*/
+  /*--breakpoint-xl: 80rem;*/
+  /*--breakpoint-2xl: 96rem;*/
 
-  --drop-shadow-card: -2px 13px 19px rgba(53, 51, 51, 0.14);
-  --drop-shadow-card-hover: -2px 6px 9px rgba(53, 51, 51, 0.14);
+  /*--drop-shadow-card: -2px 13px 19px rgba(53, 51, 51, 0.14);*/
+  /*--drop-shadow-card-hover: -2px 6px 9px rgba(53, 51, 51, 0.14);*/
 
-  --font-sans: 'Mona Sans Expanded';
+  --font-sans: 'Onest';
 
-  --radius-2\.5xl: 1.25rem;
+  /*--radius-2\.5xl: 1.25rem;*/
 
-  --shadow-card: -2px 8px 17px 4px rgba(123, 119, 119, 0.15);
-  --shadow-card-hover: -2px 4px 8px 3px rgba(123, 119, 119, 0.15);
-  --shadow-footer: 0px -5px 30px 0px rgba(54, 41, 183, 0.07);
-  --shadow-icon: 0px 3.5px 21px 0px rgba(0, 0, 0, 0.05);
-  --shadow-category: 4px 4px 22px 0 rgba(0, 0, 0, 0.13);
-  --shadow-category-hover: 25px 25px 11px -15px rgba(0, 0, 0, 0.13);
+  /*--shadow-card: -2px 8px 17px 4px rgba(123, 119, 119, 0.15);*/
+  /*--shadow-card-hover: -2px 4px 8px 3px rgba(123, 119, 119, 0.15);*/
+  /*--shadow-footer: 0px -5px 30px 0px rgba(54, 41, 183, 0.07);*/
+  /*--shadow-icon: 0px 3.5px 21px 0px rgba(0, 0, 0, 0.05);*/
+  /*--shadow-category: 4px 4px 22px 0 rgba(0, 0, 0, 0.13);*/
+  /*--shadow-category-hover: 25px 25px 11px -15px rgba(0, 0, 0, 0.13);*/
 
   --text-h4: 1.125rem;
   --text-h4--line-height: 1.75rem;
@@ -51,7 +51,7 @@
 }
 
 @source inline("{{m,-m,p}{,t,r,b,l,x,y}-{{0..12..1}},m-{,t,r,b,l,x,y}-auto}");
-@source inline("{bg,text,border}-{primary-{100,200,300,400,500,900},secondary-{100,400,500},gray-{100,200,500,900,950},warning-{200,400,500},success-{200,400,500}}");
+@source inline("{bg,text,border}-{base-{100,200,300,content},primary{,-content},secondary{,-content},accent{,-content},neutral{,-content},info{,-content},success{,-content},warning{,-content},error{,-content}}");
 @source inline("rounded{,-{none,sm,md,lg,xl,2xl,3xl,full}}");
 @source inline("border{,-{t,r,b,l,x,y}}{,-{{0..8..1}}}");
 @source inline("shadow{,-{none,xs,sm,md,lg,xl,2xl,card}}");
@@ -68,4 +68,6 @@
 @source inline("gap{,-x,-y}-{{0..12..1}}");
 @source inline("layout-{row{,-center,-end,-between},column}");
 @source inline("flex-{auto,initial,none,full,0,1,wrap}");
-@source inline("btn{,-{primary,seconday,tertiary,underline}}");
+@source inline("kbtn{,-{primary,seconday,accent,neutral,info,success,warning,error,outline,ghost,xs,sm,md,lg,xl,circle,block}}");
+@source inline("kbadge{,-{primary,seconday,accent,neutral,info,success,warning,error,outline,ghost,xs,sm,md,lg,xl}}");
+@source inline("kalert{,-{info,success,warning,error,outline,soft,xs,sm,md,lg,xl,vertical,horizontal}}");

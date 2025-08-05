@@ -17,6 +17,7 @@ import { Login } from './pages/login/Login.jsx';
 import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
 import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 import { useData } from './helpers/hooks/useData.js';
+import { SearchModal } from './components/search/SearchModal.jsx';
 
 export const App = ({
   initialized,
@@ -134,20 +135,20 @@ export const App = ({
 
   return (
     <>
-      <div className="flex flex-col flex-auto overflow-auto">
+      <div className="l-v-start-stretch flex-auto overflow-auto">
         {/* Header element where we will render headers via a portal */}
-        <header id="app-header" />
+        <header id="app-header" className="flex-none" />
 
         <main
           id="app-main"
           className={clsx(
-            'flex flex-col flex-auto relative overflow-y-auto overflow-x-hidden scrollbar',
+            'flex-auto relative overflow-y-auto overflow-x-hidden scrollbar',
           )}
         >
           {serverError || error ? (
             // If an error occurred during auth or fetching app data, show an
             // error screen
-            <Error error={serverError || error} />
+            <Error error={serverError || error} header={true} />
           ) : !initialized || !space ? (
             // If auth isn't initialized or space record isn't fetched, show a
             // loading screen

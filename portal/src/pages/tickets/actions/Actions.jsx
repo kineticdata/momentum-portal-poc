@@ -66,28 +66,32 @@ export const Actions = () => {
     usePaginatedData(searchSubmissions, params);
 
   return (
-    <Routes>
-      <Route
-        path=":submissionId"
-        element={<ActionForm listActions={actions} />}
-      />
-      <Route
-        path="*"
-        element={
-          <ActionsList
-            listData={{
-              initialized,
-              loading,
-              data: response?.submissions,
-              error: response?.error,
-              pageNumber,
-            }}
-            listActions={actions}
-            filters={filters}
-            setFilters={setFilters}
+    <div className="px-44">
+      <div className="max-w-screen-lg">
+        <Routes>
+          <Route
+            path=":submissionId"
+            element={<ActionForm listActions={actions} />}
           />
-        }
-      />
-    </Routes>
+          <Route
+            path="*"
+            element={
+              <ActionsList
+                listData={{
+                  initialized,
+                  loading,
+                  data: response?.submissions,
+                  error: response?.error,
+                  pageNumber,
+                }}
+                listActions={actions}
+                filters={filters}
+                setFilters={setFilters}
+              />
+            }
+          />
+        </Routes>
+      </div>
+    </div>
   );
 };

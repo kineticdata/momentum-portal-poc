@@ -7,21 +7,24 @@ import { Link, useLocation } from 'react-router-dom';
  * @param {string} username The username of the user, used for rendering the
  *  first letter.
  * @param {('sm'|'md'|'lg'|'xl')} [size=sm] The size of the avatar.
- * @param {string} [className]
- * @param {string} [asButton] Is the avatar in a button.
+ * @param {('primary'|'neutral')} [color] The color of the avatar.
+ * @param {('button'|'a'|'link')} [as] The tag to use for rendering the avatar.
+ * @param {string} [className] Additional classes to add to the avatar
  * @param {Object} [passThroughProps] Any additional props will we passed
  *  through to the component.
  */
 export const Avatar = ({
   username = '',
   size = 'sm',
+  color,
+  as,
   className,
-  asButton,
   ...passThroughProps
 }) => {
   const location = useLocation();
-  const isLink = !!passThroughProps.to;
-  const Tag = !isLink ? 'div' : Link;
+  const isLink = as === 'link';
+  const isActionable = isLink || ['a', 'button'].includes(as);
+  const Tag = isLink ? Link : as || 'div';
   const additionalProps = !isLink
     ? {}
     : { state: { backPath: location.pathname } };
@@ -29,31 +32,25 @@ export const Avatar = ({
   return (
     <Tag
       className={clsx(
-        'group flex justify-center items-center rounded-full transition uppercase leading-none',
-        (isLink || asButton) && 'kbtn kbtn-accent kbtn-circle',
-        !isLink && !asButton && 'bg-accent text-accent-content',
+        'kavatar kavatar-placeholder',
+        isActionable && 'kavatar-actionable',
         {
-          'h-4 w-4': size === 'sm',
-          'h-6 w-6': size === 'md',
-          'h-10 w-10': size === 'lg',
-          'h-12 w-12': size === 'xl',
-          'h-16 w-16': size === '2xl',
-          'h-24 w-24': size === '3xl',
+          'kavatar-primary': color === 'primary',
+          'kavatar-neutral': color === 'neutral',
         },
         {
-          'text-xs': size === 'sm',
-          'text-base': size === 'md',
-          'text-h3 font-medium': size === 'lg',
-          'text-h2 font-medium': size === 'xl',
-          'text-h1 font-medium': size === '2xl',
-          'text-5xl font-semibold': size === '3xl',
+          'kavatar-xs': size === 'xs',
+          'kavatar-sm': size === 'sm',
+          'kavatar-lg': size === 'lg',
+          'kavatar-xl': size === 'xl',
+          'kavatar-2xl': size === '2xl',
         },
         className,
       )}
       {...additionalProps}
       {...passThroughProps}
     >
-      {username.slice(0, 1)}
+      <div>{username.slice(0, 1)}</div>
     </Tag>
   );
 };

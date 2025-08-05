@@ -58,17 +58,21 @@ export const SettingsRouting = () => {
       : null;
 
   return (
-    <Routes>
-      <Route path="/" element={<Settings settings={settings} />} />
-      <Route
-        path="/datastore"
-        element={<Datastore datastores={datastores} />}
-      />
-      <Route
-        path="/datastore/:formSlug/:id?"
-        element={<DatastoreRecords datastores={datastores} />}
-      />
-      <Route path="/:formSlug" element={<SettingsForm />} />
-    </Routes>
+    <div className="px-44">
+      <div className="max-w-screen-lg">
+        <Routes>
+          <Route path="/" element={<Settings settings={settings} />} />
+          <Route
+            path="/datastore"
+            element={<Datastore datastores={datastores} />}
+          />
+          <Route
+            path="/datastore/:formSlug/:id?"
+            element={<DatastoreRecords datastores={datastores} />}
+          />
+          <Route path="/:formSlug" element={<SettingsForm />} />
+        </Routes>
+      </div>
+    </div>
   );
 };

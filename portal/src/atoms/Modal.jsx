@@ -4,8 +4,8 @@ import { ark } from '@ark-ui/react/factory';
 import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
 import { getChildSlots } from '../helpers/atoms.js';
-import { CloseButton } from './Button.jsx';
 import { Toaster } from './Toaster.jsx';
+import { Icon } from './Icon.jsx';
 
 /**
  * A modal.
@@ -23,7 +23,7 @@ import { Toaster } from './Toaster.jsx';
  *  property defining what the new state of the component is or should be.
  * @param {Function} [props.onExitComplete] Function to call after the modal
  *  finishes closing.
- * @param {string} props.title The title text for the modal.
+ * @param {string} [props.title] The title text for the modal.
  * @param {('sm'|'md'|'lg'|'xl')} [size=sm] The size of the modal
  * @param {boolean} [props.closeOnEscape=true] Should the modal close when the
  *  escape key is pressed.
@@ -82,13 +82,15 @@ export const Modal = ({
               'md:w-screen': size === 'xl',
             })}
           >
+            <Dialog.CloseTrigger asChild>
+              <button className="kbtn kbtn-sm kbtn-circle kbtn-ghost absolute right-2 top-2">
+                <Icon name="x" size={20} />
+              </button>
+            </Dialog.CloseTrigger>
             <div className="flex justify-between items-center gap-2">
               <Dialog.Title className="flex-auto" asChild={!!slots.title}>
                 {slots.title || title}
               </Dialog.Title>
-              <Dialog.CloseTrigger asChild>
-                <CloseButton />
-              </Dialog.CloseTrigger>
             </div>
             {slots.description && (
               <Dialog.Description
@@ -101,7 +103,7 @@ export const Modal = ({
             {slots.body && (
               <ark.div
                 asChild
-                className="overflow-auto scrollbar-white -m-4 p-4"
+                className="overflow-auto scrollbar-white -my-4 -mx-8 py-4 px-8"
               >
                 {slots.body}
               </ark.div>
@@ -131,7 +133,7 @@ Modal.propTypes = {
   onExitComplete: t.func,
   closeOnEscape: t.bool,
   closeOnInteractOutside: t.bool,
-  title: t.string.isRequired,
+  title: t.string,
   size: t.string,
   toasterId: t.string,
   children: t.node,
