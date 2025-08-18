@@ -112,8 +112,8 @@ export const NewsSection = () => {
         {loading && <Loading />}
         {!loading && news?.length > 0 && (
           <Carousel.Root
-            index={openIndex}
-            onIndexChange={({ index }) => setOpenIndex(index)}
+            page={openIndex}
+            onPageChange={({ page }) => setOpenIndex(page)}
             loop={true}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
@@ -122,7 +122,7 @@ export const NewsSection = () => {
               'bg-gray-900 bg-glassmorphism-border p-0.5 rounded-2xl',
             )}
           >
-            <Carousel.Viewport
+            <div
               className={clsx(
                 'relative flex flex-col h-full w-full overflow-hidden',
                 'bg-gray-900 bg-glassmorphism-linear rounded-[0.875rem]',
@@ -130,12 +130,16 @@ export const NewsSection = () => {
             >
               <Carousel.ItemGroup className="flex-auto max-h-full">
                 {news.map((news, index) => (
-                  <Carousel.Item key={index} index={index}>
+                  <Carousel.Item
+                    key={index}
+                    index={index}
+                    className="overflow-hidden"
+                  >
                     <NewsLink index={index} mobile={mobile} {...news} />
                   </Carousel.Item>
                 ))}
               </Carousel.ItemGroup>
-            </Carousel.Viewport>
+            </div>
             <Carousel.IndicatorGroup
               className={clsx(
                 'absolute bottom-0.75 left-1.5 md:bottom-5 md:left-[4.625rem]',
