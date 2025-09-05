@@ -49,17 +49,14 @@ export const Toaster = ({
               'flex flex-col items-stretch gap-3 pl-5 pr-1.5 py-3',
               'rounded-box shadow-card overflow-hidden',
               'min-w-80 max-w-[calc(100vw-3rem)] md:max-w-screen-sm',
-              {
-                'bg-success text-success-content': toast.type !== 'error',
-                'bg-error text-error-content': toast.type === 'error',
-              },
+              'bg-base-300 text-base-content border border-neutral',
             )}
           >
             <div className="flex items-center gap-3">
               <Icon
                 name={clsx({
-                  'circle-check-filled': toast.type !== 'error',
-                  'exclamation-circle-filled': toast.type === 'error',
+                  check: toast.type !== 'error',
+                  'alert-triangle': toast.type === 'error',
                 })}
                 className={clsx('flex-none')}
               />

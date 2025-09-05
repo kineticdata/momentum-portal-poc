@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useMatch } from 'react-router-dom';
 import t from 'prop-types';
 import clsx from 'clsx';
 import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
@@ -17,7 +16,6 @@ import { Login } from './pages/login/Login.jsx';
 import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
 import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 import { useData } from './helpers/hooks/useData.js';
-import { SearchModal } from './components/search/SearchModal.jsx';
 
 export const App = ({
   initialized,

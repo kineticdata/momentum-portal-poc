@@ -19,7 +19,7 @@ import { useData } from '../../helpers/hooks/useData.js';
 export const SearchModal = () => {
   // Get state from redux for the search modal and general app info
   const { open, searchOnly, popularForms } = useSelector(state => state.search);
-  const { kapp, kappSlug } = useSelector(state => state.app);
+  const { kapp, kappSlug, powerMode } = useSelector(state => state.app);
 
   /*** SEARCH FUNCTIONALITY ***************************************************/
 
@@ -48,11 +48,11 @@ export const SearchModal = () => {
       query
         ? {
             kappSlug,
-            q: `type = "Service" AND name *=* "${query}" AND (status = "Active" OR status = "New")`,
+            q: `type = "Service" AND name *=* "${query}" AND (status = "Active" OR status = "New") AND attributes[Scope] = "${powerMode ? 'Others' : 'Self'}"`,
             limit: 10,
           }
         : null,
-    [query, kappSlug],
+    [query, kappSlug, powerMode],
   );
 
   // Perform the search
@@ -106,11 +106,15 @@ export const SearchModal = () => {
       ? categories?.find(c => c.slug === path[path.length - 1])
       : null;
   // List of subcategories for current category, or all root categories
-  const currentCategories = currentCategory
-    ? categories.filter(
-        c => getAttributeValue(c, 'Parent') === currentCategory.slug,
-      )
-    : categories?.filter(c => !getAttributeValue(c, 'Parent'));
+  const currentCategories = (
+    currentCategory
+      ? categories.filter(
+          c => getAttributeValue(c, 'Parent') === currentCategory.slug,
+        )
+      : categories?.filter(c => !getAttributeValue(c, 'Parent'))
+  )?.filter(
+    c => getAttributeValue(c, 'Scope') === (powerMode ? 'Others' : 'Self'),
+  );
 
   // Handler for going into a category
   const handleEnterCategory = categorySlug => {
@@ -164,9 +168,11 @@ export const SearchModal = () => {
   );
   // Retrieve the services for the current category when a category is opened
   const servicesData = useData(fetchCategory, servicesParams);
-  const servicesForms = servicesData?.response?.category?.categorizations?.map(
-    c => c?.form,
-  );
+  const servicesForms = servicesData?.response?.category?.categorizations
+    ?.map(c => c?.form)
+    ?.filter(
+      f => getAttributeValue(f, 'Scope') === (powerMode ? 'Others' : 'Self'),
+    );
 
   // Parameters for the all services query (if null, the query will not run)
   const allServicesParams = useMemo(
@@ -213,30 +219,32 @@ export const SearchModal = () => {
           >
             <Icon name="arrow-left" />
           </button>
-          <span className="text-2xl font-semibold">{currentCategory.name}</span>
+          <span className="text-2xl font-semibold uppercase">
+            {currentCategory.name}
+          </span>
         </div>
       )}
       <div slot="body" className="l-v-start-stretch gap-3">
-        {!currentCategory && (
-          <label className="kinput w-full">
-            <input
-              type="text"
-              name="Search"
-              placeholder="Search"
-              value={inputValue}
-              onChange={handleSearchInputChange}
-              autoComplete="off"
-              autoFocus={searchOnly}
-            />
-            <Icon name="search" size={20} />
-          </label>
-        )}
-        {(searchOnly || searchData.initialized) && !currentCategory ? (
+        {searchOnly ? (
           <>
-            <div className="text-2xl font-semibold mt-6">Search Results</div>
-            <ul className="klist text-base p-3 border rounded-box">
+            <label className="kinput w-full">
+              <input
+                type="text"
+                name="Search"
+                placeholder="Search"
+                value={inputValue}
+                onChange={handleSearchInputChange}
+                autoComplete="off"
+                autoFocus={searchOnly}
+              />
+              <Icon name="search" size={20} />
+            </label>
+            <div className="text-2xl font-semibold text-primary uppercase mt-6">
+              Search Results
+            </div>
+            <ul className="l-v-start-stretch gap-4">
               {!searchData.initialized ? (
-                <li className="klist-row">
+                <li>
                   <em className="text-base-content/60">
                     Enter a search query to find services.
                   </em>
@@ -254,7 +262,7 @@ export const SearchModal = () => {
                       ))
                     : null}
                   {searchResults?.length === 0 && (
-                    <li className="klist-row">
+                    <li>
                       <em className="text-base-content/60">
                         No results found.
                       </em>
@@ -274,7 +282,9 @@ export const SearchModal = () => {
           <>
             {currentCategories?.length > 0 && (
               <>
-                <div className="text-2xl font-semibold mt-6">Categories</div>
+                <div className="text-2xl font-semibold text-primary uppercase">
+                  Categories
+                </div>
                 <div className="relative">
                   {currentCategoryIndex !== 0 && (
                     <button
@@ -291,10 +301,10 @@ export const SearchModal = () => {
                       .slice(currentCategoryIndex, currentCategoryIndex + 4)
                       .map(category => (
                         <div
-                          className="relative w-1/4 px-2 l-v-start-center gap-4 "
+                          className="group relative w-1/4 px-2 l-v-start-center gap-4"
                           key={category.slug}
                         >
-                          <div className="l-h-center-center h-12 w-12 bg-base-200 rounded-box">
+                          <div className="l-h-center-center h-12 w-12 bg-base-300 rounded-sm border border-transparent group-hover:border-base-content">
                             <Icon
                               name={getAttributeValue(
                                 category,
@@ -306,7 +316,7 @@ export const SearchModal = () => {
                           <button
                             type="button"
                             onClick={() => handleEnterCategory(category.slug)}
-                            className="cursor-pointer after:absolute after:inset-y-0 after:inset-x-2"
+                            className="cursor-pointer after:absolute after:inset-y-0 after:inset-x-2 uppercase"
                           >
                             {category.name}
                           </button>
@@ -329,19 +339,29 @@ export const SearchModal = () => {
 
             {!currentCategory && popularForms?.length > 0 && (
               <>
-                <div className="text-2xl font-semibold mt-6">Popular</div>
-                <ul className="klist text-base p-3 border rounded-box">
-                  {popularForms.map(form => (
-                    <FormRow key={form.slug} form={form} />
-                  ))}
+                <div className="text-2xl font-semibold text-primary uppercase mt-6">
+                  Popular
+                </div>
+                <ul className="l-v-start-stretch gap-4">
+                  {popularForms
+                    .filter(
+                      f =>
+                        getAttributeValue(f, 'Scope') ===
+                        (powerMode ? 'Others' : 'Self'),
+                    )
+                    .map(form => (
+                      <FormRow key={form.slug} form={form} />
+                    ))}
                 </ul>
               </>
             )}
 
             {(currentCategory || !hasCategories) && (
               <>
-                <div className="text-2xl font-semibold mt-6">Services</div>
-                <ul className="klist text-base p-3 border rounded-box">
+                <div className="text-2xl font-semibold text-primary uppercase mt-6">
+                  Services
+                </div>
+                <ul className="l-v-start-stretch gap-4">
                   {servicesLoading && <Loading />}
                   {servicesForms?.length > 0
                     ? servicesForms.map(form => (
@@ -349,7 +369,7 @@ export const SearchModal = () => {
                       ))
                     : null}
                   {servicesForms?.length === 0 && (
-                    <li className="klist-row">
+                    <li>
                       <em className="text-base-content/60">
                         No services found.
                       </em>
@@ -366,20 +386,19 @@ export const SearchModal = () => {
 };
 
 const FormRow = ({ form }) => (
-  <li className="klist-row items-center hover:bg-base-200">
-    <div className="l-h-center-center -my-3 h-9 w-9 bg-base-200 rounded-box">
+  <li className="form-card">
+    <div className="icon-group">
       <Icon name={getAttributeValue(form, 'Icon', 'forms')} />
     </div>
-    <div>
+    <div className="content-group">
       <Link
         to={`/forms/${form.slug}`}
-        className="after:absolute after:inset-0"
+        className="card-link"
         onClick={closeSearch}
       >
         {form.name}
       </Link>
-      <br />
-      <small className="line-clamp-2">{form.description}</small>
+      <small>{form.description}</small>
     </div>
   </li>
 );

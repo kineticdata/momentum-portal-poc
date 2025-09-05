@@ -83,6 +83,10 @@
   }
 }
 
+@utility kbtn {
+  @apply uppercase;
+}
+
 /*@utility kbtn-xs {*/
 /*  --ksize: calc(var(--size-field, 0.25rem) * 8);*/
 /*  --kfontsize: 0.875rem;*/

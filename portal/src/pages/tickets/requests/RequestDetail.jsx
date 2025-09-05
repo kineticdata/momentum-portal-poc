@@ -274,7 +274,9 @@ const Activity = ({ first, last, mobile, icon, activity }) => {
                 ([key, value]) =>
                   key !== 'Status' && (
                     <div key={key} className="flex flex-col gap-0.5 md:gap-1">
-                      <dt className="text-base-content/60 font-medium">{key}</dt>
+                      <dt className="text-base-content/60 font-medium">
+                        {key}
+                      </dt>
                       <dd>{value}</dd>
                     </div>
                   ),
@@ -319,7 +321,7 @@ export const RequestDetail = () => {
   usePoller(reloadData);
 
   return (
-    <>
+    <div className="max-w-screen-lg">
       <div className="flex flex-col mt-4 mb-6 md:my-8">
         <div className="flex justify-between items-center gap-3 min-w-0">
           <div className="flex items-center gap-3">
@@ -414,6 +416,6 @@ export const RequestDetail = () => {
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 };

@@ -8,15 +8,15 @@ import { Datastore } from './Datastore.jsx';
 import { DatastoreRecords } from './DatastoreRecords.jsx';
 
 const settingsFormsParams = {
-  kappSlug: 'admin-center',
+  kappSlug: 'datastore',
   include: 'attributesMap',
   q: 'type = "Settings" AND (status = "Active" OR status = "New")',
 };
 
 const datastoreFormsParams = {
-  kappSlug: 'admin-center',
+  kappSlug: 'datastore',
   include: 'attributesMap,authorization,fields',
-  q: 'type = "Data" AND (status = "Active" OR status = "New")',
+  q: 'type = "Datastore" AND (status = "Active" OR status = "New")',
 };
 
 export const SettingsRouting = () => {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /******************************************************************************
  * Retrieves data and returns the data and meta properties.
@@ -44,12 +44,15 @@ export function useData(fn, params) {
     executeQuery();
   }, [executeQuery]);
 
-  return {
-    initialized: !!params,
-    loading: !!params && (!response || !!lastTimestamp),
-    response,
-    actions: { reloadData: executeQuery },
-  };
+  return useMemo(
+    () => ({
+      initialized: !!params,
+      loading: !!params && (!response || !!lastTimestamp),
+      response,
+      actions: { reloadData: executeQuery },
+    }),
+    [params, response, lastTimestamp, executeQuery],
+  );
 }
 
 /**

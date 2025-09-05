@@ -40,6 +40,7 @@ export const SettingsCard = ({ icon = 'settings', to, label, description }) => {
         // Common styles
         'group relative',
       )}
+      state={{ backPath: '/settings' }}
     >
       <div
         className={clsx(
@@ -49,25 +50,24 @@ export const SettingsCard = ({ icon = 'settings', to, label, description }) => {
           'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
           // Common styles
           'group relative gap-8 items-center min-h-16 rounded-xl',
-          'bg-white shadow-card border border-transparent transition',
-          'hover:border-primary-500 hover:bg-gray-100 hover:shadow-card-hover',
-          'focus-within:border-primary-500 focus-within:bg-gray-100 focus-within:shadow-card-hover',
+          'bg-base-100 border border-base-300 transition',
+          'hover:border-base-content focus-within:border-base-content',
         )}
       >
-        <div className="bg-primary-100 border border-primary-400 text-gray-950 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+        <div className="bg-base-200 text-base-content rounded-box flex-none p-1.25 md:p-1.75">
           <Icon name={icon} />
         </div>
         {mobile ? (
           <div className="flex flex-col gap-1 min-w-0">
             <div className="font-medium leading-4 line-clamp-2">{label}</div>
-            <div className="text-gray-900 text-xs line-clamp-2">
+            <div className="text-base-content/60 text-xs line-clamp-2">
               {description}
             </div>
           </div>
         ) : (
           <>
             <div className="font-medium leading-5 line-clamp-2">{label}</div>
-            <div className="text-gray-900 line-clamp-2">
+            <div className="text-base-content/60 line-clamp-2">
               {description}
             </div>
           </>

@@ -22,7 +22,7 @@ export const RequestsList = ({
   const { nextPage, previousPage, reloadPage } = listActions;
 
   return (
-    <>
+    <div className="max-w-screen-lg">
       <div
         className={clsx(
           // Mobile first styles
@@ -31,7 +31,14 @@ export const RequestsList = ({
           'md:my-6 md:items-center',
         )}
       >
-        <TicketsTabs active="requests" />
+        <Button
+          variant="tertiary"
+          icon="arrow-left"
+          to={location.state?.backPath || '/'}
+          aria-label="Back"
+          className="flex-none"
+        />
+        <div className="uppercase text-xl me-auto">Check Status</div>
         <TicketFilters
           type="requests"
           filters={filters}
@@ -108,7 +115,7 @@ export const RequestsList = ({
                   {loading ? (
                     <Loading xsmall size={36} />
                   ) : (
-                    <div className="flex justify-center items-center w-11 h-11 bg-accent text-accent-content rounded-full font-semibold">
+                    <div className="flex justify-center items-center w-11 h-11 bg-secondary text-secondary-content rounded-full font-semibold">
                       {pageNumber}
                     </div>
                   )}
@@ -126,6 +133,6 @@ export const RequestsList = ({
           )}
         </>
       )}
-    </>
+    </div>
   );
 };

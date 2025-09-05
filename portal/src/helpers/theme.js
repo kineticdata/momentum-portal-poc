@@ -57,7 +57,7 @@ export const calculateThemeState = (
     state.parsed[name] = config;
 
     // Set logo into state
-    state.logo = config?.logo?.standard;
+    // state.logo = config?.logo?.standard;
 
     if (updateLive && (!init || isFirstTheme)) {
       // Create an array to store any css variable overrides
@@ -92,7 +92,9 @@ export const calculateThemeState = (
       const grayVariants = createGrayVariants(config?.colors?.gray);
       if (grayVariants) {
         grayVariants.forEach(([step, { hue, saturation, lightness }]) =>
-          cssVars.push(`--color-gray-${step}: hsl(${hue} ${saturation}% ${lightness}%;)`),
+          cssVars.push(
+            `--color-gray-${step}: hsl(${hue} ${saturation}% ${lightness}%;)`,
+          ),
         );
       }
 

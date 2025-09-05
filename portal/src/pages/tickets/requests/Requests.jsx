@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { defineKqlQuery, searchSubmissions } from '@kineticdata/react';
@@ -64,33 +64,31 @@ export const Requests = () => {
 
   return (
     <div className="px-44">
-      <div className="max-w-screen-lg">
-        <Routes>
-          <Route path=":submissionId" element={<RequestDetail />} />
-          <Route
-            path=":submissionId/edit"
-            element={<Form listActions={actions} />}
-          />
-          <Route path=":submissionId/review" element={<Form review={true} />} />
-          <Route
-            path="*"
-            element={
-              <RequestsList
-                listData={{
-                  initialized,
-                  loading,
-                  data: response?.submissions,
-                  error: response?.error,
-                  pageNumber,
-                }}
-                listActions={actions}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            }
-          />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path=":submissionId" element={<RequestDetail />} />
+        <Route
+          path=":submissionId/edit"
+          element={<Form listActions={actions} />}
+        />
+        <Route path=":submissionId/review" element={<Form review={true} />} />
+        <Route
+          path="*"
+          element={
+            <RequestsList
+              listData={{
+                initialized,
+                loading,
+                data: response?.submissions,
+                error: response?.error,
+                pageNumber,
+              }}
+              listActions={actions}
+              filters={filters}
+              setFilters={setFilters}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 };

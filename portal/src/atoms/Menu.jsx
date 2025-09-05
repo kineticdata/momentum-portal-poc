@@ -147,7 +147,7 @@ export const Menu = ({
         <ArkMenu.Trigger asChild>{slots.trigger}</ArkMenu.Trigger>
       )}
       <ArkMenu.Positioner>
-        <ArkMenu.Content className="py-3 bg-base-100 border border-base-300 rounded-box min-w-[10rem] outline-0 shadow-lg z-30">
+        <ArkMenu.Content className="py-3 bg-base-100 border border-base-300 rounded-box min-w-[10rem] outline-0 shadow-lg z-30 overflow-auto max-h-[45vh]">
           <Items items={items} />
         </ArkMenu.Content>
       </ArkMenu.Positioner>

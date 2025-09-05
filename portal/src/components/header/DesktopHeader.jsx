@@ -1,22 +1,29 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/logo-full.svg';
+import logo from '../../assets/images/GFIM.png';
 import { Icon } from '../../atoms/Icon.jsx';
 import { HeaderPortal } from './HeaderPortal.jsx';
-import { SearchModal } from '../search/SearchModal.jsx';
+import { appActions } from '../../helpers/state.js';
 import { Avatar } from '../../atoms/Avatar.jsx';
 import { Popover, usePopover } from '@ark-ui/react/popover';
 import clsx from 'clsx';
 import { openSearch } from '../../helpers/search.js';
+import { callIfFn } from '../../helpers/index.js';
 
 export const DesktopHeader = () => {
   const username = useSelector(state => state.app.profile?.username);
+  const powerMode = useSelector(state => state.app.powerMode);
   const themeLogo = useSelector(state => state.theme.logo);
 
   return (
     <HeaderPortal>
-      <nav className="relative l-h-start-center gap-5 h-20 px-6 py-2 bg-base-100 z-20">
+      <nav
+        className={clsx('relative l-h-start-center gap-5 h-20 px-6 py-2 z-20', {
+          'bg-base-100': !powerMode,
+          'bg-base-300': powerMode,
+        })}
+      >
         <HeaderMenu />
         <Link to="/" className="flex-initial" aria-label="Home">
           <img src={themeLogo || logo} alt="Logo" className="logo" />
@@ -28,9 +35,38 @@ export const DesktopHeader = () => {
         >
           <Icon name="search" size={20} />
         </button>
+        <div
+          className={clsx(
+            'p-3 rounded-field flex gap-1 flex-none bg-neutral max-md:self-center uppercase',
+          )}
+        >
+          <button
+            type="button"
+            className={clsx('kbtn kbtn-xs px-5 text-lg font-normal', {
+              'bg-transparent border-transparent hover:border-secondary focus-visible:border-secondary hover:bg-base-300 focus-visible:bg-base-300':
+                powerMode,
+              'border-secondary': !powerMode,
+            })}
+            onClick={() => appActions.setPowerMode(false)}
+          >
+            Soldier
+          </button>
+          <button
+            type="button"
+            className={clsx('kbtn kbtn-xs px-5 text-lg font-normal', {
+              'bg-transparent border-transparent hover:border-secondary focus-visible:border-secondary hover:bg-base-300 focus-visible:bg-base-300':
+                !powerMode,
+              'border-secondary': powerMode,
+            })}
+            onClick={() => appActions.setPowerMode(true)}
+          >
+            Power User
+          </button>
+        </div>
         <Avatar
           username={username}
           size="lg"
+          color="neutral"
           className="flex-none"
           as="link"
           to="/profile"
@@ -40,34 +76,50 @@ export const DesktopHeader = () => {
   );
 };
 
-const MENU_ITEMS = [
-  {
-    items: [
-      { label: 'Home', to: '/' },
-      { label: 'Submit a Request', to: '/submit' },
-      { label: 'Check Status', to: '/requests' },
-      { label: 'My Work', to: '/actions' },
-    ],
-  },
-  {
-    title: 'Manager',
-    items: [
-      { label: 'Team Metrics', to: '/manager/metrics' },
-      { label: 'Work Assigned to Team', to: '/manager/work' },
-    ],
-  },
-  {
-    title: 'Process Owner',
-    items: [
-      { label: 'Performance', to: '/owner/performance' },
-      { label: 'Submission Data', to: '/owner/submission' },
-    ],
-  },
-];
+// const MENU_ITEMS = [
+//   {
+//     items: [
+//       { label: 'Home', to: '/' },
+//       { label: 'Submit a Request', onClick: () => openSearch() },
+//       { label: 'Check Status', to: '/requests' },
+//       { label: 'My Work', to: '/actions' },
+//     ],
+//   },
+//   {
+//     title: 'Manager',
+//     items: [
+//       { label: 'Team Metrics', to: '/manager/metrics' },
+//       { label: 'Work Assigned to Team', to: '/manager/work' },
+//     ],
+//   },
+//   {
+//     title: 'Process Owner',
+//     items: [
+//       { label: 'Performance', to: '/owner/performance' },
+//       { label: 'Submission Data', to: '/owner/submission' },
+//     ],
+//   },
+// ];
 
 const HeaderMenu = () => {
+  const powerMode = useSelector(state => state.app.powerMode);
   const popover = usePopover();
   const close = () => popover.setOpen(false);
+
+  const MENU_ITEMS = useMemo(
+    () => [
+      {
+        items: [
+          { label: 'Home', to: '/' },
+          { label: 'Submit a Request', onClick: () => openSearch() },
+          { label: 'Check Status', to: '/requests' },
+          powerMode && { label: 'My Work', to: '/actions' },
+        ].filter(Boolean),
+      },
+    ],
+    [powerMode],
+  );
+
   return (
     <Popover.RootProvider value={popover} autoFocus={false}>
       <Popover.Trigger asChild>
@@ -108,12 +160,6 @@ const HeaderMenu = () => {
               icon="settings"
               close={close}
             />
-            <HeaderMenuItem
-              label="Help"
-              to="/help"
-              icon="help-square-rounded"
-              close={close}
-            />
           </ul>
         </Popover.Content>
       </Popover.Positioner>
@@ -121,7 +167,7 @@ const HeaderMenu = () => {
   );
 };
 
-const HeaderMenuItem = ({ label, to, icon, title, items, close }) => {
+const HeaderMenuItem = ({ label, to, onClick, icon, title, items, close }) => {
   if (items) {
     if (title) {
       return (
@@ -145,10 +191,24 @@ const HeaderMenuItem = ({ label, to, icon, title, items, close }) => {
   }
   return (
     <li>
-      <Link to={to} className="content-center h-12 text-base" onClick={close}>
-        {icon && <Icon name={icon} />}
-        <span>{label || to}</span>
-      </Link>
+      {to ? (
+        <Link to={to} className="content-center h-12 text-base" onClick={close}>
+          {icon && <Icon name={icon} />}
+          <span>{label || to}</span>
+        </Link>
+      ) : (
+        <button
+          type="button"
+          className="content-center h-12 text-base"
+          onClick={() => {
+            callIfFn(onClick);
+            close();
+          }}
+        >
+          {icon && <Icon name={icon} />}
+          <span>{label || to}</span>
+        </button>
+      )}
     </li>
   );
 };

@@ -106,7 +106,7 @@ export const TicketCard = ({ submission, reload }) => {
           className={clsx(
             'absolute top-0 right-0.25 h-full w-24 pl-4',
             'flex flex-col justify-center items-center gap-1',
-            'bg-error text-error-content rounded-r-xl',
+            'bg-error text-error-content rounded-r-box',
           )}
         >
           <Icon name="trash" />
@@ -120,14 +120,13 @@ export const TicketCard = ({ submission, reload }) => {
           // Non mobile styles
           'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
           // Common styles
-          'group relative gap-3 items-center min-h-16 rounded-xl',
-          'bg-base-100 shadow-card border border-transparent transition',
-          'hover:border-base-content hover:bg-base-200 hover:shadow-card-hover',
-          'focus-within:border-base-content focus-within:bg-base-200 focus-within:shadow-card-hover',
+          'group relative gap-3 items-center min-h-16 rounded-box',
+          'bg-base-100 shadow-card border border-base-300 transition',
+          'hover:border-base-content focus-within:border-base-content',
         )}
         style={{ left, right }}
       >
-        <div className="bg-base-200 border border-base-300 text-base-content/60 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+        <div className="bg-base-200 text-base-content rounded-box flex-none p-1.25 md:p-1.75">
           <Icon name={icon} />
         </div>
         {mobile ? (
@@ -139,7 +138,9 @@ export const TicketCard = ({ submission, reload }) => {
             >
               {submission.label}
             </Link>
-            <div className="text-xs text-base-content/60">{meta.dateString}</div>
+            <div className="text-xs text-base-content/60">
+              {meta.dateString}
+            </div>
           </div>
         ) : (
           <>
@@ -150,7 +151,7 @@ export const TicketCard = ({ submission, reload }) => {
             >
               {submission.label}
             </Link>
-            <div className="text-base-content/60">{meta.dateString}</div>
+            <div className="text-secondary">{meta.dateString}</div>
           </>
         )}
         <div className="max-md:ml-auto flex gap-2 items-center">
@@ -181,7 +182,7 @@ export const TicketCard = ({ submission, reload }) => {
 export const EmptyCard = ({ children }) => (
   <div
     className={clsx(
-      'relative p-1 md:py-3 md:px-6 bg-base-100 rounded-xl shadow-card min-h-16 max-md:flex md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] gap-3 items-center italic text-base-content/60',
+      'relative p-1 md:py-3 md:px-6 bg-base-100 rounded-box min-h-16 max-md:flex md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] gap-3 items-center italic text-base-content/60',
     )}
   >
     {children}
@@ -217,7 +218,7 @@ export const HomeTicketCard = ({
           // Non mobile styles
           'md:py-3',
           // Common styles
-          'relative rounded-xl bg-base-100',
+          'relative rounded-box bg-base-100',
           'shadow-card border border-base-300 transition-all',
           'group-hover:border-base-content',
           'group-focus-within:border-base-content',

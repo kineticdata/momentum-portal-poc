@@ -6,29 +6,29 @@
 
 :root,
 [data-theme] {
-  --color-base-100: oklch(from #fefefe l c h);
-  --color-base-200: oklch(from #f0f2f3 l c h);
-  --color-base-300: oklch(from #d0d4db l c h);
-  --color-base-content: oklch(from #101828 l c h);
-  --color-primary: oklch(from #ffce74 l c h);
+  --color-base-100: oklch(from #221F20 l c h);
+  --color-base-200: oklch(from #030000 l c h);
+  --color-base-300: oklch(from #333C33 l c h);
+  --color-base-content: oklch(from #FFFFFF l c h);
+  --color-primary: oklch(from #FFD530 l c h);
   --color-primary-content: oklch(from #272117 l c h);
-  --color-secondary: oklch(from #1f3d5a l c h);
-  --color-secondary-content: oklch(from #d4dfeb l c h);
-  --color-accent: oklch(from #8bc2ff l c h);
+  --color-secondary: oklch(from #BFB8A6 l c h);
+  --color-secondary-content: oklch(from #272117 l c h);
+  --color-accent: oklch(from #8BC2FF l c h);
   --color-accent-content: oklch(from #162455 l c h);
-  --color-neutral: oklch(from #1f3d5a l c h);
-  --color-neutral-content: oklch(from #d4dfeb l c h);
+  --color-neutral: oklch(from #727365 l c h);
+  --color-neutral-content: oklch(from #F4F4F0 l c h);
   --color-info: oklch(from #c7dfff l c h);
   --color-info-content: oklch(from #1d2229 l c h);
-  --color-success: oklch(from #d3edd3 l c h);
-  --color-success-content: oklch(from #383f38 l c h);
-  --color-warning: oklch(from #e1ac56 l c h);
+  --color-success: oklch(from #C3D0C3 l c h);
+  --color-success-content: oklch(from #383F38 l c h);
+  --color-warning: oklch(from #E1AC56 l c h);
   --color-warning-content: oklch(from #584220 l c h);
-  --color-error: oklch(from #fec8c8 l c h);
+  --color-error: oklch(from #FEC8C8 l c h);
   --color-error-content: oklch(from #801518 l c h);
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
-  --radius-box: 0.75rem;
+  --radius-box: 0.375rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -48,7 +48,7 @@
 }
 
 @utility kmodal-box {
-  @apply flex flex-col gap-6 p-8 max-md:w-screen md:max-w-[calc(100vw-3rem)];
+  @apply flex flex-col gap-6 p-8 max-md:w-screen md:max-w-[calc(100vw-3rem)] border border-base-300;
   max-height: calc(100vh - 3rem);
 }
 

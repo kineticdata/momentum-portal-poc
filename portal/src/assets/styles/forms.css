@@ -282,9 +282,12 @@
 
       &.checkbox,
       &.radio {
-        @apply flex justify-start content-start items-start flex-wrap gap-3 w-full max-md:flex-col;
+        @apply flex justify-start content-start items-start flex-wrap gap-4 w-full max-md:flex-col;
         .field-label {
           @apply -mb-3;
+        }
+        label:not(.field-label) {
+          @apply flex items-center gap-2;
         }
         &.vertical {
           @apply flex-col items-stretch;

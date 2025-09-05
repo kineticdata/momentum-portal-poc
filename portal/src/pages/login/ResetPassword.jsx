@@ -4,7 +4,7 @@ import { createSubmission, getCsrfToken } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
 import { Button } from '../../atoms/Button.jsx';
 import { toastSuccess } from '../../helpers/toasts.js';
-import logo from '../../assets/images/logo-full.svg';
+import logo from '../../assets/images/GFIM.png';
 
 export const ResetPassword = () => {
   let { token } = useParams();
@@ -12,7 +12,7 @@ export const ResetPassword = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col items-center w-[36rem] bg-base-100 rounded-xl shadow-lg">
+      <div className="flex flex-col items-center w-[36rem] bg-base-100 rounded-box border border-base-300">
         {token ? (
           <ResetPasswordChangeForm
             token={token}

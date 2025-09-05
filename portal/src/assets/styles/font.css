@@ -63,6 +63,28 @@
 }
 
 @font-face {
+  font-family: 'USArmy';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(../fonts/USArmyLight.otf) format('opentype');
+}
+@font-face {
+  font-family: 'USArmy';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/USArmyRegular.otf) format('opentype');
+}
+@font-face {
+  font-family: 'USArmy';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../fonts/USArmyBold.otf) format('opentype');
+}
+
+@font-face {
   font-family: 'Comforter Brush';
   font-style: normal;
   font-weight: 400;

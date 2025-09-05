@@ -26,7 +26,14 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
           'md:my-6 md:items-center',
         )}
       >
-        <TicketsTabs active="actions" />
+        <Button
+          variant="tertiary"
+          icon="arrow-left"
+          to={location.state?.backPath || '/'}
+          aria-label="Back"
+          className="flex-none"
+        />
+        <div className="uppercase text-xl me-auto">My Work</div>
         <TicketFilters
           type="actions"
           filters={filters}
@@ -96,7 +103,7 @@ export const ActionsList = ({ listData, listActions, filters, setFilters }) => {
                   {loading ? (
                     <Loading xsmall size={36} />
                   ) : (
-                    <div className="flex justify-center items-center w-11 h-11 bg-accent text-accent-content rounded-full font-semibold">
+                    <div className="flex justify-center items-center w-11 h-11 bg-secondary text-secondary-content rounded-full font-semibold">
                       {pageNumber}
                     </div>
                   )}

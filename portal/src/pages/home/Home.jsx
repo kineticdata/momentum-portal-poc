@@ -10,85 +10,55 @@ import { sortBy } from '../../helpers/index.js';
 import { useData } from '../../helpers/hooks/useData.js';
 import { getAttributeValue } from '../../helpers/records.js';
 import { openSearch } from '../../helpers/search.js';
+import { StatusPill } from '../../components/tickets/StatusPill.jsx';
 
 export const Home = () => {
   const { mobile, tablet, desktop } = useSelector(state => state.view);
-  const { profile } = useSelector(state => state.app);
+  const { profile, powerMode } = useSelector(state => state.app);
 
   return (
     <>
       <div className="l-h-between-stretch gap-14 px-14 h-64 bg-base-200">
         <div className="flex-auto l-v-center-stretch gap-10 px-30">
-          <div className="text-6xl font-semibold">
+          <div className="text-[40px] font-semibold uppercase">
             Hello, {profile.displayName}
           </div>
-          <div className="l-h-between-center gap-8">
+          <div className="grid grid-cols-3 gap-8">
             <button
               type="button"
-              className="kbtn kbtn-primary kbtn-xl flex-1"
+              className="kbtn kbtn-primary kbtn-lg flex-1"
               onClick={() => openSearch()}
             >
               Submit a Request
             </button>
-            <Link to="/requests" className="kbtn kbtn-outline kbtn-xl flex-1">
+            <Link
+              to="/requests"
+              className="kbtn kbtn-secondary kbtn-outline kbtn-lg flex-1"
+            >
               Check Status
             </Link>
-            <Link to="/actions" className="kbtn kbtn-outline kbtn-xl flex-1">
-              See My Work
-            </Link>
+            {powerMode && (
+              <Link
+                to="/actions"
+                className="kbtn kbtn-secondary kbtn-outline kbtn-lg flex-1"
+              >
+                See My Work
+              </Link>
+            )}
           </div>
         </div>
         <Shortcuts />
       </div>
 
-      <div className="l-v-start-stretch 2xl:l-h-between-start gap-20 px-44 py-7">
-        <div className="flex-1 l-v-start-stretch gap-4">
-          <div className="text-2xl font-semibold">Recent Activity</div>
-          <div className="px-5 py-4 border rounded-box">
-            <ActivityList />
-          </div>
-        </div>
-        <div className="flex-1 l-v-start-stretch gap-4">
-          <div className="text-2xl font-semibold">My Team&#39;s Requests</div>
-          <div className="px-5 py-4 border rounded-box">
-            <ul className="klist text-base">
-              <li className="klist-row items-center">
-                <div className="klist-col-grow">Need Review</div>
-                <div>3</div>
-              </li>
-              <li className="klist-row items-center">
-                <div className="klist-col-grow">In Progress</div>
-                <div>13</div>
-              </li>
-              <li className="klist-row items-center">
-                <div className="klist-col-grow">Completed This Week</div>
-                <div>23</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <div className="l-v-start-stretch gap-4 px-44 py-7">
-        <div className="text-2xl font-semibold">Metrics</div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] items-start gap-8">
-          <Metric value={12} label="Active Submissions" />
-          <Metric value={7} label="Overdue Items Last Month" />
-          <Metric value={5.6} label="Avg. Days to Complete" />
+        <div className="text-2xl font-semibold text-primary uppercase">
+          Recent Activity
         </div>
+        <ActivityList />
       </div>
     </>
   );
 };
-
-const Metric = ({ value, label }) => (
-  <div className="l-v-center-center gap-4">
-    <div className="px-6 py-4 border rounded-box min-w-18 l-h-center-center">
-      {value}
-    </div>
-    <span className="font-medium">{label}</span>
-  </div>
-);
 
 const ActivityList = () => {
   const { profile, kappSlug } = useSelector(state => state.app);
@@ -111,8 +81,8 @@ const ActivityList = () => {
           .end()
           // End query builder
           .end()({ types: ['Service'], username }),
-        include: ['details', 'form', 'form.attributesMap'],
-        limit: 5,
+        include: ['details', 'form', 'form.attributesMap', 'values[Status]'],
+        limit: 6,
       },
     }),
     [kappSlug, username],
@@ -128,27 +98,53 @@ const ActivityList = () => {
     ) : data.loading ? (
       <Loading />
     ) : (
-      <ul className="klist text-base">
+      <ul className="grid grid-cols-3 gap-x-22 gap-y-8 uppercase">
         {submissions?.map(submission => (
           <li
-            className="klist-row items-center hover:bg-base-200"
+            className="relative l-v-start-stretch gap-2 p-4 pb-6 rounded-box border border-neutral bg-base-200 hover:border-base-content focus-visible:border-base-content"
             key={submission.id}
           >
-            <div className="l-h-center-center -my-3 h-9 w-9 bg-base-200 rounded-box">
-              <Icon
-                name={getAttributeValue(submission?.form, 'Icon', 'checklist')}
+            <div className="l-h-end-center">
+              <StatusPill
+                status={
+                  submission.coreState === 'Submitted'
+                    ? 'Open'
+                    : submission.coreState
+                }
+                value={submission.values.Status}
+                compact
               />
             </div>
-            <Link
-              to={`/requests/${submission.id}${submission.coreState === 'Draft' ? '/edit' : ''}`}
-              className="after:absolute after:inset-0"
-            >
-              {submission.label}
-            </Link>
-            <div>{submission.coreState}</div>
+            <div className="l-h-start-start gap-6">
+              <div className="l-h-center-center p-2 bg-base-100 rounded-sm">
+                <Icon
+                  name={getAttributeValue(
+                    submission?.form,
+                    'Icon',
+                    'checklist',
+                  )}
+                />
+              </div>
+              <div className="l-v-start-stretch gap-1">
+                <Link
+                  to={`/requests/${submission.id}${submission.coreState === 'Draft' ? '/edit' : ''}`}
+                  className="text-primary text-lg after:absolute after:inset-0"
+                >
+                  {submission.form.name}
+                </Link>
+                <small>{submission.label}</small>
+              </div>
+            </div>
           </li>
         ))}
         {submissions?.length === 0 && <li>There is no activity to show.</li>}
+        {submissions?.length > 0 && (
+          <li className="col-span-3 text-center">
+            <Link to="/requests" className="kbtn kbtn-ghost">
+              More
+            </Link>
+          </li>
+        )}
       </ul>
     );
   }
@@ -221,7 +217,7 @@ const Shortcuts = () => {
                 className="w-full h-full object-cover"
               />
             )}
-            <small className="absolute inset-x-0 bottom-0 px-2 pt-2 pb-4 bg-black/60 text-white">
+            <small className="absolute inset-x-0 bottom-0 px-2 pt-2 pb-4 bg-black/60 text-base-content">
               <span className="font-medium line-clamp-2 text-center">
                 {shortcut.title}
               </span>

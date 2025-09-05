@@ -42,6 +42,8 @@ export const appActions = regRedux(
     profile: null,
     // Error from fetching any app data
     error: null,
+    // Power user toggle state
+    powerMode: false,
   },
   {
     setAuthenticated(state, payload) {
@@ -68,6 +70,9 @@ export const appActions = regRedux(
     },
     updateProfile(state, profile) {
       Object.assign(state.profile, profile);
+    },
+    setPowerMode(state, powerMode) {
+      state.powerMode = powerMode;
     },
   },
 );

@@ -2,12 +2,12 @@ import { Button } from '../../atoms/Button.jsx';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/logo-full.svg';
+import logo from '../../assets/images/GFIM.png';
 import { Icon } from '../../atoms/Icon.jsx';
 
 export const Login = loginProps => (
   <div className="flex justify-center items-center min-h-screen">
-    <div className="flex flex-col items-center gap-6 w-[36rem] bg-base-100 rounded-xl shadow-lg">
+    <div className="flex flex-col items-center gap-6 w-[36rem] bg-base-100 rounded-box border border-base-300">
       <LoginForm {...loginProps} />
     </div>
   </div>

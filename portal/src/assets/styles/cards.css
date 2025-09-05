@@ -1,0 +1,16 @@
+@utility form-card {
+  @apply relative l-h-start-center gap-3 p-4 rounded-box border border-neutral bg-base-200 uppercase;
+  @apply hover:border-base-content focus-visible:border-base-content;
+  > .icon-group {
+    @apply l-h-center-center p-2 bg-base-100 rounded-sm;
+  }
+  > .content-group {
+    @apply l-v-start-stretch gap-1;
+    > .card-link {
+      @apply text-primary text-lg after:absolute after:inset-0;
+    }
+    > small {
+      @apply line-clamp-2;
+    }
+  }
+}

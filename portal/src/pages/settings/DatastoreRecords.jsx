@@ -33,7 +33,7 @@ export const DatastoreRecords = ({ datastores }) => {
 
   const params = useMemo(
     () => ({
-      kapp: 'admin-center',
+      kapp: 'datastore',
       form: formSlug,
       search: {
         include: ['details', 'values'],
@@ -96,10 +96,10 @@ export const DatastoreRecords = ({ datastores }) => {
       ) : (
         <>
           {showForm && (
-            <div className="bg-white shadow-card rounded-box p-6 md:p-10">
+            <div className="bg-base-100 rounded-box border border-base-300 p-6 md:p-10">
               <CoreForm
                 submission={id !== 'new' ? id : undefined}
-                kapp="admin-center"
+                kapp="datastore"
                 form={formSlug}
                 components={{ Pending }}
                 created={handleCreated}

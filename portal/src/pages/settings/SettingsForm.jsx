@@ -16,7 +16,7 @@ export const SettingsForm = () => {
       <SettingsHeading pageName={form?.name?.()} />
 
       <CoreForm
-        kapp="admin-center"
+        kapp="datastore"
         form={formSlug}
         values={paramFieldValues}
         components={{ Pending }}

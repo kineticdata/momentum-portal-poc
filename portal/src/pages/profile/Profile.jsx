@@ -103,7 +103,7 @@ export const Profile = () => {
   return (
     <div className="px-44">
       <div className="max-w-screen-lg">
-        <div className={clsx('relative l-h-start-center gap-3')}>
+        <div className={clsx('relative l-h-start-center gap-3 my-6')}>
           <Link
             className="kbtn kbtn-ghost kbtn-lg kbtn-circle"
             to={backPath || '..'}
@@ -114,7 +114,7 @@ export const Profile = () => {
           <span className="text-xl font-semibold">My Profile</span>
         </div>
         <form className="flex flex-col gap-5 items-stretch w-full">
-          <div className="flex justify-center items-center mb-5 mt-8">
+          <div className="flex justify-center items-center my-5">
             <Avatar username={profile.username} size="2xl" />
           </div>
 
@@ -269,22 +269,22 @@ export const Profile = () => {
                   </Button>
                 </Menu>
               </div>
-              {theme.ready && (
-                <div className="flex justify-center items-center">
-                  <Button
-                    variant="tertiary"
-                    onClick={() =>
-                      theme.editor
-                        ? themeActions.disableEditor()
-                        : themeActions.enableEditor()
-                    }
-                  >
-                    {theme.editor
-                      ? 'Disable Theme Editor'
-                      : 'Enable Theme Editor'}
-                  </Button>
-                </div>
-              )}
+              {/*{theme.ready && (*/}
+              {/*  <div className="flex justify-center items-center">*/}
+              {/*    <Button*/}
+              {/*      variant="tertiary"*/}
+              {/*      onClick={() =>*/}
+              {/*        theme.editor*/}
+              {/*          ? themeActions.disableEditor()*/}
+              {/*          : themeActions.enableEditor()*/}
+              {/*      }*/}
+              {/*    >*/}
+              {/*      {theme.editor*/}
+              {/*        ? 'Disable Theme Editor'*/}
+              {/*        : 'Enable Theme Editor'}*/}
+              {/*    </Button>*/}
+              {/*  </div>*/}
+              {/*)}*/}
             </>
           )}
         </form>
