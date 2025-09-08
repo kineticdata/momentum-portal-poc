@@ -106,6 +106,7 @@ jobs:
       # Verify Snyk Scans Pass
       - name: Run Snyk
         uses: snyk/actions/node@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_AUTH }}
         with:

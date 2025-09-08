@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![@KineticData KineticData](https://img.shields.io/badge/GitHub%20-KineticData-lightgrey.svg?style=flat-square)](https://github.com/kineticdata/momentum-portal)
 
-The Momentum Portal is a fully-functional demo that brings the capabilities of the Kinetic Experience Platform to life. This codebase is a fork of the Momentum Portal for demo projects.
+The Momentum Portal is a fully-functional demo that brings the capabilities of the Kinetic Experience Platform to life. This codebase is a fork of the Momentum Portal for demo and POC projects.
 
 ## Table of Contents
 
