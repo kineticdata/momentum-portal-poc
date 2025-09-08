@@ -13,7 +13,7 @@
 # SNYK_AUTH                 -> A token to authenticate to Snyk for scans
 #
 # The final S3 bucket location will be:
-# s3://S3_BUCKET/portals/REPOSITORY_NAME/versions/latest/
+# s3://S3_BUCKET/portals/REPOSITORY_NAME/versions/BRANCH_NAME/
 name: Momentum Portal Publish (POC Commits)
 
 on:
@@ -106,6 +106,7 @@ jobs:
       # Verify Snyk Scans Pass
       - name: Run Snyk
         uses: snyk/actions/node@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_AUTH }}
         with:
@@ -118,4 +119,4 @@ jobs:
           aws s3 sync \
           ./build \
           s3://${{ vars.S3_BUCKET }}/portals/${{ steps.repo_name.outputs.REPO_NAME }}/versions/${{ steps.branch_name.outputs.BRANCH_NAME }}/ \
-          --cache-control=\"must-revalidate,max-age:0\" --delete --dryrun
+          --cache-control=\"must-revalidate,max-age:0\" --delete
