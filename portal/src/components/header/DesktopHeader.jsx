@@ -19,9 +19,9 @@ export const DesktopHeader = () => {
   return (
     <HeaderPortal>
       <nav
-        className={clsx('relative l-h-start-center gap-5 h-20 px-6 py-2 z-20', {
-          'bg-base-100': !powerMode,
-          'bg-base-300': powerMode,
+        className={clsx('relative l-h-start-center gap-5 h-20 px-6 py-2 z-20 border-b-4', {
+          'bg-base-100 border-transparent': !powerMode,
+          'bg-base-300 border-primary': powerMode,
         })}
       >
         <HeaderMenu />
