@@ -119,4 +119,4 @@ jobs:
           aws s3 sync \
           ./build \
           s3://${{ vars.S3_BUCKET }}/portals/${{ steps.repo_name.outputs.REPO_NAME }}/versions/${{ steps.branch_name.outputs.BRANCH_NAME }}/ \
-          --cache-control=\"must-revalidate,max-age:0\" --delete --dryrun
+          --cache-control=\"must-revalidate,max-age:0\" --delete
