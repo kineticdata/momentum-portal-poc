@@ -9,20 +9,14 @@ export const SettingsHeading = ({ pageName }) => {
   const mobile = useSelector(state => state.view.mobile);
 
   return (
-    <div
-      className={clsx('relative flex gap-3 items-center my-8', {
-        'justify-start': mobile,
-        'justify-center': !mobile,
-      })}
-    >
+    <div className={clsx('relative l-h-start-center gap-6 my-6')}>
       <Button
         variant="tertiary"
         icon="arrow-left"
         to="./.."
         aria-label="Back"
-        className={clsx(!mobile && 'absolute left-0')}
       />
-      <span className="text-xl font-semibold text-center text-balance">
+      <span className="text-xl font-semibold text-center text-balance uppercase">
         Settings{pageName && ` / ${pageName}`}
       </span>
     </div>

@@ -103,7 +103,7 @@ export const Profile = () => {
   return (
     <div className="px-44">
       <div className="max-w-screen-lg">
-        <div className={clsx('relative l-h-start-center gap-3 my-6')}>
+        <div className={clsx('relative l-h-start-center gap-6 my-6')}>
           <Link
             className="kbtn kbtn-ghost kbtn-lg kbtn-circle"
             to={backPath || '..'}
@@ -111,7 +111,7 @@ export const Profile = () => {
           >
             <Icon name="arrow-left" />
           </Link>
-          <span className="text-xl font-semibold">My Profile</span>
+          <span className="text-xl font-semibold uppercase">My Profile</span>
         </div>
         <form className="flex flex-col gap-5 items-stretch w-full">
           <div className="flex justify-center items-center my-5">
