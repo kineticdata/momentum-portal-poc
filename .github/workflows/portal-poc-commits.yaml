@@ -1,5 +1,5 @@
-# This workflow runs on any GitHub tag push (vXX.YY.ZZ) to the repository.
-# 
+# This workflow runs commit to the poc/* branches in the repository.
+#
 # This workflow will:
 # - Verify the required variables and secrets are set in this GitHub Repository
 # - Install node
@@ -11,15 +11,17 @@
 # S3_BUCKET                 -> The S3 bucket to publish the portal to
 # SOURCE_DIRECTORY          -> The source directory for the portal within this repository
 # SNYK_AUTH                 -> A token to authenticate to Snyk for scans
-# 
+#
 # The final S3 bucket location will be:
-# s3://S3_BUCKET/portals/REPOSITORY_NAME/versions/GITHUB_TAG/
-name: Momentum Portal Publish (Tag Push)
+# s3://S3_BUCKET/portals/REPOSITORY_NAME/versions/latest/
+name: Momentum Portal Publish (POC Commits)
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+    branches:
+      - 'poc/**'
+    paths:
+      - 'portal/**'
 
 permissions:
   id-token: write
@@ -50,7 +52,19 @@ jobs:
         with:
           script: |
             core.setFailed('The REPO_NAME value was not set in the github actions outputs.')
-      
+
+      - name: Extract branch name
+        id: branch_name
+        run: echo "BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+      # Verify we were able to parse out the repository name
+      - name: Fail if Branch Name Not Set
+        if: ${{ !steps.branch_name.outputs.BRANCH_NAME }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('The BRANCH_NAME value was not set in the github actions outputs.')
+
       # Verify we have an S3 bucket set in the Repository Variables
       - name: Fail if S3 Bucket Not Set
         if: ${{ !vars.S3_BUCKET }}
@@ -103,5 +117,5 @@ jobs:
         run: |
           aws s3 sync \
           ./build \
-          s3://${{ vars.S3_BUCKET }}/portals/${{ steps.repo_name.outputs.REPO_NAME }}/versions/${{ github.ref_name }}/ \
-          --cache-control=\"must-revalidate,max-age:0\" --delete
+          s3://${{ vars.S3_BUCKET }}/portals/${{ steps.repo_name.outputs.REPO_NAME }}/versions/${{ steps.branch_name.outputs.BRANCH_NAME }}/ \
+          --cache-control=\"must-revalidate,max-age:0\" --delete --dryrun
