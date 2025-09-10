@@ -37,12 +37,12 @@ export const DesktopHeader = () => {
         </button>
         <div
           className={clsx(
-            'p-3 rounded-field flex gap-1 flex-none bg-neutral max-md:self-center uppercase',
+            'py-2 px-3 rounded-field flex gap-1 flex-none bg-neutral max-md:self-center uppercase',
           )}
         >
           <button
             type="button"
-            className={clsx('kbtn kbtn-xs px-5 text-lg font-normal', {
+            className={clsx('kbtn kbtn-sm px-5 text-lg font-normal', {
               'bg-transparent border-transparent hover:border-secondary focus-visible:border-secondary hover:bg-base-300 focus-visible:bg-base-300':
                 powerMode,
               'border-secondary': !powerMode,
@@ -53,7 +53,7 @@ export const DesktopHeader = () => {
           </button>
           <button
             type="button"
-            className={clsx('kbtn kbtn-xs px-5 text-lg font-normal', {
+            className={clsx('kbtn kbtn-sm px-5 text-lg font-normal', {
               'bg-transparent border-transparent hover:border-secondary focus-visible:border-secondary hover:bg-base-300 focus-visible:bg-base-300':
                 !powerMode,
               'border-secondary': powerMode,
