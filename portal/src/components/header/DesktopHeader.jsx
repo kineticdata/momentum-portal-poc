@@ -192,14 +192,14 @@ const HeaderMenuItem = ({ label, to, onClick, icon, title, items, close }) => {
   return (
     <li>
       {to ? (
-        <Link to={to} className="content-center h-12 text-base" onClick={close}>
+        <Link to={to} className="content-center h-12 text-base uppercase" onClick={close}>
           {icon && <Icon name={icon} />}
           <span>{label || to}</span>
         </Link>
       ) : (
         <button
           type="button"
-          className="content-center h-12 text-base"
+          className="content-center h-12 text-base uppercase"
           onClick={() => {
             callIfFn(onClick);
             close();

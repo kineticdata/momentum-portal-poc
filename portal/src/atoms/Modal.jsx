@@ -73,7 +73,7 @@ export const Modal = ({
       )}
       <Portal>
         <Dialog.Backdrop className="fixed inset-0 bg-black/20" />
-        <Dialog.Positioner className="kmodal">
+        <Dialog.Positioner className="kmodal uppercase">
           <Dialog.Content
             className={clsx('kmodal-box', {
               'md:w-screen-sm': size === 'sm',

@@ -42,7 +42,7 @@ export const Popover = ({
           {slots.trigger}
         </ArkPopover.Trigger>
       )}
-      <ArkPopover.Positioner>
+      <ArkPopover.Positioner className="uppercase">
         <ArkPopover.Content className="p-5 bg-base-100 rounded-box border border-base-300 w-[30rem] max-w-[calc(100vw-3rem)] z-30">
           {slots.content}
         </ArkPopover.Content>
