@@ -133,7 +133,7 @@ export const App = ({
 
   return (
     <>
-      <div className="l-v-start-stretch flex-auto overflow-auto">
+      <div className="l-v-start-stretch flex-auto overflow-auto uppercase">
         {/* Header element where we will render headers via a portal */}
         <header id="app-header" className="flex-none" />
 
