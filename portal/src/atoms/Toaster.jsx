@@ -46,8 +46,8 @@ export const Toaster = ({
           <Toast.Root
             key={toast.id}
             className={clsx(
-              'flex flex-col items-stretch gap-3 pl-5 pr-1.5 py-3',
-              'rounded-box shadow-card overflow-hidden',
+              'flex-c-st gap-3 pl-5 pr-1.5 py-3',
+              'rounded-box shadow-lg overflow-hidden',
               'min-w-80 max-w-[calc(100vw-3rem)] md:max-w-screen-sm',
               {
                 'bg-success text-success-content': toast.type !== 'error',
@@ -55,7 +55,7 @@ export const Toaster = ({
               },
             )}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex-sc gap-3">
               <Icon
                 name={clsx({
                   'circle-check-filled': toast.type !== 'error',

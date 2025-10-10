@@ -6,24 +6,32 @@ import { sortBy } from '../../helpers/index.js';
 import { SettingsForm } from './SettingsForm.jsx';
 import { Datastore } from './Datastore.jsx';
 import { DatastoreRecords } from './DatastoreRecords.jsx';
-
-const settingsFormsParams = {
-  kappSlug: 'admin-center',
-  include: 'attributesMap',
-  q: 'type = "Settings" AND (status = "Active" OR status = "New")',
-};
-
-const datastoreFormsParams = {
-  kappSlug: 'admin-center',
-  include: 'attributesMap,authorization,fields',
-  q: 'type = "Data" AND (status = "Active" OR status = "New")',
-};
+import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 
 export const SettingsRouting = () => {
+  const kappSlug = useSelector(state => state.app.kappSlug);
+
   // Retrieve all settings forms
+  const settingsFormsParams = useMemo(
+    () => ({
+      kappSlug,
+      include: 'attributesMap',
+      q: 'type = "Settings" AND (status = "Active" OR status = "New")',
+    }),
+    [kappSlug],
+  );
   const settingsForms = useData(fetchForms, settingsFormsParams);
 
   // Retrieve all datastore forms
+  const datastoreFormsParams = useMemo(
+    () => ({
+      kappSlug,
+      include: 'attributesMap,authorization,fields',
+      q: 'type = "Datastore" AND (status = "Active" OR status = "New")',
+    }),
+    [kappSlug],
+  );
   const datastoreForms = useData(fetchForms, datastoreFormsParams);
 
   const datastores =
@@ -45,6 +53,7 @@ export const SettingsRouting = () => {
             description: 'Management of your user profile.',
             icon: 'user',
             to: '/profile',
+            state: { backPath: '/settings' },
           },
           ...(settingsForms?.response?.forms?.map(form => ({
             label: form.name,
@@ -58,21 +67,19 @@ export const SettingsRouting = () => {
       : null;
 
   return (
-    <div className="px-44">
-      <div className="max-w-screen-lg">
-        <Routes>
-          <Route path="/" element={<Settings settings={settings} />} />
-          <Route
-            path="/datastore"
-            element={<Datastore datastores={datastores} />}
-          />
-          <Route
-            path="/datastore/:formSlug/:id?"
-            element={<DatastoreRecords datastores={datastores} />}
-          />
-          <Route path="/:formSlug" element={<SettingsForm />} />
-        </Routes>
-      </div>
+    <div className="gutter">
+      <Routes>
+        <Route path="/" element={<Settings settings={settings} />} />
+        <Route
+          path="/datastore"
+          element={<Datastore datastores={datastores} />}
+        />
+        <Route
+          path="/datastore/:formSlug/:id?"
+          element={<DatastoreRecords datastores={datastores} />}
+        />
+        <Route path="/:formSlug" element={<SettingsForm />} />
+      </Routes>
     </div>
   );
 };

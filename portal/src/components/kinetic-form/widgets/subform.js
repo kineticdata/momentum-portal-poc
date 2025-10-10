@@ -6,15 +6,14 @@ import {
   useRef,
   useState,
 } from 'react';
+import clsx from 'clsx';
 import t from 'prop-types';
 import { CoreForm, generateKey, KineticLib } from '@kineticdata/react';
-import { Button } from '../../../atoms/Button.jsx';
-import { getChildSlots } from '../../../helpers/atoms.js';
-import { Loading as Pending } from '../../states/Loading.jsx';
 import { registerWidget, validateContainer, WidgetAPI } from './index.js';
-import { asArray, callIfFn } from '../../../helpers/index.js';
 import { Modal } from '../../../atoms/Modal.jsx';
-import clsx from 'clsx';
+import { getChildSlots } from '../../../helpers/atoms.js';
+import { asArray, callIfFn } from '../../../helpers/index.js';
+import { Loading as Pending } from '../../states/Loading.jsx';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -231,14 +230,14 @@ const KineticSubformComponent = forwardRef(
               onError={error}
             />
             {ready && !disabled && onSave && (
-              <Button
+              <button
                 slot="save"
-                variant="primary"
-                className="flex-1"
+                type="button"
+                className="flex-1 kbtn kbtn-lg kbtn-primary"
                 onClick={save}
               >
                 {saveLabel}
-              </Button>
+              </button>
             )}
           </SubformLayout>
         </KineticLib>
@@ -444,14 +443,14 @@ const CustomSubformComponent = forwardRef(
             })}
           </div>
           {!disabled && onSave && (
-            <Button
+            <button
               slot="save"
-              variant="primary"
-              className="flex-1"
+              type="button"
+              className="flex-1 kbtn kbtn-lg kbtn-primary"
               onClick={save}
             >
               {saveLabel}
-            </Button>
+            </button>
           )}
         </SubformLayout>
       </WidgetAPI>

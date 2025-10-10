@@ -72,7 +72,7 @@ export const Modal = ({
         <Dialog.Trigger asChild>{slots.trigger}</Dialog.Trigger>
       )}
       <Portal>
-        <Dialog.Backdrop className="fixed inset-0 bg-black/20" />
+        <Dialog.Backdrop className="fixed inset-0 bg-black/20 z-40" />
         <Dialog.Positioner className="kmodal">
           <Dialog.Content
             className={clsx('kmodal-box', {

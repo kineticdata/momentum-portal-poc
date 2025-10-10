@@ -7,6 +7,7 @@ import { forwardRef } from 'react';
 
 /**
  * Renders either a button or a link.
+ * TODO Delete
  *
  * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
  * @param {Object} [passThroughProps] Any additional props will we passed
@@ -33,6 +34,7 @@ ButtonOrLink.propTypes = {
 
 /**
  * Component for rendering a styled button or link.
+ * TODO Delete
  *
  * @param {string} [className]
  * @param {('primary'|'secondary'|'tertiary'|'custom')} [variant=primary]
@@ -134,7 +136,7 @@ export const ChipButton = ({
     <button
       type="button"
       className={clsx(
-        'kbtn kbtn-sm',
+        'kbtn',
         active && 'kbtn-neutral',
         !active && 'kbtn-outline',
         className,
@@ -158,6 +160,7 @@ ChipButton.propTypes = {
 
 /**
  * Component for rendering a tab style button or link.
+ * TODO Delete
  *
  * @param {string} [className]
  * @param {boolean} [active] Is the tab in an active state.
@@ -234,150 +237,4 @@ CloseButton.propTypes = {
   className: t.string,
   size: t.oneOf(['sm', 'md', 'lg']),
   inverse: t.bool,
-};
-
-/**
- * Component for rendering a styled category button or link.
- *
- * @param {string} [className]
- * @param {string} [icon] The name of an icon to render in the button.
- * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
- * @param {Object} [passThroughProps] Any additional props will we passed
- *  through to the component.
- */
-export const CategoryButton = ({
-  className,
-  icon = 'category',
-  children,
-  ...passThroughProps
-}) => (
-  <ButtonOrLink
-    className={clsx(
-      className,
-      'group inline-flex flex-col items-center text-sm outline-0',
-    )}
-    {...passThroughProps}
-  >
-    <span
-      className={clsx(
-        'flex-none flex justify-center items-center transition bg-base-300',
-        'h-[4.75rem] w-[4.75rem] rounded-2.5xl rotate-45 m-4 p-0.5 shadow-category',
-        'group-hover:bg-none group-hover:border group-hover:border-base-content group-hover:shadow-category-hover',
-        'group-focus-visible:bg-none group-focus-visible:border group-focus-visible:border-base-content group-focus-visible:shadow-category-hover',
-      )}
-    >
-      <span
-        className={clsx(
-          'flex-none flex justify-center items-center',
-          'h-[3.25rem] w-[3.25rem] rounded-full -rotate-45 p-0.5',
-          'bg-base-200',
-        )}
-      >
-        <Icon name={icon} size={34} />
-      </span>
-    </span>
-    <span>{children}</span>
-  </ButtonOrLink>
-);
-
-CategoryButton.propTypes = {
-  className: t.string,
-  index: t.number,
-  icon: t.string,
-  children: t.node,
-};
-
-/**
- * Component for rendering a styled popular service button or link.
- *
- * @param {string} [className]
- * @param {string} [icon] The name of an icon to render in the button.
- * @param {string} [category] The name of the category the service is in.
- * @param {boolean} [small] Should the button use the small design.
- * @param {JSX.Element|JSX.Element[]} [children] The content of the button.
- * @param {Object} [passThroughProps] Any additional props will we passed
- *  through to the component.
- */
-export const PopularServiceButton = ({
-  className,
-  icon = 'forms',
-  category,
-  small = false,
-  children,
-  ...passThroughProps
-}) => {
-  return small ? (
-    <ButtonOrLink
-      className={clsx(
-        className,
-        'group inline-flex flex-col items-center gap-1 text-xs outline-0 transition',
-      )}
-      {...passThroughProps}
-    >
-      <span
-        className={clsx(
-          'flex-none flex justify-center items-center transition',
-          'h-[4.25rem] w-[4.25rem] rounded-full p-0.5',
-          'bg-base-100 border border-base-300 shadow-icon',
-          'group-hover:p-0 group-hover:border group-hover:border-base-content',
-          'group-focus-visible:p-0 group-focus-visible:border group-focus-visible:border-base-content',
-        )}
-      >
-        <Icon name={icon} size={34} className={clsx('text-base-content/60')} />
-      </span>
-      <span className="text-center line-clamp-2">{children}</span>
-      {category && (
-        <span className="px-2 py-0.5 rounded-lg bg-base-300 text-center line-clamp-1 mt-auto">
-          {category}
-        </span>
-      )}
-    </ButtonOrLink>
-  ) : (
-    <ButtonOrLink
-      className={clsx(
-        className,
-        'group inline-flex flex-col gap-1 rounded-2xl px-5.5 py-4 min-h-[10.75rem]',
-        'shadow-card border border-base-300 bg-base-100',
-        'transition hover:scale-[1.02] focus:scale-[1.02]',
-      )}
-      {...passThroughProps}
-    >
-      <div className="flex items-start gap-8">
-        {category && (
-          <span
-            className={clsx(
-              'px-3 py-1.25 text-h5 font-medium rounded-full border border-base-300 bg-base-200 line-clamp-1',
-            )}
-          >
-            {category}
-          </span>
-        )}
-        <span
-          className={clsx(
-            'flex-none flex justify-center items-center transition',
-            'h-[4.25rem] w-[4.25rem] rounded-full p-0.5 ms-auto',
-            'bg-base-200 border border-base-300 shadow-icon',
-          )}
-        >
-          <Icon
-            name={icon}
-            size={34}
-            className={clsx('text-base-content/60')}
-          />
-        </span>
-      </div>
-      <div className="text-left text-h2 font-medium line-clamp-2">
-        {children}
-      </div>
-    </ButtonOrLink>
-  );
-};
-
-PopularServiceButton.propTypes = {
-  className: t.string,
-  index: t.number,
-  icon: t.string,
-  category: t.string,
-  small: t.bool,
-  children: t.node,
 };

@@ -1,7 +1,6 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import { SettingsHeading } from './Settings.jsx';
 import {
   CoreForm,
   deleteSubmission,
@@ -15,6 +14,8 @@ import clsx from 'clsx';
 import { Error } from '../../components/states/Error.jsx';
 import { openConfirm } from '../../helpers/confirm.js';
 import { callIfFn } from '../../helpers/index.js';
+import { useSelector } from 'react-redux';
+import { PageHeading } from '../../components/PageHeading.jsx';
 
 const idToHandle = id =>
   !id ? null : id.toLowerCase() === 'new' ? 'New' : id.slice(-6).toUpperCase();
@@ -29,18 +30,19 @@ const dateFormat = dateString => format(new Date(dateString), 'PPPp');
 export const DatastoreRecords = ({ datastores }) => {
   const { formSlug, id } = useParams();
   const navigate = useNavigate();
+  const { kappSlug } = useSelector(state => state.app);
   const datastore = datastores?.find(form => form.slug === formSlug);
 
   const params = useMemo(
     () => ({
-      kapp: 'admin-center',
+      kapp: kappSlug,
       form: formSlug,
       search: {
         include: ['details', 'values'],
         limit: 1000,
       },
     }),
-    [formSlug],
+    [kappSlug, formSlug],
   );
 
   const {
@@ -83,20 +85,23 @@ export const DatastoreRecords = ({ datastores }) => {
     navigate('./..', { state: { persistToasts: true } });
   }, [navigate, reloadData]);
 
-  const crumbs = ['Datastore', datastore?.name, idToHandle(id)].filter(Boolean);
   const isLoading = !datastores || !initialized || (loading && !response);
   const showForm = typeof id === 'string';
 
   return (
-    <>
-      <SettingsHeading pageName={crumbs.join(' / ')} />
+    <div className="max-w-screen-lg full-form:max-w-full pt-1 pb-6">
+      <PageHeading
+        title={['Settings', 'Datastore', datastore?.name, idToHandle(id)]
+          .filter(Boolean)
+          .join(' / ')}
+      />
 
       {isLoading ? (
         <Pending />
       ) : (
         <>
           {showForm && (
-            <div className="bg-white shadow-card rounded-box p-6 md:p-10">
+            <div className="rounded-box md:border md:p-8">
               <CoreForm
                 submission={id !== 'new' ? id : undefined}
                 kapp="admin-center"
@@ -119,7 +124,7 @@ export const DatastoreRecords = ({ datastores }) => {
               }
             />
           ) : (
-            <div className={clsx('-my-5 -mx-6 md:-mx-5', { hidden: showForm })}>
+            <div className={clsx('', { hidden: showForm })}>
               <TableComponent
                 data={response.submissions}
                 rowTransform={rowTransform}
@@ -223,6 +228,6 @@ export const DatastoreRecords = ({ datastores }) => {
           )}
         </>
       )}
-    </>
+    </div>
   );
 };

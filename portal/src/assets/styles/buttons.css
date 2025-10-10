@@ -4,69 +4,18 @@
  * Styling for button elements and the Kinetic form.
  ******************************************************************************/
 
-@utility kavatar {
-  @apply rounded-field;
-  --kavatar-bg: var(--color-base-300);
-  --kavatar-fg: var(--color-base-content);
-  > div {
-    @apply w-10;
-    background-color: var(--kavatar-bg);
-    color: var(--kavatar-fg);
-  }
+@utility kbtn {
+  @apply font-medium md:text-base;
 }
-
-@utility kavatar-placeholder {
-  > div {
-    @apply rounded-field uppercase font-semibold;
-  }
+@utility kbtn-lg {
+  @apply max-md:text-base;
 }
-
-@utility kavatar-primary {
-  --kavatar-bg: var(--color-primary);
-  --kavatar-fg: var(--color-primary-content);
+@utility kbtn-xl {
+  @apply text-lg max-md:text-base;
 }
-
-@utility kavatar-neutral {
-  --kavatar-bg: var(--color-neutral);
-  --kavatar-fg: var(--color-neutral-content);
-}
-
-@utility kavatar-actionable {
-  &:focus-visible {
-    @apply outline-2;
-  }
-  &:is(:hover, :active):not(:disabled) > div {
-    background-color: color-mix(in oklab, var(--kavatar-bg), #000 7%);
-  }
-}
-
-@utility kavatar-xs {
-  > div {
-    @apply w-6 text-xs;
-  }
-}
-
-@utility kavatar-sm {
-  > div {
-    @apply w-8 text-sm;
-  }
-}
-
-@utility kavatar-lg {
-  > div {
-    @apply w-12 text-lg;
-  }
-}
-
-@utility kavatar-xl {
-  > div {
-    @apply w-14 text-xl;
-  }
-}
-
-@utility kavatar-2xl {
-  > div {
-    @apply w-20 text-4xl;
+@utility kbtn-outline {
+  &.kbtn-base {
+    @apply border-base-300 bg-base-100 hover:bg-base-300;
   }
 }
 
@@ -74,104 +23,11 @@
   .embedded-core-form form {
     [data-element-type='button'] {
       &[data-button-type='submit-page'] {
-        @apply kbtn kbtn-primary;
+        @apply kbtn kbtn-primary kbtn-lg;
       }
       &:not([data-button-type='submit-page']) {
-        @apply kbtn kbtn-outline;
+        @apply kbtn kbtn-outline kbtn-lg;
       }
     }
   }
 }
-
-/*@utility kbtn-xs {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 8);*/
-/*  --kfontsize: 0.875rem;*/
-/*  --kbtn-p: 0.75rem;*/
-/*}*/
-
-/*@utility kbtn-sm {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 9);*/
-/*  --kfontsize: 1rem;*/
-/*  --kbtn-p: 0.75rem;*/
-/*}*/
-
-/*@utility kbtn-md {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 10);*/
-/*  --kfontsize: 1rem;*/
-/*  --kbtn-p: 1rem;*/
-/*}*/
-
-/*@utility kbtn {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  --kfontsize: 1rem;*/
-/*  --kbtn-p: 1rem;*/
-/*  @apply font-medium gap-1;*/
-/*  @apply focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-primary/40;*/
-/*}*/
-/*@utility kbtn-lg {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  --kfontsize: 1rem;*/
-/*  --kbtn-p: 1rem;*/
-/*}*/
-
-/*@utility kbtn-xl {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 12);*/
-/*  --kfontsize: 1rem;*/
-/*  --kbtn-p: 1rem;*/
-/*}*/
-
-/*@utility kbtn-outline {*/
-/*  &:not(*/
-/*      .kbtn-active,*/
-/*      :hover,*/
-/*      :active:focus,*/
-/*      :focus-visible,*/
-/*      :disabled,*/
-/*      [disabled],*/
-/*      .kbtn-disabled,*/
-/*      :checked*/
-/*    ) {*/
-/*    --kbtn-bg: var(--color-base-100);*/
-/*    &:not(*/
-/*        .kbtn-primary,*/
-/*        .kbtn-secondary,*/
-/*        .kbtn-accent,*/
-/*        .kbtn-neutral,*/
-/*        .kbtn-info,*/
-/*        .kbtn-success,*/
-/*        .kbtn-warning,*/
-/*        .kbtn-error*/
-/*      ) {*/
-/*      --kbtn-border: var(--color-base-300);*/
-/*    }*/
-/*  }*/
-/*}*/
-
-/*@utility bg-glassmorphism-border {*/
-/*  --glassmorphism-angle: 100deg;*/
-/*  background-image: linear-gradient(*/
-/*    var(--glassmorphism-angle),*/
-/*    white 0%,*/
-/*    transparent 54%,*/
-/*    rgba(255, 255, 255, 77%) 100%*/
-/*  );*/
-/*  background-blend-mode: overlay;*/
-/*}*/
-/*@utility bg-glassmorphism-linear {*/
-/*  --glassmorphism-angle: 122deg;*/
-/*  background-image: linear-gradient(*/
-/*    var(--glassmorphism-angle),*/
-/*    rgba(255, 255, 255, 50%) 12%,*/
-/*    transparent 61%*/
-/*  );*/
-/*  background-blend-mode: overlay;*/
-/*}*/
-/*@utility bg-glassmorphism-circular {*/
-/*  background-image: radial-gradient(*/
-/*    164% 148% at -5% 9%,*/
-/*    rgba(0, 0, 0, 10%) 18%,*/
-/*    rgba(255, 255, 255, 15%) 62%,*/
-/*    rgba(0, 0, 0, 20%) 96%*/
-/*  );*/
-/*  background-blend-mode: overlay;*/
-/*}*/

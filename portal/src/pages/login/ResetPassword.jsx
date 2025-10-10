@@ -1,28 +1,41 @@
 import { useCallback, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { createSubmission, getCsrfToken } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
-import { Button } from '../../atoms/Button.jsx';
 import { toastSuccess } from '../../helpers/toasts.js';
-import logo from '../../assets/images/logo-full.svg';
+import { LoginCardWrapper } from './Login.jsx';
+import logo from '../../assets/images/logo.svg';
+import { Icon } from '../../atoms/Icon.jsx';
 
 export const ResetPassword = () => {
   let { token } = useParams();
   let [searchParams] = useSearchParams();
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col items-center w-[36rem] bg-base-100 rounded-xl shadow-lg">
-        {token ? (
-          <ResetPasswordChangeForm
-            token={token}
-            username={decodeURIComponent(searchParams.get('u'))}
-          />
-        ) : (
-          <ResetPasswordRequestForm />
-        )}
+    <LoginCardWrapper>
+      <div className="flex-ss w-full">
+        <Link
+          to="./.."
+          className="kbtn kbtn-circle kbtn-ghost kbtn-lg"
+          aria-label="Back to Login"
+        >
+          <Icon name="arrow-left" />
+        </Link>
       </div>
-    </div>
+      {token ? (
+        <ResetPasswordChangeForm
+          token={token}
+          username={decodeURIComponent(searchParams.get('u'))}
+        />
+      ) : (
+        <ResetPasswordRequestForm />
+      )}
+    </LoginCardWrapper>
   );
 };
 
@@ -59,55 +72,46 @@ const ResetPasswordRequestForm = () => {
   );
 
   return (
-    <>
-      <div className="flex justify-start w-full md:pl-8 pt-4">
-        <Button
-          variant="tertiary"
-          icon="arrow-left"
-          to=".."
-          aria-label="Back to Login"
-        ></Button>
-      </div>
-      <form className="self-center flex flex-col gap-5 px-5 items-stretch w-full max-w-96 mb-12">
-        <img
-          src={themeLogo || logo}
-          alt="Logo"
-          className="h-10 max-w-45 object-contain mb-5 mt-4 self-center"
+    <form className="flex-c-st gap-5 w-full max-w-96 pb-8">
+      <img
+        src={themeLogo || logo}
+        alt="Logo"
+        className="logo mb-5 self-center"
+      />
+      <div className="field">
+        <label htmlFor="username">Username</label>
+        <input
+          id="email"
+          type="text"
+          name="username"
+          required={true}
+          autoFocus
+          value={username}
+          onChange={onChangeUsername}
+          disabled={submitted}
         />
-        <div className="field">
-          <label htmlFor="username">Username</label>
-          <input
-            id="email"
-            type="text"
-            name="username"
-            required={true}
-            autoFocus
-            value={username}
-            onChange={onChangeUsername}
-            disabled={submitted}
-          />
-        </div>
-        {submitted && (
-          <p>
-            Your request has been submitted. You should receive an email with a
-            password reset link shortly.
-          </p>
-        )}
-        {error && (
-          <p className="flex items-center gap-2 text-base-content/80">
-            <span className="kstatus kstatus-error"></span>
-            {error}
-          </p>
-        )}
-        <Button
-          type="submit"
-          onClick={submitRequest}
-          disabled={!username || submitted}
-        >
-          Reset Password
-        </Button>
-      </form>
-    </>
+      </div>
+      {submitted && (
+        <p>
+          Your request has been submitted. You should receive an email with a
+          password reset link shortly.
+        </p>
+      )}
+      {error && (
+        <p className="flex-cc gap-2 text-base-content/80">
+          <span className="kstatus kstatus-error"></span>
+          {error}
+        </p>
+      )}
+      <button
+        type="submit"
+        className="kbtn kbtn-lg kbtn-primary"
+        onClick={submitRequest}
+        disabled={!username || submitted}
+      >
+        Reset Password
+      </button>
+    </form>
   );
 };
 
@@ -167,7 +171,7 @@ const ResetPasswordChangeForm = ({ token, username }) => {
         try {
           const json = await response.json();
           if (json.error) setError(json.error);
-        } catch (e) {
+        } catch {
           setError(
             'There was a problem resetting your password! Please note that password reset links may only be used once.',
           );
@@ -178,11 +182,11 @@ const ResetPasswordChangeForm = ({ token, username }) => {
   );
 
   return (
-    <form className="flex flex-col gap-5 items-stretch w-full p-5 max-w-96 mb-12">
+    <form className="flex-c-st gap-5 w-full max-w-96 pb-8">
       <img
         src={themeLogo || logo}
         alt="Logo"
-        className="h-10 max-w-45 object-contain mb-5 mt-4 self-center"
+        className="logo mb-5 self-center"
       />
       {!token || !username ? (
         <>The reset password link is invalid.</>
@@ -226,27 +230,28 @@ const ResetPasswordChangeForm = ({ token, username }) => {
             />
           </div>
           {passwordMismatch && (
-            <p className="flex items-center gap-2 text-base-content/80">
+            <p className="flex-sc gap-2 text-base-content/80">
               <span className="kstatus kstatus-error"></span>
               Passwords must match.
             </p>
           )}
           {error && (
-            <p className="flex items-center gap-2 text-base-content/80">
+            <p className="flex-sc gap-2 text-base-content/80">
               <span className="kstatus kstatus-error"></span>
               {error}
             </p>
           )}
 
-          <Button
+          <button
             type="submit"
+            className="kbtn kbtn-lg kbtn-primary"
             onClick={submitRequest}
             disabled={
               submitted || !password || !confirmPassword || passwordMismatch
             }
           >
             Reset Password
-          </Button>
+          </button>
         </>
       )}
     </form>

@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useMatch } from 'react-router-dom';
 import t from 'prop-types';
 import clsx from 'clsx';
 import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
@@ -17,7 +16,6 @@ import { Login } from './pages/login/Login.jsx';
 import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
 import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 import { useData } from './helpers/hooks/useData.js';
-import { SearchModal } from './components/search/SearchModal.jsx';
 
 export const App = ({
   initialized,
@@ -26,8 +24,6 @@ export const App = ({
   timedOut,
   serverError,
 }) => {
-  // Get redux view state
-  const mobile = useSelector(state => state.view.mobile);
   // Get redux theme state
   const { css: themeCSS, ready: themeReady } = useSelector(
     state => state.theme,
@@ -135,7 +131,7 @@ export const App = ({
 
   return (
     <>
-      <div className="l-v-start-stretch flex-auto overflow-auto">
+      <div className="flex-c-st flex-auto overflow-auto">
         {/* Header element where we will render headers via a portal */}
         <header id="app-header" className="flex-none" />
 

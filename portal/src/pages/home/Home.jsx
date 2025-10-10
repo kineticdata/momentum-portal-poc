@@ -10,85 +10,117 @@ import { sortBy } from '../../helpers/index.js';
 import { useData } from '../../helpers/hooks/useData.js';
 import { getAttributeValue } from '../../helpers/records.js';
 import { openSearch } from '../../helpers/search.js';
+import { StatusPill } from '../../components/tickets/StatusPill.jsx';
 
 export const Home = () => {
-  const { mobile, tablet, desktop } = useSelector(state => state.view);
+  const { mobile, desktop } = useSelector(state => state.view);
   const { profile } = useSelector(state => state.app);
 
   return (
     <>
-      <div className="l-h-between-stretch gap-14 px-14 h-64 bg-base-200">
-        <div className="flex-auto l-v-center-stretch gap-10 px-30">
-          <div className="text-6xl font-semibold">
-            Hello, {profile.displayName}
-          </div>
-          <div className="l-h-between-center gap-8">
-            <button
-              type="button"
-              className="kbtn kbtn-primary kbtn-xl flex-1"
-              onClick={() => openSearch()}
-            >
-              Submit a Request
-            </button>
-            <Link to="/requests" className="kbtn kbtn-outline kbtn-xl flex-1">
-              Check Status
-            </Link>
-            <Link to="/actions" className="kbtn kbtn-outline kbtn-xl flex-1">
-              See My Work
-            </Link>
+      <div className="flex-bt gap-20 2xl:gap-42 gutter xl:pr-14 max-md:py-9 md:h-64 bg-base-200">
+        <div className="flex-auto flex-c-ct gap-10">
+          {!mobile && (
+            <div className="text-4xl xl:text-6xl font-semibold">
+              Hello, {profile.displayName}
+            </div>
+          )}
+          <div
+            className={clsx(
+              'flex-bc gap-6 xl:gap-8',
+              mobile && 'justify-around',
+            )}
+          >
+            {!mobile ? (
+              <>
+                <button
+                  type="button"
+                  className="kbtn kbtn-primary kbtn-xl flex-1"
+                  onClick={() => openSearch()}
+                >
+                  Submit a Request
+                </button>
+                <Link
+                  to="/requests"
+                  className="kbtn kbtn-outline kbtn-base kbtn-xl flex-1"
+                >
+                  Check Status
+                </Link>
+                <Link
+                  to="/actions"
+                  className="kbtn kbtn-outline kbtn-base kbtn-xl flex-1"
+                >
+                  See My Work
+                </Link>
+              </>
+            ) : (
+              <>
+                <div className="relative flex-1 flex-c-sc gap-4">
+                  <div className="icon-box-lg bg-primary text-primary-content">
+                    <Icon name="send" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => openSearch()}
+                    className="cursor-pointer after:absolute after:inset-0 text-center"
+                  >
+                    Submit a Request
+                  </button>
+                </div>
+                <div className="relative flex-1 flex-c-sc gap-4">
+                  <div className="icon-box-lg bg-base-100 text-base-content border">
+                    <Icon name="list-search" />
+                  </div>
+                  <Link
+                    to="/requests"
+                    className="cursor-pointer after:absolute after:inset-0 text-center"
+                  >
+                    Check Status
+                  </Link>
+                </div>
+                <div className="relative flex-1 flex-c-sc gap-4">
+                  <div className="icon-box-lg bg-base-100 text-base-content border">
+                    <Icon name="list-details" />
+                  </div>
+                  <Link
+                    to="/actions"
+                    className="cursor-pointer after:absolute after:inset-0 text-center"
+                  >
+                    See My Work
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
-        <Shortcuts />
+        {desktop && <Shortcuts vertical={true} />}
       </div>
 
-      <div className="l-v-start-stretch 2xl:l-h-between-start gap-20 px-44 py-7">
-        <div className="flex-1 l-v-start-stretch gap-4">
-          <div className="text-2xl font-semibold">Recent Activity</div>
-          <div className="px-5 py-4 border rounded-box">
-            <ActivityList />
+      <div className="flex-c-st xl:flex-bs gap-7 md:gap-10 xl:gap-20 gutter py-7">
+        <div className="flex-1 flex-c-st gap-4">
+          <div className="text-lg md:text-2xl font-semibold">
+            Recent Activity
+          </div>
+          <div className="kcard">
+            <div className="kcard-body">
+              <ActivityList />
+            </div>
           </div>
         </div>
-        <div className="flex-1 l-v-start-stretch gap-4">
-          <div className="text-2xl font-semibold">My Team&#39;s Requests</div>
-          <div className="px-5 py-4 border rounded-box">
-            <ul className="klist text-base">
-              <li className="klist-row items-center">
-                <div className="klist-col-grow">Need Review</div>
-                <div>3</div>
-              </li>
-              <li className="klist-row items-center">
-                <div className="klist-col-grow">In Progress</div>
-                <div>13</div>
-              </li>
-              <li className="klist-row items-center">
-                <div className="klist-col-grow">Completed This Week</div>
-                <div>23</div>
-              </li>
-            </ul>
+        <div className="flex-1 flex-c-st gap-4">
+          <div className="text-lg md:text-2xl font-semibold">Recent Work</div>
+          <div className="kcard">
+            <div className="kcard-body">
+              <WorkList />
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="l-v-start-stretch gap-4 px-44 py-7">
-        <div className="text-2xl font-semibold">Metrics</div>
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] items-start gap-8">
-          <Metric value={12} label="Active Submissions" />
-          <Metric value={7} label="Overdue Items Last Month" />
-          <Metric value={5.6} label="Avg. Days to Complete" />
-        </div>
-      </div>
+      {!desktop && <Shortcuts className="gutter pt-3 pb-10" />}
     </>
   );
 };
-
-const Metric = ({ value, label }) => (
-  <div className="l-v-center-center gap-4">
-    <div className="px-6 py-4 border rounded-box min-w-18 l-h-center-center">
-      {value}
-    </div>
-    <span className="font-medium">{label}</span>
-  </div>
-);
 
 const ActivityList = () => {
   const { profile, kappSlug } = useSelector(state => state.app);
@@ -131,24 +163,93 @@ const ActivityList = () => {
       <ul className="klist text-base">
         {submissions?.map(submission => (
           <li
-            className="klist-row items-center hover:bg-base-200"
+            className="klist-row min-h-20 hover:bg-base-200"
             key={submission.id}
           >
-            <div className="l-h-center-center -my-3 h-9 w-9 bg-base-200 rounded-box">
+            <div className="icon-box -my-3">
               <Icon
                 name={getAttributeValue(submission?.form, 'Icon', 'checklist')}
               />
             </div>
             <Link
               to={`/requests/${submission.id}${submission.coreState === 'Draft' ? '/edit' : ''}`}
-              className="after:absolute after:inset-0"
+              className="line-clamp-2 after:absolute after:inset-0"
             >
               {submission.label}
             </Link>
-            <div>{submission.coreState}</div>
+            <StatusPill status={submission.coreState}></StatusPill>
           </li>
         ))}
         {submissions?.length === 0 && <li>There is no activity to show.</li>}
+      </ul>
+    );
+  }
+};
+
+const WorkList = () => {
+  const { profile, kappSlug } = useSelector(state => state.app);
+  const { username, memberships } = profile;
+
+  // Parameters for the query
+  const params = useMemo(
+    () => ({
+      kapp: kappSlug,
+      search: {
+        q: defineKqlQuery()
+          // Limit form types
+          .in('type', 'types')
+          // Add assignment query so we only retrieve requests for the current user
+          .or()
+          .equals('values[Assigned Individual]', 'username')
+          .in('values[Assigned Team]', 'teams')
+          // End or block
+          .end()
+          // End query builder
+          .end()({
+          types: ['Approval', 'Task'],
+          username,
+          teams: memberships.map(({ team }) => team.name),
+        }),
+        include: ['details', 'form', 'form.attributesMap'],
+        limit: 5,
+      },
+    }),
+    [kappSlug, username, memberships],
+  );
+
+  // Retrieve the submission record
+  const data = useData(searchSubmissions, params);
+  const { error, submissions } = data.response || {};
+
+  if (data.initialized) {
+    return error ? (
+      <Error error={error} />
+    ) : data.loading ? (
+      <Loading />
+    ) : (
+      <ul className="klist text-base">
+        {submissions?.map(submission => (
+          <li
+            className="klist-row min-h-20 hover:bg-base-200"
+            key={submission.id}
+          >
+            <div className="icon-box -my-3">
+              <Icon
+                name={getAttributeValue(submission?.form, 'Icon', 'checklist')}
+              />
+            </div>
+            <Link
+              to={`/actions/${submission.id}`}
+              className="line-clamp-2 after:absolute after:inset-0"
+            >
+              {submission.label}
+            </Link>
+            <StatusPill
+              status={submission.coreState === 'Draft' ? 'Open' : 'Closed'}
+            ></StatusPill>
+          </li>
+        ))}
+        {submissions?.length === 0 && <li>There is no work to show.</li>}
       </ul>
     );
   }
@@ -167,8 +268,7 @@ const shortcutsTransform = submissions =>
     }))
     ?.sort(sortBy('sortOrder'));
 
-const Shortcuts = () => {
-  const mobile = useSelector(state => state.view.mobile);
+const Shortcuts = ({ vertical = false, className }) => {
   const { kappSlug } = useSelector(state => state.app);
 
   // Parameters for the shortcuts query
@@ -192,7 +292,12 @@ const Shortcuts = () => {
 
   return (
     <div
-      className="flex-none gap-3 w-89 overflow-auto grid grid-cols-2"
+      className={clsx(
+        'flex-none gap-3 overflow-auto',
+        vertical && 'w-89 grid grid-cols-2',
+        !vertical && 'w-full flex-sc',
+        className,
+      )}
       style={{ scrollbarWidth: 'none' }}
     >
       {initialized &&
@@ -205,13 +310,18 @@ const Shortcuts = () => {
             target={shortcut.newTab ? '_blank' : undefined}
             rel="noreferrer"
             className={clsx(
-              'relative bg-base-300 flex-full h-36 rounded-box row-span-2 overflow-hidden',
-              index === 1 && 'row-start-2',
-              'hover:scale-105 transition-transform',
-              {
-                'hover:translate-x-1/40': index % 2 === 1,
-                'hover:-translate-x-1/40': index % 2 === 0,
-              },
+              'relative bg-base-300 rounded-box overflow-hidden',
+              vertical && [
+                'flex-full h-33 row-span-2',
+                index === 1 && 'row-start-2',
+                'hover:scale-105 transition-transform',
+                shortcuts.length !== 1 && {
+                  'hover:translate-x-1/40': index % 2 === 1,
+                  'hover:-translate-x-1/40': index % 2 === 0,
+                },
+                shortcuts.length === 1 && 'hover:translate-1/40',
+              ],
+              !vertical && ['flex-none h-50 w-65'],
             )}
           >
             {shortcut.image && (

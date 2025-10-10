@@ -1,35 +1,20 @@
 @import 'tailwindcss';
-@import './assets/styles/daisyui/index.css';
+@import './assets/styles/daisyui.css';
 @import './assets/styles/font.css' layer(base);
 @import './assets/styles/colors.css' layer(base); /* TODO delete */
 @import './assets/styles/layout.css';
-@import './assets/styles/toasts.css';
-@import './assets/styles/panels.css';
+@import './assets/styles/avatar.css';
 @import './assets/styles/buttons.css';
 @import './assets/styles/forms.css';
+@import './assets/styles/menu.css';
+@import './assets/styles/panels.css';
 @import './assets/styles/scrollbar.css';
+@import './assets/styles/toasts.css';
 @import './assets/styles/typography.css';
+@import './assets/styles/utilities.css';
 
 @theme {
-  /*--breakpoint-sm: 40rem;*/
-  /*--breakpoint-md: 48rem;*/
-  /*--breakpoint-lg: 64rem;*/
-  /*--breakpoint-xl: 80rem;*/
-  /*--breakpoint-2xl: 96rem;*/
-
-  /*--drop-shadow-card: -2px 13px 19px rgba(53, 51, 51, 0.14);*/
-  /*--drop-shadow-card-hover: -2px 6px 9px rgba(53, 51, 51, 0.14);*/
-
   --font-sans: 'Onest';
-
-  /*--radius-2\.5xl: 1.25rem;*/
-
-  /*--shadow-card: -2px 8px 17px 4px rgba(123, 119, 119, 0.15);*/
-  /*--shadow-card-hover: -2px 4px 8px 3px rgba(123, 119, 119, 0.15);*/
-  /*--shadow-footer: 0px -5px 30px 0px rgba(54, 41, 183, 0.07);*/
-  /*--shadow-icon: 0px 3.5px 21px 0px rgba(0, 0, 0, 0.05);*/
-  /*--shadow-category: 4px 4px 22px 0 rgba(0, 0, 0, 0.13);*/
-  /*--shadow-category-hover: 25px 25px 11px -15px rgba(0, 0, 0, 0.13);*/
 
   --text-h4: 1.125rem;
   --text-h4--line-height: 1.75rem;
@@ -50,24 +35,24 @@
   --width-screen-xl: var(--breakpoint-xl);
 }
 
-@source inline("{{m,-m,p}{,t,r,b,l,x,y}-{{0..12..1}},m-{,t,r,b,l,x,y}-auto}");
+@source inline("{{m,-m,p}{,t,r,b,l,x,y}-{{0..24..1}},m-{,t,r,b,l,x,y}-auto}");
 @source inline("{bg,text,border}-{base-{100,200,300,content},primary{,-content},secondary{,-content},accent{,-content},neutral{,-content},info{,-content},success{,-content},warning{,-content},error{,-content}}");
-@source inline("rounded{,-{none,sm,md,lg,xl,2xl,3xl,full}}");
+@source inline("rounded{,-{none,sm,md,lg,xl,2xl,3xl,full,box}}");
 @source inline("border{,-{t,r,b,l,x,y}}{,-{{0..8..1}}}");
-@source inline("shadow{,-{none,xs,sm,md,lg,xl,2xl,card}}");
+@source inline("shadow{,-{none,xs,sm,md,lg,xl,2xl}}");
 @source inline("{d1,d2,h1,h2,h3,h4,h5,h6}");
 @source inline("text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,left,center,right}");
 @source inline("font-{light,normal,medium,semibold,bold,extrabold}");
 @source inline("{underline,uppercase,lowercase,capitalize,italic}");
 @source inline("{trunacte,line-clamp-{1..5..1}}");
-@source inline("{w,h}-{auto,px,full,screen,1/5,2/5,3/5,4/5,1/12,2/12,3/12,4/12,5/12,6/12,7/12,8/12,9/12,10/12,11/12,{0..12..1}}");
+@source inline("{w,h}-{auto,px,full,screen,1/5,2/5,3/5,4/5,1/12,2/12,3/12,4/12,5/12,6/12,7/12,8/12,9/12,10/12,11/12,{0..24..1}}");
 @source inline("max-w-{0,none,full,screen,xs,sm,md,lg,xl,screen-{sm,md,lg,xl,2xl}}");
 @source inline("max-h-{none,full,screen,-{0..96..16}}");
 @source inline("min-{w,h}-{0,auto,full,screen}");
 @source inline("{inline,block,inline-block,flex,inline-flex,hidden,sr-only}");
-@source inline("gap{,-x,-y}-{{0..12..1}}");
-@source inline("layout-{row{,-center,-end,-between},column}");
+@source inline("gap{,-x,-y}-{{0..24..1}}");
 @source inline("flex-{auto,initial,none,full,0,1,wrap}");
+@source inline("flex{,-c}-{ss,sc,se,st,cs,cc,ce,ct,es,ec,ee,et,bs,bc,be,bt}")
 @source inline("kbtn{,-{primary,seconday,accent,neutral,info,success,warning,error,outline,ghost,xs,sm,md,lg,xl,circle,block}}");
 @source inline("kbadge{,-{primary,seconday,accent,neutral,info,success,warning,error,outline,ghost,xs,sm,md,lg,xl}}");
 @source inline("kalert{,-{info,success,warning,error,outline,soft,xs,sm,md,lg,xl,vertical,horizontal}}");

@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
-import { closeConfirm } from '../../helpers/confirm.js';
 import { Modal } from '../../atoms/Modal.jsx';
-import { Button } from '../../atoms/Button.jsx';
+import { closeConfirm } from '../../helpers/confirm.js';
 import { callIfFn } from '../../helpers/index.js';
 
 /**
@@ -39,10 +38,20 @@ export const ConfirmationModal = () => {
         <div slot="description">{options?.description}</div>
       )}
       <div slot="footer">
-        <Button onClick={accept}>{options?.acceptLabel || 'Continue'}</Button>
-        <Button variant="tertiary" onClick={cancel}>
+        <button
+          type="button"
+          className="kbtn kbtn-lg kbtn-primary"
+          onClick={accept}
+        >
+          {options?.acceptLabel || 'Continue'}
+        </button>
+        <button
+          type="button"
+          className="kbtn kbtn-lg kbtn-ghost"
+          onClick={cancel}
+        >
           {options?.cancelLabel || 'Cancel'}
-        </Button>
+        </button>
       </div>
     </Modal>
   );

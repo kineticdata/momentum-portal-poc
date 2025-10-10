@@ -32,7 +32,7 @@ This documentation lists all the Tailwind, DaisyUI, and custom classes that have
   - `border-#` `border-t-#` `border-r-#` `border-b-#` `border-l-#` `border-x-#` `border-y-#`
     - Where `#` is between `0` and `8` (inclusive). Numeric values increase in `1px` increments.
 - **Border Radius**
-  - `rounded` `rounded-none` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-3xl` `rounded-full`
+  - `rounded` `rounded-none` `rounded-sm` `rounded-md` `rounded-lg` `rounded-xl` `rounded-2xl` `rounded-3xl` `rounded-full` `rounded-box`
 
 ### Buttons
 
@@ -72,44 +72,54 @@ Form elements (inputs, selects, etc) will automatically be styled to match the d
 - **Display**
   - `block` `inline` `inline-block` `flex` `inline-flex` `hidden` `sr-only`
 - **Flex Layout**
-  - `layout-column` `layout-row` `layout-row-center` `layout-row-end` `layout-row-between` `flex-wrap`
+  - `flex-wrap`
+  - **Row Layouts** _(1st letter -> justify content | 2nd letter -> align items)_ `s=start` `c=center` `e=end` `b=between` `t=stretch`
+    - `flex-ss` `flex-sc` `flex-se` `flex-st`
+    - `flex-cs` `flex-cc` `flex-ce` `flex-ct`
+    - `flex-es` `flex-ec` `flex-ee` `flex-et`
+    - `flex-bs` `flex-bc` `flex-be` `flex-bt`
+  - **Column Layouts** _(1st letter -> justify content | 2nd letter -> align items)_ `s=start` `c=center` `e=end` `b=between` `t=stretch`
+    - `flex-c-ss` `flex-c-sc` `flex-c-se` `flex-c-st`
+    - `flex-c-cs` `flex-c-cc` `flex-c-ce` `flex-c-ct`
+    - `flex-c-es` `flex-c-ec` `flex-c-ee` `flex-c-et`
+    - `flex-c-bs` `flex-c-bc` `flex-c-be` `flex-c-bt`
 - **Flex Item**
   - `flex-auto` `flex-initial` `flex-none` `flex-full` `flex-0` `flex-1`
 - **Gap**
-  - `gap-#` `gap-x-#` `gap-y-#` where `#` is between `0` and `12` (inclusive). Numeric values increase in `4px` increments.
+  - `gap-#` `gap-x-#` `gap-y-#` where `#` is between `0` and `24` (inclusive). Numeric values increase in `4px` increments.
 
 ### Margin and Padding
 
 - **Margin**
   - `m-#` `mt-#` `mr-#` `mb-#` `ml-#` `mx-#` `my-#`
-    - Where `#` is between `0` and `12` (inclusive), or `auto`. Numeric values increase in `4px` increments.
+    - Where `#` is between `0` and `24` (inclusive), or `auto`. Numeric values increase in `4px` increments.
   - You can prepend `-` to the class name to make the margin negative. Ex: `-m-3`.
 - **Padding**
   - `p-#` `pt-#` `pr-#` `pb-#` `pl-#` `px-#` `py-#`
-    - Where `#` is between `0` and `12` (inclusive), or `auto`. Numeric values increase in `4px` increments.
+    - Where `#` is between `0` and `24` (inclusive), or `auto`. Numeric values increase in `4px` increments.
 
 ### Shadow
 
 - **Box Shadow**
-  - `shadow` `shadow-none` `shadow-xs` `shadow-sm` `shadow-md` `shadow-lg` `shadow-xl` `shadow-2xl` `shadow-card`
+  - `shadow` `shadow-none` `shadow-xs` `shadow-sm` `shadow-md` `shadow-lg` `shadow-xl` `shadow-2xl`
 
 ### Sizes
 
 - **Width and Height**
   - `w-auto` `w-px` `w-full` `w-screen`
   - `h-auto` `h-px` `h-full` `h-screen`
-  - `w-#` `h-#` where `#` is between `0` and `12` inclusive. Numeric values increase in `4px` increments.
+  - `w-#` `h-#` where `#` is between `0` and `24` inclusive. Numeric values increase in `4px` increments.
   - `w-#/5` `h-#/5` where `#` is between `1` and `4` inclusive. These divide the width into fifths.
   - `w-#/12` `h-#/12` where `#` is between `1` and `11` inclusive. These divide the width into twelfths.
 - **Max Width**
   - `max-w-0` `max-w-none` `max-w-full` `max-w-screen` `max-w-xs` `max-w-sm` `max-w-md` `max-w-lg` `max-w-xl` `max-w-screen-sm` `max-w-screen-md` `max-w-screen-lg` `max-w-screen-xl` `max-w-screen-2xl`
 - **Min Width**
-  - `max-w-0` `max-w-auto` `max-w-full` `max-w-screen`
+  - `min-w-0` `min-w-auto` `min-w-full` `min-w-screen`
 - **Max Height**
   - `max-h-none` `max-h-full` `max-h-screem`
   - `max-h-#` where `#` is between `0` and `96` (inclusive) in steps of `16`. Numeric values increase in `4px` increments (so `16` is `64px`).
 - **Min Height**
-  - `max-h-0` `max-h-auto` `max-h-full` `max-h-screen`
+  - `min-h-0` `min-h-auto` `min-h-full` `min-h-screen`
 
 ### Typography
 

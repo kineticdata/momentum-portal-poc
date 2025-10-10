@@ -204,7 +204,7 @@ export const SearchModal = () => {
       size="sm"
     >
       {currentCategory && (
-        <div slot="title" className="l-h-start-center gap-4">
+        <div slot="title" className="flex-sc gap-4">
           <button
             type="button"
             className="kbtn kbtn-ghost kbtn-circle"
@@ -216,7 +216,7 @@ export const SearchModal = () => {
           <span className="text-2xl font-semibold">{currentCategory.name}</span>
         </div>
       )}
-      <div slot="body" className="l-v-start-stretch gap-3">
+      <div slot="body" className="flex-c-st gap-3">
         {!currentCategory && (
           <label className="kinput w-full">
             <input
@@ -286,15 +286,15 @@ export const SearchModal = () => {
                       <Icon name="chevron-left" />
                     </button>
                   )}
-                  <div className="l-h-start-start">
+                  <div className="flex-ss">
                     {currentCategories
                       .slice(currentCategoryIndex, currentCategoryIndex + 4)
                       .map(category => (
                         <div
-                          className="relative w-1/4 px-2 l-v-start-center gap-4 "
+                          className="group relative w-1/4 px-2 flex-c-sc gap-4"
                           key={category.slug}
                         >
-                          <div className="l-h-center-center h-12 w-12 bg-base-200 rounded-box">
+                          <div className="icon-box-lg group-hover:bg-base-300">
                             <Icon
                               name={getAttributeValue(
                                 category,
@@ -366,8 +366,8 @@ export const SearchModal = () => {
 };
 
 const FormRow = ({ form }) => (
-  <li className="klist-row items-center hover:bg-base-200">
-    <div className="l-h-center-center -my-3 h-9 w-9 bg-base-200 rounded-box">
+  <li className="klist-row hover:bg-base-200">
+    <div className="flex-cc -my-3 h-9 w-9 bg-base-200 rounded-box">
       <Icon name={getAttributeValue(form, 'Icon', 'forms')} />
     </div>
     <div>
@@ -386,7 +386,7 @@ const FormRow = ({ form }) => (
 
 const Pagination = ({ loading, previousPage, nextPage, pageNumber }) =>
   (previousPage || nextPage) && (
-    <div className="l-h-center-center gap-3 mt-3">
+    <div className="flex-cc gap-3 mt-3">
       <button
         type="button"
         className="kbtn kbtn-outline"
@@ -399,7 +399,7 @@ const Pagination = ({ loading, previousPage, nextPage, pageNumber }) =>
       {loading ? (
         <Loading xsmall size={32} />
       ) : (
-        <div className="l-h-center-center flex-none w-10 h-10 font-semibold">
+        <div className="flex-cc flex-none w-10 h-10 font-semibold">
           {pageNumber}
         </div>
       )}

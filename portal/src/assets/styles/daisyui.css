@@ -1,5 +1,3 @@
-@import './badge.css';
-@import './menu.css';
 @plugin "daisyui" {
   prefix: 'k';
 }
@@ -26,9 +24,9 @@
   --color-warning-content: oklch(from #584220 l c h);
   --color-error: oklch(from #fec8c8 l c h);
   --color-error-content: oklch(from #801518 l c h);
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 0.75rem;
+  --radius-selector: 0.75rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -48,7 +46,5 @@
 }
 
 @utility kmodal-box {
-  @apply flex flex-col gap-6 p-8 max-md:w-screen md:max-w-[calc(100vw-3rem)];
-  max-height: calc(100vh - 3rem);
+  @apply flex-c-st gap-6 p-8 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-2rem)];
 }
-

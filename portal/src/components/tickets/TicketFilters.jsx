@@ -3,9 +3,11 @@ import { useCallback, useState } from 'react';
 import { produce } from 'immer';
 import { Panel } from '../../atoms/Panel.jsx';
 import { Popover } from '../../atoms/Popover.jsx';
-import { Button, ChipButton, CloseButton } from '../../atoms/Button.jsx';
+import { ChipButton } from '../../atoms/Button.jsx';
 import t from 'prop-types';
 import { StatusDot } from './StatusPill.jsx';
+import { Icon } from '../../atoms/Icon.jsx';
+import clsx from 'clsx';
 
 export const TicketFilters = ({ type, filters, setFilters }) => {
   const mobile = useSelector(state => state.view.mobile);
@@ -79,11 +81,11 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
   const FilterComponent = mobile ? Panel : Popover;
 
   return (
-    <div className="flex justify-between gap-2 md:gap-5 items-center max-xl:self-stretch">
+    <div className="flex-bc gap-2 md:gap-5 items-center ml-auto">
       {!hasNone && (
-        <div className="flex max-md:flex-col gap-2 md:gap-4 flex-wrap">
+        <div className="flex-ec gap-2 md:gap-4 flex-wrap">
           {hasAssignment && (
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <div className="flex-ec flex-wrap gap-x-2 gap-y-1">
               <span className="text-sm font-medium">Assigned to</span>
               {filters.assignment.mine && (
                 <ChipButton
@@ -106,7 +108,7 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
             </div>
           )}
           {hasStatus && (
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <div className="flex-ec flex-wrap gap-x-2 gap-y-1">
               <span className="text-sm font-medium">Status</span>
               {filters.status.open && (
                 <ChipButton
@@ -148,21 +150,29 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
         onOpenChange={handleOnOpenChange}
         alignment={!mobile ? 'end' : undefined}
       >
-        <Button
+        <button
+          type="button"
+          className={clsx('kbtn', {
+            'kbtn-circle': !hasNone,
+            'kbtn-lg': !mobile,
+          })}
           slot="trigger"
-          variant={hasNone ? 'tertiary' : 'secondary'}
-          size={mobile ? (hasNone ? 'sm' : 'md') : 'lg'}
-          iconEnd={hasNone ? 'chevron-down' : 'filter'}
         >
           {hasNone && `All ${type}`}
-        </Button>
-        <div slot="content" className="flex flex-col gap-6">
-          <div className="flex justify-between items-center gap-3">
+          <Icon name={hasNone ? 'chevron-down' : 'filter'} />
+        </button>
+        <div slot="content" className="flex-c-st gap-6">
+          <div className="flex-bc gap-3">
             <span className="h3">Filter</span>
-            <CloseButton onClick={() => setOpen(false)}></CloseButton>
+            <button
+              className="kbtn kbtn-sm kbtn-circle kbtn-ghost absolute right-2 top-2"
+              onClick={() => setOpen(false)}
+            >
+              <Icon name="x" size={20} />
+            </button>
           </div>
 
-          <div className="px-4 pt-1 pb-3 flex flex-col gap-4 border-b border-base-300">
+          <div className="px-4 pt-1 pb-3 flex-c-st gap-4 border-b border-base-300">
             <div className="flex gap-5 flex-wrap">
               <ChipButton
                 active={hasNoneTemp}
@@ -177,7 +187,7 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
           </div>
 
           {tempFilters.assignment && (
-            <div className="px-4 pt-1 pb-3 flex flex-col gap-4 border-b border-base-300">
+            <div className="px-4 pt-1 pb-3 flex-c-st gap-4 border-b border-base-300">
               <span className="font-medium">Assigned to</span>
               <div className="flex gap-5 flex-wrap">
                 <ChipButton
@@ -207,7 +217,7 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
           )}
 
           {tempFilters.status && (
-            <div className="px-4 pt-1 pb-3 flex flex-col gap-4">
+            <div className="px-4 pt-1 pb-3 flex-c-st gap-4">
               <span className="font-medium">Status</span>
               <div className="flex gap-5 flex-wrap">
                 <ChipButton
@@ -252,14 +262,13 @@ export const TicketFilters = ({ type, filters, setFilters }) => {
             </div>
           )}
 
-          <Button
-            variant="primary"
-            size="md"
+          <button
+            type="button"
+            className="kbtn kbtn-primary mt-auto"
             onClick={handleApplyTempFilters}
-            className="mt-auto"
           >
             Show Results
-          </Button>
+          </button>
         </div>
       </FilterComponent>
     </div>

@@ -1,19 +1,17 @@
-import { Button } from '../../atoms/Button.jsx';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import { useSelector } from 'react-redux';
-import logo from '../../assets/images/logo-full.svg';
-import { Icon } from '../../atoms/Icon.jsx';
+import logo from '../../assets/images/logo.svg';
 
-export const Login = loginProps => (
-  <div className="flex justify-center items-center min-h-screen">
-    <div className="flex flex-col items-center gap-6 w-[36rem] bg-base-100 rounded-xl shadow-lg">
-      <LoginForm {...loginProps} />
+export const LoginCardWrapper = ({ children }) => (
+  <div className="flex-cc min-h-screen">
+    <div className="kcard w-144 border m-4">
+      <div className="kcard-body items-center p-5">{children}</div>
     </div>
   </div>
 );
 
-export const LoginForm = loginProps => {
+export const Login = loginProps => {
   const {
     error,
     onChangePassword,
@@ -28,74 +26,77 @@ export const LoginForm = loginProps => {
   const themeLogo = useSelector(state => state.theme.logo);
 
   return (
-    <form className="flex flex-col gap-5 items-stretch w-full p-5 max-w-96">
-      <img
-        src={themeLogo || logo}
-        alt="Logo"
-        className="h-10 max-w-45 object-contain mb-5 mt-5 self-center"
-      />
-      <div className="field">
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          name="username"
-          required={true}
-          autoFocus
-          value={username}
-          onChange={onChangeUsername}
+    <LoginCardWrapper>
+      <form className="flex-c-st gap-5 w-full max-w-96">
+        <img
+          src={themeLogo || logo}
+          alt="Logo"
+          className="logo my-5 self-center"
         />
-      </div>
-      <div className="field">
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          required={true}
-          value={password}
-          onChange={onChangePassword}
-        />
-      </div>
-      {error && (
-        <p className="flex items-center gap-2 text-base-content/80">
-          <span className="kstatus kstatus-error"></span>
-          {error}
-        </p>
-      )}
-      <Button
-        type="submit"
-        onClick={onLogin}
-        disabled={pending || !username || !password}
-      >
-        Sign In
-      </Button>
-      {onSso && (
-        <>
-          <div className="flex justify-center items-center gap-2.5 text-base-content/60 font-semibold leading-4">
-            <hr className="inline w-16 text-base-content/50" />
-            OR
-            <hr className="inline w-16 text-base-content/50" />
-          </div>
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={onSso}
-            disabled={pending}
-          >
-            Enterprise Single Sign-On
-          </Button>
-        </>
-      )}
-      <Link
-        to="/reset-password"
-        className={clsx(
-          'flex justify-center items-center gap-1 text-base-content/60 py-2.5 font-semibold',
-          'hover:underline hover:text-base-content',
+        <div className="field">
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            required={true}
+            autoFocus
+            value={username}
+            onChange={onChangeUsername}
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            required={true}
+            value={password}
+            onChange={onChangePassword}
+          />
+        </div>
+        {error && (
+          <p className="flex-sc gap-2 text-base-content/80">
+            <span className="kstatus kstatus-error"></span>
+            {error}
+          </p>
         )}
-      >
-        Forgot your password?
-      </Link>
-    </form>
+        <button
+          type="submit"
+          className="kbtn kbtn-primary kbtn-lg"
+          onClick={onLogin}
+          disabled={pending || !username || !password}
+        >
+          Sign In
+        </button>
+        {onSso && (
+          <>
+            <div className="flex justify-center items-center gap-2.5 text-base-content/60 font-semibold leading-4">
+              <hr className="inline w-16 text-base-content/50" />
+              OR
+              <hr className="inline w-16 text-base-content/50" />
+            </div>
+            <button
+              type="button"
+              className="kbtn kbtn-lg kbtn-outline"
+              onClick={onSso}
+              disabled={pending}
+            >
+              Enterprise Single Sign-On
+            </button>
+          </>
+        )}
+        <Link
+          to="/reset-password"
+          className={clsx(
+            'flex justify-center items-center gap-1 text-base-content/60 py-2.5 font-semibold',
+            'hover:underline hover:text-base-content',
+          )}
+        >
+          Forgot your password?
+        </Link>
+      </form>
+    </LoginCardWrapper>
   );
 };

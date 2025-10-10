@@ -56,7 +56,7 @@ export const Tooltip = ({
         <ArkTooltip.Trigger asChild>{slots.trigger}</ArkTooltip.Trigger>
       )}
       <ArkTooltip.Positioner>
-        <ArkTooltip.Content className="px-1 py-1.75 text-sm font-medium bg-neutral text-neutral-content rounded-lg max-w-96 shadow-card">
+        <ArkTooltip.Content className="px-1 py-1.75 text-sm font-medium bg-neutral text-neutral-content rounded-lg max-w-96 shadow">
           {slots.content || content}
         </ArkTooltip.Content>
       </ArkTooltip.Positioner>

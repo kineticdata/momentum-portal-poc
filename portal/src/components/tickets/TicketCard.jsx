@@ -5,7 +5,6 @@ import { Icon } from '../../atoms/Icon.jsx';
 import { StatusPill } from './StatusPill.jsx';
 import { callIfFn, timeAgo } from '../../helpers/index.js';
 import { useSelector } from 'react-redux';
-import { Button } from '../../atoms/Button.jsx';
 import { openConfirm } from '../../helpers/confirm.js';
 import { deleteSubmission } from '@kineticdata/react';
 import { toastError, toastSuccess } from '../../helpers/toasts.js';
@@ -105,8 +104,7 @@ export const TicketCard = ({ submission, reload }) => {
         <div
           className={clsx(
             'absolute top-0 right-0.25 h-full w-24 pl-4',
-            'flex flex-col justify-center items-center gap-1',
-            'bg-error text-error-content rounded-r-xl',
+            'flex-c-cc gap-1 bg-error text-error-content rounded-r-box',
           )}
         >
           <Icon name="trash" />
@@ -116,18 +114,16 @@ export const TicketCard = ({ submission, reload }) => {
       <div
         className={clsx(
           // Mobile first styles
-          'flex py-0.75 px-1',
+          'flex py-1.25 px-3',
           // Non mobile styles
           'md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] md:py-2.75 md:px-6',
           // Common styles
-          'group relative gap-3 items-center min-h-16 rounded-xl',
-          'bg-base-100 shadow-card border border-transparent transition',
-          'hover:border-base-content hover:bg-base-200 hover:shadow-card-hover',
-          'focus-within:border-base-content focus-within:bg-base-200 focus-within:shadow-card-hover',
+          'group relative gap-3 items-center min-h-16 rounded-box bg-base-100 border transition',
+          'hover:bg-base-200 focus-within:bg-base-200',
         )}
         style={{ left, right }}
       >
-        <div className="bg-base-200 border border-base-300 text-base-content/60 rounded-xl shadow-icon flex-none p-1.25 md:p-1.75">
+        <div className="icon-box flex-none">
           <Icon name={icon} />
         </div>
         {mobile ? (
@@ -139,7 +135,9 @@ export const TicketCard = ({ submission, reload }) => {
             >
               {submission.label}
             </Link>
-            <div className="text-xs text-base-content/60">{meta.dateString}</div>
+            <div className="text-xs text-base-content/60">
+              {meta.dateString}
+            </div>
           </div>
         ) : (
           <>
@@ -155,22 +153,24 @@ export const TicketCard = ({ submission, reload }) => {
         )}
         <div className="max-md:ml-auto flex gap-2 items-center">
           <StatusPill
-            className={clsx({
+            className={clsx('md:min-w-32 justify-end', {
               'group-hover:min-w-20 group-focus-within:min-w-20':
                 !mobile && meta.canDelete,
             })}
             status={meta.status}
           />
           {!mobile && meta.canDelete && (
-            <Button
-              variant="secondary"
-              icon="trash"
-              size="md"
+            <button
+              type="button"
               className={clsx(
+                'kbtn kbtn-soft kbtn-circle',
                 'relative -my-1 not-group-hover:not-group-focus-within:hidden',
               )}
               onClick={() => handleDelete(submission.id, reload)}
-            />
+              aria-label="Delete Draft"
+            >
+              <Icon name="trash" />
+            </button>
           )}
         </div>
       </div>
@@ -181,94 +181,9 @@ export const TicketCard = ({ submission, reload }) => {
 export const EmptyCard = ({ children }) => (
   <div
     className={clsx(
-      'relative p-1 md:py-3 md:px-6 bg-base-100 rounded-xl shadow-card min-h-16 max-md:flex md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] gap-3 items-center italic text-base-content/60',
+      'relative p-1 md:py-3 md:px-6 bg-base-100 rounded-box min-h-16 max-md:flex md:col-start-1 md:col-end-5 md:grid md:grid-cols-[subgrid] gap-3 items-center italic text-base-content/60',
     )}
   >
     {children}
   </div>
 );
-
-export const HomeTicketCard = ({
-  page,
-  submission,
-  index,
-  active,
-  setActive,
-  last,
-}) => {
-  const mobile = useSelector(state => state.view.mobile);
-  const icon = getAttributeValue(submission?.form, 'Icon', 'checklist');
-  const meta = getMetaData(submission);
-
-  return (
-    <div
-      className={clsx(
-        'group bg-transparent drop-shadow-card transition-all',
-        'hover:drop-shadow-card-hover pb-1',
-        'focus-within:drop-shadow-card-hover',
-        !last && '-mb-[4.125rem] md:-mb-[4.5rem] hover:mb-0 focus-within:mb-0',
-      )}
-      aria-expanded={mobile ? active === index || !!last : undefined}
-    >
-      <div
-        className={clsx(
-          // Mobile first styles
-          'py-2.5 px-4',
-          // Non mobile styles
-          'md:py-3',
-          // Common styles
-          'relative rounded-xl bg-base-100',
-          'shadow-card border border-base-300 transition-all',
-          'group-hover:border-base-content',
-          'group-focus-within:border-base-content',
-        )}
-        style={{
-          maskImage: !mobile
-            ? 'radial-gradient(circle at 0% 5.25rem, transparent 0.625rem, white 0.6875rem),radial-gradient(circle at 100% 5.25rem, transparent 0.625rem, white 0.6875rem)'
-            : 'radial-gradient(circle at 0% 4.375rem, transparent 0.625rem, white 0.6875rem),radial-gradient(circle at 100% 4.375rem, transparent 0.625rem, white 0.6875rem)',
-          maskComposite: 'intersect',
-        }}
-      >
-        <div className="flex gap-4">
-          <div
-            className={clsx(
-              'flex-none h-11 w-11 md:h-14 md:w-14 flex justify-center items-center rounded-full border border-base-300 bg-base-200 text-base-content/60',
-            )}
-          >
-            <Icon name={icon} size={32} />
-          </div>
-          <div className="flex-auto min-w-0">
-            <Link
-              className="block md:text-h3 font-medium text-right truncate after:absolute after:inset-0 outline-0"
-              to={page ? `/${page}/${getToPath(submission)}` : undefined}
-              state={{ backPath: `/${page}` }}
-              onClick={e => {
-                if (mobile) {
-                  // If the clicked card isn't active, or isn't the last card,
-                  // expand it on first click instead of following the link
-                  if (active !== index && !last) {
-                    e.preventDefault();
-                    setActive(index);
-                  }
-                }
-              }}
-            >
-              {submission.label}
-            </Link>
-            <div
-              className={clsx(
-                'max-md:text-sm text-right truncate text-base-content/60',
-              )}
-            >
-              {meta.dateString}
-            </div>
-          </div>
-        </div>
-        <hr className={clsx('mt-3.75 mb-3.5 border-dashed')} />
-        <div className="flex justify-center">
-          <StatusPill status={meta.status} />
-        </div>
-      </div>
-    </div>
-  );
-};

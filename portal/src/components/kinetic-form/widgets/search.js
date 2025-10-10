@@ -117,7 +117,6 @@ const SearchComponent = forwardRef(
     const previousQuery = useDeferredValue(query);
     // Function to update the query value with a debounce so we don't fire too
     // many queries as the user types
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSetQuery = useMemo(
       () =>
         usesIntegration ? debounce(value => setQuery(value), 300) : setQuery,

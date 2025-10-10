@@ -1,23 +1,22 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/logo-full.svg';
+import logo from '../../assets/images/logo.svg';
 import { Icon } from '../../atoms/Icon.jsx';
 import { HeaderPortal } from './HeaderPortal.jsx';
-import { SearchModal } from '../search/SearchModal.jsx';
 import { Avatar } from '../../atoms/Avatar.jsx';
 import { Popover, usePopover } from '@ark-ui/react/popover';
 import clsx from 'clsx';
 import { openSearch } from '../../helpers/search.js';
 
-export const DesktopHeader = () => {
-  const username = useSelector(state => state.app.profile?.username);
+export const Header = () => {
+  const profile = useSelector(state => state.app.profile);
   const themeLogo = useSelector(state => state.theme.logo);
 
   return (
     <HeaderPortal>
-      <nav className="relative l-h-start-center gap-5 h-20 px-6 py-2 bg-base-100 z-20">
-        <HeaderMenu />
+      <nav className="relative flex-sc gap-3 md:gap-5 h-20 px-3 md:px-6 py-2 bg-base-100 z-20">
+        <HeaderMenu profile={profile} />
         <Link to="/" className="flex-initial" aria-label="Home">
           <img src={themeLogo || logo} alt="Logo" className="logo" />
         </Link>
@@ -29,7 +28,7 @@ export const DesktopHeader = () => {
           <Icon name="search" size={20} />
         </button>
         <Avatar
-          username={username}
+          username={profile?.username}
           size="lg"
           className="flex-none"
           as="link"
@@ -40,38 +39,44 @@ export const DesktopHeader = () => {
   );
 };
 
-const MENU_ITEMS = [
-  {
-    items: [
-      { label: 'Home', to: '/' },
-      { label: 'Submit a Request', to: '/submit' },
-      { label: 'Check Status', to: '/requests' },
-      { label: 'My Work', to: '/actions' },
-    ],
-  },
-  {
-    title: 'Manager',
-    items: [
-      { label: 'Team Metrics', to: '/manager/metrics' },
-      { label: 'Work Assigned to Team', to: '/manager/work' },
-    ],
-  },
-  {
-    title: 'Process Owner',
-    items: [
-      { label: 'Performance', to: '/owner/performance' },
-      { label: 'Submission Data', to: '/owner/submission' },
-    ],
-  },
-];
+const getMenuItems = profile =>
+  [
+    {
+      items: [
+        { label: 'Home', to: '/' },
+        { label: 'Submit a Request', onClick: () => openSearch() },
+        { label: 'Check Status', to: '/requests' },
+        { label: 'My Work', to: '/actions' },
+      ],
+    },
+    profile?.spaceAdmin && {
+      title: 'Admin',
+      items: [
+        { label: 'Theme Editor', to: '/theme' },
+        {
+          label: 'Platform Console',
+          href: '/app/console',
+          endIcon: 'external-link',
+        },
+        {
+          label: 'API Documentation',
+          href: '/app/docs',
+          endIcon: 'external-link',
+        },
+      ],
+    },
+  ].filter(Boolean);
 
-const HeaderMenu = () => {
+const HeaderMenu = ({ profile }) => {
   const popover = usePopover();
   const close = () => popover.setOpen(false);
+
+  const menuItems = getMenuItems(profile);
+
   return (
     <Popover.RootProvider value={popover} autoFocus={false}>
       <Popover.Trigger asChild>
-        <button className="kbtn kbtn-ghost kbtn-square kbtn-xl">
+        <button className="kbtn kbtn-ghost kbtn-square kbtn-lg">
           <Icon name="menu-2" size={20} />
         </button>
       </Popover.Trigger>
@@ -91,9 +96,9 @@ const HeaderMenu = () => {
         })}
         style={{ transform: 'none' }}
       >
-        <Popover.Content className="l-v-start-stretch h-full w-full gap-3 px-6 py-4 outline-0 bg-base-100 z-30">
+        <Popover.Content className="flex-c-st h-full w-full gap-3 px-6 py-4 outline-0 bg-base-100 z-30">
           <ul className="kmenu flex-nowrap gap-3 p-0 w-full flex-auto overflow-auto">
-            {MENU_ITEMS.map((item, i) => (
+            {menuItems.map((item, i) => (
               <Fragment key={i}>
                 {i !== 0 && <hr />}
                 <HeaderMenuItem {...item} close={close} />
@@ -108,12 +113,12 @@ const HeaderMenu = () => {
               icon="settings"
               close={close}
             />
-            <HeaderMenuItem
-              label="Help"
-              to="/help"
-              icon="help-square-rounded"
-              close={close}
-            />
+            {/*<HeaderMenuItem*/}
+            {/*  label="Help"*/}
+            {/*  to="/help"*/}
+            {/*  icon="help-square-rounded"*/}
+            {/*  close={close}*/}
+            {/*/>*/}
           </ul>
         </Popover.Content>
       </Popover.Positioner>
@@ -121,7 +126,17 @@ const HeaderMenu = () => {
   );
 };
 
-const HeaderMenuItem = ({ label, to, icon, title, items, close }) => {
+const HeaderMenuItem = ({
+  label,
+  to,
+  href,
+  onClick,
+  icon,
+  endIcon,
+  title,
+  items,
+  close,
+}) => {
   if (items) {
     if (title) {
       return (
@@ -145,10 +160,36 @@ const HeaderMenuItem = ({ label, to, icon, title, items, close }) => {
   }
   return (
     <li>
-      <Link to={to} className="content-center h-12 text-base" onClick={close}>
-        {icon && <Icon name={icon} />}
-        <span>{label || to}</span>
-      </Link>
+      {typeof onClick === 'function' ? (
+        <button
+          className="content-cemter h12 text-base"
+          onClick={() => {
+            onClick();
+            close();
+          }}
+        >
+          {icon && <Icon name={icon} />}
+          <span>{label || to}</span>
+          {endIcon && <Icon name={endIcon} size={20} className="ml-auto" />}
+        </button>
+      ) : href ? (
+        <a
+          className="content-center h-12 text-base"
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {icon && <Icon name={icon} />}
+          <span>{label || to}</span>
+          {endIcon && <Icon name={endIcon} size={20} className="ml-auto" />}
+        </a>
+      ) : (
+        <Link to={to} className="content-center h-12 text-base" onClick={close}>
+          {icon && <Icon name={icon} />}
+          <span>{label || to}</span>
+          {endIcon && <Icon name={endIcon} size={20} className="ml-auto" />}
+        </Link>
+      )}
     </li>
   );
 };

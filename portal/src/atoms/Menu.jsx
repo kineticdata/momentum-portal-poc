@@ -156,7 +156,7 @@ export const Menu = ({
 };
 
 const itemType = {
-  label: t.string,
+  label: t.oneOfType([t.string, t.node]),
   icon: t.string,
   onClick: t.func,
   to: t.string,

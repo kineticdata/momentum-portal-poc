@@ -1,4 +1,10 @@
-import { useCallback, useDeferredValue, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { usePagination } from './usePagination.js';
 
 /******************************************************************************
@@ -15,8 +21,14 @@ export function usePaginatedData(fn, params) {
   // Response and timestamp of last fetch of the query
   const [[response, lastTimestamp], setData] = useState([null, null]);
   // Pagination state for the query
-  const { pageToken, setNextPageToken, resetPagination, ...pagination } =
-    usePagination();
+  const {
+    pageToken,
+    setNextPageToken,
+    resetPagination,
+    pageNumber,
+    previousPage,
+    nextPage,
+  } = usePagination();
 
   // If params change, reset response state and pagination to initial values
   useEffect(() => {
@@ -75,18 +87,30 @@ export function usePaginatedData(fn, params) {
     else executeQuery();
   }, [pageToken, resetPagination, executeQuery]);
 
-  return {
-    initialized: !!params,
-    loading: !!params && (!response || !!lastTimestamp),
-    response,
-    pageNumber: pagination.pageNumber,
-    actions: {
-      previousPage: pagination.previousPage,
-      nextPage: pagination.nextPage,
-      reloadPage: executeQuery,
+  return useMemo(
+    () => ({
+      initialized: !!params,
+      loading: !!params && (!response || !!lastTimestamp),
+      response,
+      pageNumber,
+      actions: {
+        previousPage,
+        nextPage,
+        reloadPage: executeQuery,
+        reloadData,
+      },
+    }),
+    [
+      params,
+      response,
+      lastTimestamp,
+      pageNumber,
+      previousPage,
+      nextPage,
+      executeQuery,
       reloadData,
-    },
-  };
+    ],
+  );
 }
 
 /**

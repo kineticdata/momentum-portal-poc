@@ -6,8 +6,7 @@ import { Requests } from './tickets/requests/Requests.jsx';
 import { Form } from './forms/Form.jsx';
 import { Profile } from './profile/Profile.jsx';
 import { SettingsRouting } from './settings/index.jsx';
-import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
-import { MobileFooter } from '../components/footer/MobileFooter.jsx';
+import { Header } from '../components/header/Header.jsx';
 import { SearchModal } from '../components/search/SearchModal.jsx';
 import { Theme } from './theme/index.jsx';
 
@@ -22,11 +21,10 @@ const Redirect = ({ to }) => {
 };
 
 export const PrivateRoutes = () => {
-  const { mobile } = useSelector(state => state.view);
   const spaceAdmin = useSelector(state => state.app.profile?.spaceAdmin);
   return (
     <>
-      <DesktopHeader></DesktopHeader>
+      <Header></Header>
       <Routes>
         {/* Canonical route for submissions */}
         <Route
@@ -59,7 +57,6 @@ export const PrivateRoutes = () => {
         <Route path="/login" element={<Navigate to="/" />} />
         <Route path="/*" element={<Home />} />
       </Routes>
-      {mobile && <MobileFooter></MobileFooter>}
 
       {/* Global search modal */}
       <SearchModal />

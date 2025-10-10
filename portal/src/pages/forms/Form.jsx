@@ -2,12 +2,12 @@ import { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { deleteSubmission } from '@kineticdata/react';
-import { Button } from '../../atoms/Button.jsx';
 import { generateFormLayout } from '../../components/forms/FormLayout.jsx';
 import { KineticForm } from '../../components/kinetic-form/KineticForm.jsx';
 import { openConfirm } from '../../helpers/confirm.js';
 import { toastError, toastSuccess } from '../../helpers/toasts.js';
 import { callIfFn } from '../../helpers/index.js';
+import { Icon } from '../../atoms/Icon.jsx';
 
 const generateDeleteDraftButton =
   ({ listActions }) =>
@@ -21,11 +21,11 @@ const generateDeleteDraftButton =
     )
       return null;
 
-    // Show delete button is submission is of type Service and is in Draft state
+    // Show delete button if submission is of type Service and is in Draft state
     return (
-      <Button
-        variant="tertiary"
-        icon="trash"
+      <button
+        type="button"
+        className="kbtn kbtn-ghost kbtn-circle kbtn-lg"
         onClick={() => {
           openConfirm({
             title: 'Delete Draft',
@@ -50,7 +50,9 @@ const generateDeleteDraftButton =
         }}
         aria-label="Delete Draft"
         title="Delete Draft"
-      />
+      >
+        <Icon name="trash" />
+      </button>
     );
   };
 

@@ -38,12 +38,10 @@ export const Popover = ({
       positioning={{ placement }}
     >
       {slots.trigger && (
-        <ArkPopover.Trigger asChild openable={true}>
-          {slots.trigger}
-        </ArkPopover.Trigger>
+        <ArkPopover.Trigger asChild>{slots.trigger}</ArkPopover.Trigger>
       )}
       <ArkPopover.Positioner>
-        <ArkPopover.Content className="p-5 bg-base-100 rounded-4xl shadow-card w-[30rem] max-w-[calc(100vw-3rem)] z-30">
+        <ArkPopover.Content className="relative p-6 bg-base-100 rounded-box shadow-2xl w-[30rem] max-w-[calc(100vw-2rem)] z-30">
           {slots.content}
         </ArkPopover.Content>
       </ArkPopover.Positioner>

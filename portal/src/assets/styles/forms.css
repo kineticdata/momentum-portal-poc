@@ -27,88 +27,11 @@
  *    Use on a button to align it and any buttons after it to the right.
  *    This class only works if the relevant elements aren't full width, and is
  *    mainly useful for buttons.
+ *  .full-width-form
+ *    Use anywhere inside a form to make it span the full width of the page.
  ******************************************************************************/
 
 @layer base {
-  /*input[type='number']:not(.unstyled),*/
-  /*input[type='date']:not(.unstyled),*/
-  /*input[type='datetime-local']:not(.unstyled),*/
-  /*input[type='time']:not(.unstyled),*/
-  /*input[type='password']:not(.unstyled),*/
-  /*input[type='text']:not(.unstyled) {*/
-  /*  @apply kinput;*/
-  /*}*/
-
-  /*select:not(.unstyled) {*/
-  /*  @apply kselect;*/
-  /*}*/
-
-  /*textarea:not(.unstyled) {*/
-  /*  @apply ktextarea;*/
-  /*}*/
-
-  /*input[type='checkbox']:not(.unstyled) {*/
-  /*  @apply kcheckbox;*/
-  /*}*/
-
-  /*input[type='radio']:not(.unstyled) {*/
-  /*  @apply kradio;*/
-  /*}*/
-
-  /*input[type='checkbox']:not(.unstyled),*/
-  /*input[type='radio']:not(.unstyled) {*/
-  /*  @apply flex-none appearance-none w-5 h-5 border-2 border-primary bg-base-200 outline-0 bg-center bg-no-repeat;*/
-  /*  &:checked {*/
-  /*    @apply bg-primary;*/
-  /*  }*/
-  /*}*/
-  /*input[type='checkbox']:not(.unstyled) {*/
-  /*  @apply rounded;*/
-  /*  &:checked {*/
-  /*    &:before {*/
-  /*      content: '';*/
-  /*      @apply block size-5/6 rotate-45 bg-base-content;*/
-  /*      clip-path: polygon(*/
-  /*        20% 100%,*/
-  /*        20% 80%,*/
-  /*        50% 80%,*/
-  /*        50% 0%,*/
-  /*        70% 0%,*/
-  /*        70% 100%*/
-  /*      );*/
-  /*      margin: 6% 0 0 16%;*/
-  /*    }*/
-  /*    &:disabled {*/
-  /*      &:before {*/
-  /*        @apply bg-base-content/40;*/
-  /*      }*/
-  /*    }*/
-  /*  }*/
-  /*}*/
-  /*input[type='radio']:not(.unstyled) {*/
-  /*  @apply rounded-full;*/
-  /*  &:checked {*/
-  /*    &:before {*/
-  /*      content: '';*/
-  /*      @apply block size-full rotate-45 bg-base-content;*/
-  /*      clip-path: circle(30%);*/
-  /*    }*/
-  /*    &:disabled {*/
-  /*      &:before {*/
-  /*        @apply bg-base-content/40;*/
-  /*      }*/
-  /*    }*/
-  /*  }*/
-  /*}*/
-  /*label:not(.unstyled):has(> input[type='checkbox'], > input[type='radio']) {*/
-  /*  @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border border-base-300 rounded-field outline-0 font-medium max-w-full;*/
-  /*  @apply outline-0 hover:bg-base-200 focus-within:bg-base-200 focus-within:ring-3 focus-within:ring-primary/40;*/
-  /*  overflow-wrap: anywhere;*/
-  /*  &:has(input[disabled]) {*/
-  /*    @apply bg-base-200 border-base-200 text-base-content/40;*/
-  /*  }*/
-  /*}*/
-
   .field {
     input[type='number']:not(.unstyled),
     input[type='date']:not(.unstyled),
@@ -153,6 +76,7 @@
     }
   }
 
+  /* Styling within a Kinetic form */
   .embedded-core-form form {
     > .errors {
       @apply kalert kalert-error kalert-vertical w-full justify-start justify-items-start text-left gap-1;
@@ -286,6 +210,9 @@
         .field-label {
           @apply -mb-3;
         }
+        label:not(.field-label) {
+          @apply flex-sc gap-2;
+        }
         &.vertical {
           @apply flex-col items-stretch;
         }
@@ -312,7 +239,7 @@
 
       /* Attachments */
       .fileinput-button {
-        @apply kbtn kbtn-outline border-dashed bg-no-repeat !pl-11 py-2.25;
+        @apply kbtn kbtn-outline kbtn-lg border-dashed bg-no-repeat focus-within:outline-2 !pl-11 py-2.25;
         &:before {
           content: 'x';
           @apply block absolute left-4 size-6 bg-base-content;
@@ -357,89 +284,37 @@
   }
 }
 
-/*@utility kinput-sm {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 9);*/
-/*  font-size: 0.875rem;*/
-/*}*/
-/*@utility kinput-md {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 10);*/
-/*  font-size: 1rem;*/
-/*}*/
-/*@utility kinput {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  font-size: 1rem;*/
-/*  @apply block w-full hover:bg-base-200 font-medium px-6;*/
-/*  @apply focus:outline-0 focus:border-base-300 focus:bg-base-100 focus:ring-3 focus:ring-primary/40;*/
-/*  @apply focus-within:outline-0 focus-within:border-base-300 focus-within:bg-base-100 focus-within:ring-3 focus-within:ring-primary/40;*/
-/*}*/
-/*@utility kinput-lg {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  font-size: 1rem;*/
-/*}*/
-/*@utility kinput-xl {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 12);*/
-/*  font-size: 1rem;*/
-/*}*/
+@utility kinput {
+  &:focus,
+  &:focus-within {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
+@utility kselect {
+  &:focus,
+  &:focus-within {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
+@utility ktextarea {
+  &:focus,
+  &:focus-within {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
+@utility kcheckbox {
+  &:focus-visible {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
+@utility kradio {
+  &:focus-visible {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
 
-/*@utility kselect-sm {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 9);*/
-/*  font-size: 0.875rem;*/
-/*}*/
-/*@utility kselect-md {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 10);*/
-/*  font-size: 1rem;*/
-/*}*/
-/*@utility kselect {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  font-size: 1rem;*/
-/*  @apply block w-full hover:bg-base-200 font-medium px-6;*/
-/*  @apply focus:outline-0 focus:border-base-300 focus:bg-base-100 focus:ring-3 focus:ring-primary/40;*/
-/*  @apply focus-within:outline-0 focus-within:border-base-300 focus-within:bg-base-100 focus-within:ring-3 focus-within:ring-primary/40;*/
-/*  background-image: linear-gradient(*/
-/*      45deg,*/
-/*      #0000 50%,*/
-/*      currentColor 50%,*/
-/*      currentColor 75%,*/
-/*      #0000 75%*/
-/*    ),*/
-/*    linear-gradient(*/
-/*      135deg,*/
-/*      #0000 25%,*/
-/*      currentColor 25%,*/
-/*      currentColor 50%,*/
-/*      #0000 50%*/
-/*    );*/
-/*  background-position:*/
-/*    calc(100% - 22px) calc(1px + 50%),*/
-/*    calc(100% - 16px) calc(1px + 50%);*/
-/*  background-size:*/
-/*    6px 6px,*/
-/*    6px 6px;*/
-/*}*/
-/*@utility kselect-lg {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  font-size: 1rem;*/
-/*}*/
-/*@utility kselect-xl {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 12);*/
-/*  font-size: 1rem;*/
-/*}*/
-
-/*@utility ktextarea-sm {*/
-/*  font-size: 0.875rem;*/
-/*}*/
-/*@utility ktextarea-md {*/
-/*  font-size: 1rem;*/
-/*}*/
-/*@utility ktextarea {*/
-/*  font-size: 1rem;*/
-/*  @apply block w-full hover:bg-base-200 font-medium px-6;*/
-/*  @apply focus:outline-0 focus:border-base-300 focus:bg-base-100 focus:ring-3 focus:ring-primary/40;*/
-/*  @apply focus-within:outline-0 focus-within:border-base-300 focus-within:bg-base-100 focus-within:ring-3 focus-within:ring-primary/40;*/
-/*}*/
-/*@utility ktextarea-lg {*/
-/*  font-size: 1rem;*/
-/*}*/
-/*@utility ktextarea-xl {*/
-/*  font-size: 1rem;*/
-/*}*/
+@custom-variant full-form {
+  &:has(.full-width-form) {
+    @slot;
+  }
+}

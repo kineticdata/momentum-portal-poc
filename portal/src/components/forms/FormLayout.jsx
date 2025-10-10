@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getAttributeValue } from '../../helpers/records.js';
-import { Button } from '../../atoms/Button.jsx';
 import { Icon } from '../../atoms/Icon.jsx';
+import { PageHeading } from '../PageHeading.jsx';
 
 /**
  * Generates a Layout component for CoreForm.
@@ -44,91 +44,52 @@ export const generateFormLayout = ({
     const icon = getAttributeValue(form, 'Icon', 'forms');
 
     return (
-      <div className="max-w-screen-md mx-auto my-5">
-        <div
-          className={clsx(
-            // Common styles
-            // 'flex flex-col bg-neutral text-neutral-content shadow-card max-w-screen-xl self-center',
-            // // Mobile first styles
-            // 'max-md:stretch-wide max-md:flex-auto max-md:w-stretch',
-            // // Non mobile styles
-            // 'md:my-6 md:rounded-t-2.5xl md:rounded-b-3xl md:shadow-card md:w-full',
-            'rounded-box shadow-lg',
-          )}
-        >
-          <div
-            className={clsx(
-              // Mobile first styles
-              'p-6 py-4 flex-none flex flex-col items-center gap-3',
-              // Non mobile styles
-              'md:py-5',
-            )}
-          >
-            <div className="self-stretch flex justify-between items-center gap-3">
-              <span className="flex-1">
-                {(backTo || backPath) && (
-                  <Button
-                    variant="tertiary"
-                    icon="arrow-left"
-                    to={backTo || backPath}
-                    aria-label="Back"
-                  />
-                )}
-              </span>
-              <div className="bg-neutral-content text-neutral rounded-[10px] shadow-icon flex-none p-2.25">
+      <div className="gutter">
+        <div className="max-w-screen-lg mx-auto full-form:max-w-full full-form:mx-0 pt-1 pb-6">
+          <PageHeading
+            title={form?.name}
+            before={
+              <div className="icon-box-lg">
                 <Icon name={form ? icon : 'blank'} />
               </div>
-              <span className="flex-1 text-right">
-                {Action && (
-                  <Action
-                    form={form}
-                    submission={submission}
-                    backTo={backTo || backPath}
-                  />
-                )}
-              </span>
-            </div>
-            <div className="max-w-screen-md text-base md:text-h3 font-semibold flex gap-4 items-center text-center text-balance">
-              {form?.name}{' '}
-              {form && spaceAdmin && (
+            }
+            after={
+              form &&
+              spaceAdmin && (
                 <a
-                  className="outline-0 hover:text-neutral-content/80 focus-visible:text-neutral-content/80"
+                  className="kbtn kbtn-ghost kbtn kbtn-circle"
                   href={`/app/console#/kapps/${form.kapp?.slug}/forms/edit/${form.slug}/general`}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Open Form Settings in Platform Console"
                 >
-                  <Icon name="settings-share" />
+                  <Icon name="settings-share" size={20} />
                 </a>
-              )}
-            </div>
-            <div className="max-w-screen-md text-sm md:text-base line-clamp-2">
-              {form?.description}
-            </div>
-            {form && Heading && (
-              <div className="max-w-screen-md">
-                <Heading
+              )
+            }
+          >
+            <span className="ml-auto">
+              {Action && (
+                <Action
                   form={form}
                   submission={submission}
                   backTo={backTo || backPath}
                 />
-              </div>
-            )}
-          </div>
-          <div
-            className={clsx(
-              // Common styles
-              'text-base-content',
-              // Mobile first styles
-              'flex-auto p-6 bg-base-100 shadow-card rounded-t-2.5xl',
-              // Non mobile styles
-              'md:p-10 md:rounded-2.5xl',
-            )}
-          >
-            <div className="mx-auto w-full max-w-screen-lg">
-              {content}
-              {reviewPaginationControl}
+              )}
+            </span>
+          </PageHeading>
+          {form && Heading && (
+            <div className="mb-6">
+              <Heading
+                form={form}
+                submission={submission}
+                backTo={backTo || backPath}
+              />
             </div>
+          )}
+          <div className={clsx('rounded-box md:border md:p-8 flex-c-st gap-6')}>
+            {content}
+            {reviewPaginationControl}
           </div>
         </div>
       </div>

@@ -1,5 +1,0 @@
-@layer components {
-  [data-scope='menu'][data-part='item'][data-highlighted] {
-    @apply bg-base-content/10 text-base-content cursor-pointer outline-hidden;
-  }
-}

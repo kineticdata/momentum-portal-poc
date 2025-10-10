@@ -3,7 +3,7 @@ import { parseColor } from '@ark-ui/react/color-picker';
 export const parseHexColor = color => {
   try {
     return parseColor(color);
-  } catch (e) {
+  } catch {
     return null;
   }
 };
@@ -92,7 +92,9 @@ export const calculateThemeState = (
       const grayVariants = createGrayVariants(config?.colors?.gray);
       if (grayVariants) {
         grayVariants.forEach(([step, { hue, saturation, lightness }]) =>
-          cssVars.push(`--color-gray-${step}: hsl(${hue} ${saturation}% ${lightness}%;)`),
+          cssVars.push(
+            `--color-gray-${step}: hsl(${hue} ${saturation}% ${lightness}%;)`,
+          ),
         );
       }
 
@@ -102,7 +104,7 @@ export const calculateThemeState = (
     }
 
     return state;
-  } catch (e) {
+  } catch {
     console.error('Invalid Theme Configuration');
     return state;
   }

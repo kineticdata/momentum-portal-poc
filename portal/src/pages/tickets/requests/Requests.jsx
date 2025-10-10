@@ -13,11 +13,11 @@ const buildMyRequestsSearch = (profile, filters) => {
 
   // Limit form types
   search.in('type', 'types');
-  // Add core state query if filtering by either status
+  // Add core state query if filtering by a status
   if (filters.status.open || filters.status.closed || filters.status.draft) {
     search.in('coreState', 'statuses');
   }
-  // Add assignment query, making sure at least one part is always included
+  // Add assignment query
   search.or();
   search.equals('createdBy', 'username');
   search.equals('submittedBy', 'username');
@@ -37,8 +37,6 @@ const buildMyRequestsSearch = (profile, filters) => {
       ].filter(Boolean),
       username: profile.username,
     }),
-    sortOrder: 'createdAt',
-    direction: 'asc',
     include: ['details', 'values', 'form', 'form.attributesMap'],
     limit: 10,
   };
@@ -63,34 +61,30 @@ export const Requests = () => {
     usePaginatedData(searchSubmissions, params);
 
   return (
-    <div className="px-44">
-      <div className="max-w-screen-lg">
-        <Routes>
-          <Route path=":submissionId" element={<RequestDetail />} />
-          <Route
-            path=":submissionId/edit"
-            element={<Form listActions={actions} />}
+    <Routes>
+      <Route path=":submissionId" element={<RequestDetail />} />
+      <Route
+        path=":submissionId/edit"
+        element={<Form listActions={actions} />}
+      />
+      <Route path=":submissionId/review" element={<Form review={true} />} />
+      <Route
+        path="*"
+        element={
+          <RequestsList
+            listData={{
+              initialized,
+              loading,
+              data: response?.submissions,
+              error: response?.error,
+              pageNumber,
+            }}
+            listActions={actions}
+            filters={filters}
+            setFilters={setFilters}
           />
-          <Route path=":submissionId/review" element={<Form review={true} />} />
-          <Route
-            path="*"
-            element={
-              <RequestsList
-                listData={{
-                  initialized,
-                  loading,
-                  data: response?.submissions,
-                  error: response?.error,
-                  pageNumber,
-                }}
-                listActions={actions}
-                filters={filters}
-                setFilters={setFilters}
-              />
-            }
-          />
-        </Routes>
-      </div>
-    </div>
+        }
+      />
+    </Routes>
   );
 };

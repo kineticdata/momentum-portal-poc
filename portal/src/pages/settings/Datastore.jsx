@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux';
 import { Loading } from '../../components/states/Loading.jsx';
-import { SettingsCard, SettingsHeading } from './Settings.jsx';
+import { SettingsCard } from './Settings.jsx';
+import { PageHeading } from '../../components/PageHeading.jsx';
 
 export const Datastore = ({ datastores }) => {
   const mobile = useSelector(state => state.view.mobile);
 
   return (
-    <>
-      <SettingsHeading pageName="Datastore" />
+    <div className="max-w-screen-lg pt-1 pb-6">
+      <PageHeading title="Settings / Datastore" />
 
       <div className="flex flex-col gap-4 mb-4 md:mb-6 md:grid md:grid-cols-[auto_auto_1fr]">
         {!datastores ? (
@@ -28,6 +29,6 @@ export const Datastore = ({ datastores }) => {
           ))
         )}
       </div>
-    </>
+    </div>
   );
 };

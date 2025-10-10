@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { ColorPicker, parseColor } from '@ark-ui/react/color-picker';
 import clsx from 'clsx';
-import { Button } from './Button.jsx';
 import { callIfFn } from '../helpers/index.js';
 import { calcPlacement } from '../helpers/atoms.js';
+import { Icon } from './Icon.jsx';
 
 export const ColorField = ({
   value,
@@ -57,7 +57,9 @@ export const ColorField = ({
                   className={clsx('shrink !w-1 flex-1')}
                 />
                 <ColorPicker.EyeDropperTrigger asChild>
-                  <Button variant="secondary" icon="color-picker" />
+                  <button type="button" className="kbtn kbtn-lg kbtn-outline">
+                    <Icon name="color-picker" />
+                  </button>
                 </ColorPicker.EyeDropperTrigger>
               </ColorPicker.View>
             </div>
