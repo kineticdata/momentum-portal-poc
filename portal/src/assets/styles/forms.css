@@ -68,9 +68,14 @@
       }
     }
     &.has-error {
-      input,
-      select,
-      textarea {
+      input[type='number']:not(.unstyled),
+      input[type='date']:not(.unstyled),
+      input[type='datetime-local']:not(.unstyled),
+      input[type='time']:not(.unstyled),
+      input[type='password']:not(.unstyled),
+      input[type='text']:not(.unstyled),
+      select:not(.unstyled),
+      textarea:not(.unstyled) {
         --kinput-color: var(--color-error);
       }
     }

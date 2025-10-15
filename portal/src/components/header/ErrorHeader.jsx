@@ -8,7 +8,7 @@ import { Menu } from '../../atoms/Menu.jsx';
 export const ErrorHeader = () => {
   const { username, displayName } = useSelector(state => state.app.profile);
 
-  const themeLogo = useSelector(state => state.theme.logo);
+  const themeLogo = useSelector(state => state.theme.data?.logo?.default);
 
   return (
     <HeaderPortal>

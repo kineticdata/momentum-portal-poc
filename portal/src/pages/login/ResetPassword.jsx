@@ -41,7 +41,7 @@ export const ResetPassword = () => {
 
 const ResetPasswordRequestForm = () => {
   const kappSlug = useSelector(state => state.app.kappSlug);
-  const themeLogo = useSelector(state => state.theme.logo);
+  const themeLogo = useSelector(state => state.theme.data?.logo?.default);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
 
@@ -98,7 +98,7 @@ const ResetPasswordRequestForm = () => {
         </p>
       )}
       {error && (
-        <p className="flex-cc gap-2 text-base-content/80">
+        <p className="flex-sc gap-2 text-base-content/80">
           <span className="kstatus kstatus-error"></span>
           {error}
         </p>
@@ -119,7 +119,7 @@ const ResetPasswordChangeForm = ({ token, username }) => {
   const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
-  const themeLogo = useSelector(state => state.theme.logo);
+  const themeLogo = useSelector(state => state.theme.data?.logo?.default);
 
   // State and change handlers for new password fields
   const [password, setPassword] = useState('');

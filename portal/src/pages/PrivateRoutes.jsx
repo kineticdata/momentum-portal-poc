@@ -23,43 +23,56 @@ const Redirect = ({ to }) => {
 export const PrivateRoutes = () => {
   const spaceAdmin = useSelector(state => state.app.profile?.spaceAdmin);
   return (
-    <>
-      <Header></Header>
-      <Routes>
-        {/* Canonical route for submissions */}
-        <Route
-          path="/kapps/:kappSlug/forms/:formSlug/submissions/:submissionId"
-          element={
-            <Redirect
-              to={params =>
-                `/kapps/${params.kappSlug}/forms/${params.formSlug}/${params.submissionId}`
-              }
-            />
-          }
-        />
-        {/* Canonical route for forms */}
-        <Route
-          path="/kapps/:kappSlug/forms/:formSlug/:submissionId?"
-          element={<Form />}
-        />
-        {/* Canonical route for kapps */}
-        <Route path="/kapps/:kappSlug" element={<Redirect to="/" />} />
+    <Routes>
+      {/* Theme page */}
+      {spaceAdmin && <Route path="/theme" element={<Theme />} />}
 
-        {/* Theme page */}
-        {spaceAdmin && <Route path="/theme" element={<Theme />} />}
+      {/* Other Routes*/}
+      <Route
+        path="/*"
+        element={
+          <>
+            {/* Shared header */}
+            <Header />
 
-        {/* Portal routes */}
-        <Route path="/actions/*" element={<Actions />} />
-        <Route path="/requests/*" element={<Requests />} />
-        <Route path="/forms/:formSlug/:submissionId?" element={<Form />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings/*" element={<SettingsRouting />} />
-        <Route path="/login" element={<Navigate to="/" />} />
-        <Route path="/*" element={<Home />} />
-      </Routes>
+            <Routes>
+              {/* Canonical route for submissions */}
+              <Route
+                path="/kapps/:kappSlug/forms/:formSlug/submissions/:submissionId"
+                element={
+                  <Redirect
+                    to={params =>
+                      `/kapps/${params.kappSlug}/forms/${params.formSlug}/${params.submissionId}`
+                    }
+                  />
+                }
+              />
+              {/* Canonical route for forms */}
+              <Route
+                path="/kapps/:kappSlug/forms/:formSlug/:submissionId?"
+                element={<Form />}
+              />
+              {/* Canonical route for kapps */}
+              <Route path="/kapps/:kappSlug" element={<Redirect to="/" />} />
 
-      {/* Global search modal */}
-      <SearchModal />
-    </>
+              {/* Portal routes */}
+              <Route path="/actions/*" element={<Actions />} />
+              <Route path="/requests/*" element={<Requests />} />
+              <Route
+                path="/forms/:formSlug/:submissionId?"
+                element={<Form />}
+              />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings/*" element={<SettingsRouting />} />
+              <Route path="/login" element={<Navigate to="/" />} />
+              <Route path="/*" element={<Home />} />
+            </Routes>
+
+            {/* Global search modal */}
+            <SearchModal />
+          </>
+        }
+      />
+    </Routes>
   );
 };

@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import './assets/styles/daisyui.css';
 @import './assets/styles/font.css' layer(base);
-@import './assets/styles/colors.css' layer(base); /* TODO delete */
 @import './assets/styles/layout.css';
 @import './assets/styles/avatar.css';
 @import './assets/styles/buttons.css';

@@ -11,7 +11,7 @@ import { openSearch } from '../../helpers/search.js';
 
 export const Header = () => {
   const profile = useSelector(state => state.app.profile);
-  const themeLogo = useSelector(state => state.theme.logo);
+  const themeLogo = useSelector(state => state.theme.data?.logo?.default);
 
   return (
     <HeaderPortal>

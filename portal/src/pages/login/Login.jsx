@@ -23,7 +23,7 @@ export const Login = loginProps => {
     username,
   } = loginProps;
 
-  const themeLogo = useSelector(state => state.theme.logo);
+  const themeLogo = useSelector(state => state.theme.data?.logo?.default);
 
   return (
     <LoginCardWrapper>

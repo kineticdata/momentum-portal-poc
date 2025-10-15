@@ -3,30 +3,31 @@
 }
 
 :root,
-[data-theme] {
-  --color-base-100: oklch(from #fefefe l c h);
-  --color-base-200: oklch(from #f0f2f3 l c h);
-  --color-base-300: oklch(from #d0d4db l c h);
-  --color-base-content: oklch(from #101828 l c h);
-  --color-primary: oklch(from #ffce74 l c h);
-  --color-primary-content: oklch(from #272117 l c h);
-  --color-secondary: oklch(from #1f3d5a l c h);
-  --color-secondary-content: oklch(from #d4dfeb l c h);
-  --color-accent: oklch(from #8bc2ff l c h);
-  --color-accent-content: oklch(from #162455 l c h);
-  --color-neutral: oklch(from #1f3d5a l c h);
-  --color-neutral-content: oklch(from #d4dfeb l c h);
-  --color-info: oklch(from #c7dfff l c h);
-  --color-info-content: oklch(from #1d2229 l c h);
-  --color-success: oklch(from #d3edd3 l c h);
-  --color-success-content: oklch(from #383f38 l c h);
-  --color-warning: oklch(from #e1ac56 l c h);
-  --color-warning-content: oklch(from #584220 l c h);
-  --color-error: oklch(from #fec8c8 l c h);
-  --color-error-content: oklch(from #801518 l c h);
-  --radius-selector: 0.75rem;
-  --radius-field: 0.75rem;
+[data-theme],
+[data-theme-editor] {
+  --color-base-100: #fefefe;
+  --color-base-200: #f0f2f3;
+  --color-base-300: #d0d4db;
+  --color-base-content: #101828;
+  --color-primary: #ffce74;
+  --color-primary-content: #272117;
+  --color-secondary: #1f3d5a;
+  --color-secondary-content: #d4dfeb;
+  --color-accent: #8bc2ff;
+  --color-accent-content: #162455;
+  --color-neutral: #1f3d5a;
+  --color-neutral-content: #d4dfeb;
+  --color-info: #c7dfff;
+  --color-info-content: #1d2229;
+  --color-success: #d3edd3;
+  --color-success-content: #383f38;
+  --color-warning: #e1ac56;
+  --color-warning-content: #584220;
+  --color-error: #fec8c8;
+  --color-error-content: #801518;
   --radius-box: 1rem;
+  --radius-field: 0.75rem;
+  --radius-selector: 0.5rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;

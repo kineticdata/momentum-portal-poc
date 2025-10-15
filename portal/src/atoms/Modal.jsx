@@ -32,6 +32,7 @@ import { Icon } from './Icon.jsx';
  * @param {string} [props.toasterId] The id for a Toaster component that should
  *  be rendered inside the modal to allow for toasts that can be interacted
  *  with without the modal getting closed.
+ * @param {Object} [props.portal] Ref to a container for the portal to use.
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
  *  available slots in the modal. Available slots are:
  *  - trigger: Component that toggles the modal open state when interacted with.
@@ -50,6 +51,7 @@ export const Modal = ({
   closeOnEscape,
   closeOnInteractOutside,
   toasterId,
+  portal,
   children,
 }) => {
   const slots = getChildSlots(children, {
@@ -71,7 +73,7 @@ export const Modal = ({
       {slots.trigger && (
         <Dialog.Trigger asChild>{slots.trigger}</Dialog.Trigger>
       )}
-      <Portal>
+      <Portal container={portal}>
         <Dialog.Backdrop className="fixed inset-0 bg-black/20 z-40" />
         <Dialog.Positioner className="kmodal">
           <Dialog.Content
@@ -136,5 +138,6 @@ Modal.propTypes = {
   title: t.string,
   size: t.string,
   toasterId: t.string,
+  portal: t.object,
   children: t.node,
 };
