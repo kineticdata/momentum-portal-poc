@@ -104,7 +104,7 @@ export const DatastoreRecords = ({ datastores }) => {
             <div className="rounded-box md:border md:p-8">
               <CoreForm
                 submission={id !== 'new' ? id : undefined}
-                kapp="admin-center"
+                kapp={kappSlug}
                 form={formSlug}
                 components={{ Pending }}
                 created={handleCreated}
