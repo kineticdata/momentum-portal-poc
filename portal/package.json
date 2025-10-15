@@ -1,7 +1,7 @@
 {
   "name": "momentum-portal",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "prestart": "node ./src/setupEnv.cjs",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@ark-ui/react": "^4.9.2",
     "@date-fns/utc": "^2.1.0",
-    "@kineticdata/react": "^6.1.0",
+    "@kineticdata/react": "^6.1.1",
     "@reduxjs/toolkit": "^2.3.0",
     "@tabler/icons-react": "^3.19.0",
     "@toast-ui/react-editor": "^3.2.3",
