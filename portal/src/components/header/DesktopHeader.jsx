@@ -1,7 +1,7 @@
 import { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/GFIM.png';
+import logo from '../../assets/images/IPPSA.svg';
 import { Icon } from '../../atoms/Icon.jsx';
 import { HeaderPortal } from './HeaderPortal.jsx';
 import { appActions } from '../../helpers/state.js';
@@ -60,7 +60,7 @@ export const DesktopHeader = () => {
             })}
             onClick={() => appActions.setPowerMode(true)}
           >
-            Power User
+            Commander
           </button>
         </div>
         <Avatar

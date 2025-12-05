@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/GFIM.png';
+import logo from '../../assets/images/IPPSA.svg';
 import { HeaderPortal } from './HeaderPortal.jsx';
 import { Avatar } from '../../atoms/Avatar.jsx';
 import { Menu } from '../../atoms/Menu.jsx';
