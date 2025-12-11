@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import { PageHeading } from '../../components/PageHeading.jsx';
 import { TableComponent } from '../../components/kinetic-form/widgets/table.js';
 import { Modal } from '../../atoms/Modal.jsx';
-import { toastSuccess } from '../../helpers/toasts.js';
+import { toastError, toastSuccess } from '../../helpers/toasts.js';
 import clsx from 'clsx';
+import { openConfirm } from '../../helpers/confirm.js';
+import { deleteSubmission } from '@kineticdata/react';
 
 // Transform the data to a single level map
 const rowTransform = ({ Values, ...row }) => ({ ...row, ...Values });
@@ -88,7 +90,7 @@ export const Notifications = () => {
           saveLabel: 'Create',
           values:
             templateType !== 'Date Format' ? { Type: templateType } : undefined,
-          onSave: function (api) {
+          onSave: function (_, api) {
             api.submit(function (result) {
               // Add row to the table so it appears immediately before the table reloads
               const newRow = mapSubmissionToRow(
@@ -147,15 +149,24 @@ export const Notifications = () => {
       label: `Delete ${templateType}`,
       icon: 'trash',
       onClick: function (row, index, tableApi) {
-        tableApi.actions.delete(index, {
+        openConfirm({
           title: `Delete ${templateType}`,
+          acceptLabel: 'Yes',
           description: `Are you sure you want to delete the ${templateType.toLowerCase()}: ${row.name}?`,
           successMessage: `${templateType} was successfully deleted`,
           accept: function () {
-            // Delete the row in the table so it is removed immediately before the table reloads
-            tableApi.deleteRow(index);
-            // Reload the table data in the background
-            tableApi.reloadData();
+            deleteSubmission({ id: row.id }).then(({ error }) => {
+              if (error) {
+                toastError({
+                  title: `There was an error deleting the ${templateType.toLowerCase()}: ${row.name}`,
+                });
+              } else {
+                // Delete the row in the table so it is removed immediately before the table reloads
+                tableApi.deleteRow(index);
+                // Reload the table data in the background
+                tableApi.reloadData();
+              }
+            });
           },
         });
       },
@@ -199,7 +210,7 @@ export const Notifications = () => {
                 { label: 'Status', property: 'status' },
                 { label: 'Name', property: 'name' },
               ]}
-              addAction={createAddAction('Templates', 'notification-data')}
+              addAction={createAddAction('Template', 'notification-data')}
               rowActions={createRowActions('Templates')}
               title="Templates"
               messages={{
@@ -224,7 +235,7 @@ export const Notifications = () => {
                 { label: 'Status', property: 'status' },
                 { label: 'Name', property: 'name' },
               ]}
-              addAction={createAddAction('Snippets', 'notification-data')}
+              addAction={createAddAction('Snippet', 'notification-data')}
               rowActions={createRowActions('Snippets')}
               title="Snippets"
               messages={{

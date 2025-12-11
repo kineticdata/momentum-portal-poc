@@ -8,7 +8,7 @@ import { Datastore } from './Datastore.jsx';
 import { DatastoreRecords } from './DatastoreRecords.jsx';
 import { useSelector } from 'react-redux';
 import { useMemo } from 'react';
-import { Notifications } from '../Notifications/Notifications.jsx';
+import { Notifications } from './Notifications.jsx';
 
 export const SettingsRouting = () => {
   const kappSlug = useSelector(state => state.app.kappSlug);
