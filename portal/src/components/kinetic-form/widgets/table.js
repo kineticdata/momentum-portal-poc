@@ -413,6 +413,7 @@ const TableRenderer = ({
             {currentTableData?.map(row => (
               <tr
                 key={row.key}
+                data-test-id={row.raw.id || undefined}
                 className={clsx(
                   'group rounded-box',
                   'has-[td.selectable>button:focus]:outline-2',

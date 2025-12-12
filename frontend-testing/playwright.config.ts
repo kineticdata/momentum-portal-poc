@@ -17,7 +17,7 @@ export default defineConfig({
   reporter: process.env.CI ? "dot" : "html",
   use: {
     actionTimeout: 0,
-    baseURL: process.env.TEST_HOST || "https://momentum-dev.kinopsdev.io/#",
+    baseURL: process.env.PW_BASE_URI,
     trace: "on-first-retry",
     testIdAttribute: "data-locator",
   },
