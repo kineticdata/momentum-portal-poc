@@ -102,7 +102,7 @@ export const Profile = () => {
 
   return (
     <div className="px-44">
-      <div className="max-w-screen-lg">
+      <div className="max-w-screen-md">
         <div className={clsx('relative l-h-start-center gap-6 my-6')}>
           <Link
             className="kbtn kbtn-ghost kbtn-lg kbtn-circle"

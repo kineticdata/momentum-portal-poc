@@ -105,13 +105,19 @@
 /*  --kbtn-p: 1rem;*/
 /*}*/
 
-/*@utility kbtn {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  --kfontsize: 1rem;*/
-/*  --kbtn-p: 1rem;*/
-/*  @apply font-medium gap-1;*/
-/*  @apply focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-primary/40;*/
-/*}*/
+@utility kbtn {
+  --ksize: calc(var(--size-field, 0.25rem) * 11);
+  --kfontsize: 1rem;
+  --kbtn-p: 1rem;
+  @apply font-medium gap-1 outline-none;
+  @apply focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-primary/40;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-secondary);
+    outline: none;
+    border: none;
+  }
+}
 /*@utility kbtn-lg {*/
 /*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
 /*  --kfontsize: 1rem;*/

@@ -39,9 +39,9 @@
   /*  @apply kinput;*/
   /*}*/
 
-  /*select:not(.unstyled) {*/
-  /*  @apply kselect;*/
-  /*}*/
+  select:not(.unstyled) {
+    @apply kselect uppercase;
+  }
 
   /*textarea:not(.unstyled) {*/
   /*  @apply ktextarea;*/
@@ -221,10 +221,10 @@
 
     [data-element-type='section'] {
       > .section-title {
-        @apply h3 block w-full;
+        @apply h3 block w-full text-primary;
       }
       > [data-element-type='section'] > .section-title {
-        @apply h4;
+        @apply h4 text-primary;
       }
     }
 
@@ -368,13 +368,13 @@
 /*  --ksize: calc(var(--size-field, 0.25rem) * 10);*/
 /*  font-size: 1rem;*/
 /*}*/
-/*@utility kinput {*/
-/*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
-/*  font-size: 1rem;*/
-/*  @apply block w-full hover:bg-base-200 font-medium px-6;*/
-/*  @apply focus:outline-0 focus:border-base-300 focus:bg-base-100 focus:ring-3 focus:ring-primary/40;*/
-/*  @apply focus-within:outline-0 focus-within:border-base-300 focus-within:bg-base-100 focus-within:ring-3 focus-within:ring-primary/40;*/
-/*}*/
+@utility kinput {
+  --ksize: calc(var(--size-field, 0.25rem) * 11);
+  font-size: 1rem;
+  @apply block w-full font-medium px-6 bg-white text-base-100;
+  @apply focus:outline-0 focus:border-primary focus:bg-white focus:ring-3 focus:ring-primary/40;
+  @apply focus-within:outline-0 focus-within:border-primary focus-within:bg-white focus-within:ring-3 focus-within:ring-primary/40;
+}
 /*@utility kinput-lg {*/
 /*  --ksize: calc(var(--size-field, 0.25rem) * 11);*/
 /*  font-size: 1rem;*/
