@@ -207,7 +207,7 @@ export const Profile = () => {
           <Button
             type="submit"
             onClick={saveProfile}
-            className="mt-7"
+            className="mt-7 w-90 mx-auto"
             disabled={
               profile.email === newEmail &&
               profile.displayName === newDisplayName &&
