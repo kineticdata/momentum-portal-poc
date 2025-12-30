@@ -121,3 +121,5 @@ You can also view the output to determine the S3 bucket by viewing the Github Ac
 ### License
 
 Code released under [the MIT license](https://github.com/coreui/coreui-free-react-admin-template/blob/main/LICENSE).
+
+Last Updated: 12/30/2025
