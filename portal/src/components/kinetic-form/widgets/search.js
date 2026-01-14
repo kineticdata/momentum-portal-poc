@@ -8,7 +8,11 @@ import {
   useState,
 } from 'react';
 import t from 'prop-types';
-import { Combobox, createListCollection } from '@ark-ui/react/combobox';
+import {
+  Combobox,
+  createListCollection,
+  useListCollection,
+} from '@ark-ui/react/combobox';
 import { Portal } from '@ark-ui/react/portal';
 import { defineFilter } from '@kineticdata/react';
 import { debounce } from 'lodash-es';
@@ -160,15 +164,15 @@ const SearchComponent = forwardRef(
     const isLoading = usesIntegration && (loading || isQueryStale);
 
     // Define the collection to use for the combobox field
-    const collection = useMemo(
-      () =>
-        createListCollection({
-          items: (open ? !isLoading && data : selection) || [],
-          itemToValue: optionToValue,
-          itemToString: optionToLabel,
-        }),
-      [open, isLoading, data, selection, optionToValue, optionToLabel],
-    );
+    const { collection, set } = useListCollection({
+      initialItems: (open ? !isLoading && data : selection) || [],
+      itemToValue: optionToValue,
+      itemToString: optionToLabel,
+    });
+    // Update collection when data changes
+    useEffect(() => {
+      set((open ? !isLoading && data : selection) || []);
+    }, [set, open, isLoading, data, selection]);
 
     // State for disabled state of the field
     const [isDisabled, setIsDisabled] = useState(!!disabled);
@@ -230,8 +234,9 @@ const SearchComponent = forwardRef(
           collection={collection}
           onInputValueChange={({ inputValue }) => {
             setInputValue(inputValue);
-            // If the input value is empty, set the query immediately
-            if (!inputValue) setQuery(inputValue);
+            // If the input value is empty or the search is closed, set the
+            // query immediately
+            if (!inputValue || !open) setQuery(inputValue);
           }}
           value={selection.map(optionToValue)}
           onValueChange={handleChange}
@@ -266,11 +271,14 @@ const SearchComponent = forwardRef(
                         className="absolute left-4 top-0 text-base-content/50 my-2.5 z-1"
                       />
                     )}
-                    {showClear && !isDisabled && (
+                    {!isDisabled && (
                       <Combobox.ClearTrigger
                         asChild
-                        className="absolute right-0 top-0 z-1"
-                        onClick={() => ctx.setOpen(true)}
+                        className={clsx(
+                          'absolute right-0 top-0 z-1',
+                          !showClear && 'hidden',
+                        )}
+                        onClick={() => setTimeout(() => ctx.setOpen(true), 0)}
                         tabIndex={0}
                       >
                         <CloseButton />
