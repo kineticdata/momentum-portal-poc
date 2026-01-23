@@ -169,7 +169,10 @@ const SignatureComponent = forwardRef(
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="w-[17rem] h-[3.5rem] bg-base-100 border border-base-300 rounded-2.5xl hover:bg-base-200 flex items-center justify-center focus-visible:ring-3 focus-visible:ring-primary/40 outline-0"
+              className={clsx(
+                'w-[17rem] h-[3.5rem] border border-base-300 rounded-2.5xl hover:bg-base-200 flex items-center justify-center focus-visible:ring-3 focus-visible:ring-primary/40 outline-0',
+                savedSignature ? 'bg-white' : 'bg-base-100',
+              )}
             >
               {savedSignature ? (
                 <img
