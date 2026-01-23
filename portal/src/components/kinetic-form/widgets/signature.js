@@ -33,6 +33,7 @@ const SignatureComponent = forwardRef(
       savedFileName = 'signature_widget',
       buttonLabel = 'Signature',
       clearButtonLabel = 'Clear',
+      signatureColor = '#000000',
     },
     ref,
   ) => {
@@ -241,6 +242,7 @@ const SignatureComponent = forwardRef(
                     <SignaturePad.Label>{signaturePadLabel}</SignaturePad.Label>
                   </div>
                   <SignaturePad.Control
+                    style={{ fill: signatureColor }}
                     className={clsx(
                       'border border-base-300 bg-base-200 relative rounded-2.5xl transition-all',
                       'focus-within:ring-3 focus-within:ring-primary/40 outline-0',
