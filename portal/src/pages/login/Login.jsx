@@ -2,7 +2,7 @@ import { Button } from '../../atoms/Button.jsx';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/IPPSA.svg';
+import logo from '../../assets/images/UnitedStatesCommand.svg';
 import { Icon } from '../../atoms/Icon.jsx';
 
 export const Login = loginProps => (
