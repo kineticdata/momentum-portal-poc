@@ -1,7 +1,7 @@
 import { Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/images/IPPSA.svg';
+import logo from '../../assets/images/stratcom.svg';
 import { Icon } from '../../atoms/Icon.jsx';
 import { HeaderPortal } from './HeaderPortal.jsx';
 import { appActions } from '../../helpers/state.js';
@@ -26,7 +26,7 @@ export const DesktopHeader = () => {
       >
         <HeaderMenu />
         <Link to="/" className="flex-initial" aria-label="Home">
-          <img src={themeLogo || logo} alt="Logo" className="logo" />
+           <img src={themeLogo || logo} alt="Logo" className="logo" style={{ width: '85px', height: 'auto', padding: '10px'}}/>
         </Link>
         <div className="mx-auto" />
         <button

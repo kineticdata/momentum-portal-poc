@@ -4,7 +4,7 @@ import { createSubmission, getCsrfToken } from '@kineticdata/react';
 import { useSelector } from 'react-redux';
 import { Button } from '../../atoms/Button.jsx';
 import { toastSuccess } from '../../helpers/toasts.js';
-import logo from '../../assets/images/IPPSA.svg';
+import logo from '../../assets/images/stratcom.svg';
 
 export const ResetPassword = () => {
   let { token } = useParams();
