@@ -1,0 +1,16 @@
+---
+description: Kinetic front-end portal patterns
+globs: ["**/*.jsx", "**/*.tsx"]
+---
+
+If the `ai-skills/` directory is empty or missing, initialize the submodule first: `git submodule update --init ai-skills`
+
+When adding or modifying Kinetic Platform skills, make changes inside `ai-skills/` and submit a pull request to the `kineticdata/kinetic-platform-ai-skills` repository so all projects benefit from the update.
+
+Apply the following patterns when building or modifying Kinetic front-end portals using @kineticdata/react and KineticLib.
+
+@ai-skills/skills/front-end/bootstrap/SKILL.md
+@ai-skills/skills/front-end/forms/SKILL.md
+@ai-skills/skills/front-end/data-fetching/SKILL.md
+@ai-skills/skills/front-end/mutations/SKILL.md
+@ai-skills/skills/front-end/state/SKILL.md

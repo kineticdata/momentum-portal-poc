@@ -1,0 +1,24 @@
+---
+description: Kinetic Platform API and workflow knowledge
+globs: ["**/*.js", "**/*.ts", "**/*.rb", "**/*.yaml", "**/*.yml"]
+---
+
+If the `ai-skills/` directory is empty or missing, initialize the submodule first: `git submodule update --init ai-skills`
+
+When adding or modifying Kinetic Platform skills, make changes inside `ai-skills/` and submit a pull request to the `kineticdata/kinetic-platform-ai-skills` repository so all projects benefit from the update.
+
+Apply the following knowledge when writing code that interacts with the Kinetic Platform REST API or Task workflow engine.
+
+@ai-skills/skills/platform/api-basics/SKILL.md
+@ai-skills/skills/platform/kql-and-indexing/SKILL.md
+@ai-skills/skills/platform/pagination/SKILL.md
+@ai-skills/skills/platform/workflow-engine/SKILL.md
+@ai-skills/skills/platform/workflow-xml/SKILL.md
+@ai-skills/skills/platform/decision-frameworks/SKILL.md
+@ai-skills/skills/platform/architectural-patterns/SKILL.md
+@ai-skills/skills/platform/form-engine/SKILL.md
+@ai-skills/skills/platform/integrations/SKILL.md
+@ai-skills/skills/platform/webapis-and-webhooks/SKILL.md
+@ai-skills/skills/platform/users-teams-security/SKILL.md
+@ai-skills/skills/platform/ruby-sdk/SKILL.md
+@ai-skills/skills/platform/template-provisioning/SKILL.md
