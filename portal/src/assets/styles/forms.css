@@ -27,92 +27,64 @@
  *    Use on a button to align it and any buttons after it to the right.
  *    This class only works if the relevant elements aren't full width, and is
  *    mainly useful for buttons.
+ *  .full-width-form
+ *    Use anywhere inside a form to make it span the full width of the page.
  ******************************************************************************/
 
-@layer components {
+@layer base {
   .field {
-    @apply block;
-
-    label {
-      @apply block text-sm font-semibold text-gray-900 leading-4 pb-2;
+    input[type='number']:not(.unstyled),
+    input[type='date']:not(.unstyled),
+    input[type='datetime-local']:not(.unstyled),
+    input[type='time']:not(.unstyled),
+    input[type='password']:not(.unstyled),
+    input[type='text']:not(.unstyled) {
+      @apply kinput w-full;
     }
 
-    input[type='text'],
-    input[type='password'],
-    input[type='number'],
-    input[type='date'],
-    input[type='datetime-local'],
-    input[type='time'],
-    textarea {
-      @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
-      @apply text-gray-950 bg-white border-primary-400;
-      @apply hover:bg-primary-100;
-      @apply focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400;
-      @apply disabled:text-gray-900 disabled:bg-gray-100;
-    }
-    textarea {
-      @apply md:rounded-br-md;
+    select:not(.unstyled) {
+      @apply kselect w-full;
     }
 
-    label:has(> input[type='checkbox']),
-    label:has(> input[type='radio']) {
-      @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
-      @apply text-gray-950 bg-white border-primary-400;
-      @apply hover:bg-primary-100;
-      @apply focus-within:bg-white focus-within:ring-3 focus-within:ring-secondary-400;
-      overflow-wrap: anywhere;
-
-      input[type='checkbox'],
-      input[type='radio'] {
-        @apply flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat;
-      }
-      input[type='checkbox'] {
-        @apply rounded;
-        background-size: 1.125rem;
-        &:checked {
-          background-image: url(icons/checkbox-checked.svg);
-          &:disabled {
-            background-image: url(icons/checkbox-checked_disabled.svg);
-          }
-        }
-      }
-      input[type='radio'] {
-        @apply rounded-full;
-        background-size: 0.75rem;
-        &:checked {
-          background-image: url(./icons/radio-checked.svg);
-          &:disabled {
-            background-image: url(./icons/radio-checked_disabled.svg);
-          }
-        }
-      }
-
-      &:has(input[disabled]) {
-        @apply text-gray-900 bg-gray-100;
-      }
+    textarea:not(.unstyled) {
+      @apply ktextarea w-full;
     }
 
+    input[type='checkbox']:not(.unstyled) {
+      @apply kcheckbox;
+    }
+
+    input[type='radio']:not(.unstyled) {
+      @apply kradio;
+    }
+
+    > label {
+      @apply block flex-none w-full text-sm font-semibold leading-4 pb-2 text-base-content/70 empty:hidden;
+    }
+    &.required > label {
+      @apply after:text-[var(--required-field-color,red)] after:font-bold;
+      &:after {
+        content: ' *';
+      }
+    }
     &.has-error {
-      label {
-        @apply text-warning-500;
-      }
-
-      input {
-        @apply ring ring-warning-200;
-      }
-
-      p {
-        @apply text-warning-500 text-sm;
-      }
-      span {
-        @apply text-sm;
+      input[type='number']:not(.unstyled),
+      input[type='date']:not(.unstyled),
+      input[type='datetime-local']:not(.unstyled),
+      input[type='time']:not(.unstyled),
+      input[type='password']:not(.unstyled),
+      input[type='text']:not(.unstyled),
+      select:not(.unstyled),
+      textarea:not(.unstyled) {
+        --kinput-color: var(--color-error);
       }
     }
   }
 
+  /* Styling within a Kinetic form */
   .embedded-core-form form {
     > .errors {
-      @apply w-full text-warning-500;
+      @apply kalert kalert-error kalert-vertical w-full justify-start justify-items-start text-left gap-1;
       > p {
         @apply font-semibold;
       }
@@ -186,131 +158,69 @@
     }
 
     [data-element-type='wrapper'] {
-      &.form-group {
-        @apply block w-full;
+      @apply relative block w-full;
 
+      input[type='number']:not(.unstyled),
+      input[type='date']:not(.unstyled),
+      input[type='datetime-local']:not(.unstyled),
+      input[type='time']:not(.unstyled),
+      input[type='password']:not(.unstyled),
+      input[type='text']:not(.unstyled) {
+        @apply kinput w-full;
+      }
+      select:not(.unstyled) {
+        @apply kselect w-full;
+      }
+      textarea:not(.unstyled) {
+        @apply ktextarea w-full;
+      }
+      input[type='checkbox']:not(.unstyled) {
+        @apply kcheckbox;
+      }
+      input[type='radio']:not(.unstyled) {
+        @apply kradio;
+      }
+
+      .field-label {
+        @apply block flex-none w-full text-sm font-semibold leading-4 pb-2 text-base-content/70 empty:hidden;
+      }
+      &.required .field-label {
+        @apply after:text-[var(--required-field-color,red)] after:font-bold;
+        &:after {
+          content: ' *';
+        }
+      }
+      &.empty-label {
         .field-label {
-          @apply block w-full text-sm font-semibold text-gray-900 leading-4 pb-2;
+          @apply hidden;
         }
-
-        input[type='text'],
-        input[type='password'],
-        textarea,
-        select {
-          @apply block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-medium;
-          @apply text-gray-950 bg-white border-primary-400;
-          @apply hover:bg-primary-100;
-          @apply focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400;
-          @apply disabled:text-gray-900 disabled:bg-gray-100;
-        }
-        select {
-          @apply appearance-none bg-no-repeat pr-11 md:pr-12;
-          background-image: url(./icons/chevron-down.svg);
-          &:disabled {
-            background-image: url(./icons/chevron-down_disabled.svg);
+        &.required {
+          @apply after:text-[var(--required-field-color,red)] after:font-bold relative after:absolute after:-top-1 after:-left-0;
+          &:after {
+            content: ' *';
           }
-          background-position: right 1.25rem center;
-          @media (min-width: 768px) {
-            background-position: right 1.5rem center;
-          }
-          background-size: 1.5rem;
         }
+      }
+      &.has-error {
+        input,
+        select,
         textarea {
-          @apply md:rounded-br-md;
-        }
-
-        /* Attachments */
-        .fileinput-button {
-          @apply btn-secondary border-dashed border-primary-900 bg-no-repeat !pl-11 focus-within:bg-secondary-400;
-          background-image: url(./icons/file-plus.svg);
-          background-position: left 1rem center;
-          background-size: 1.5rem;
-        }
-        .file-table {
-          @apply table;
-          .file-header {
-            @apply table-header-group;
-            .file-row {
-              @apply table-row;
-              span {
-                @apply pr-5 py-1 table-cell text-gray-900 font-semibold text-xs md:text-sm;
-              }
-            }
-          }
-          .file-container {
-            @apply table-row-group;
-            .file-row {
-              @apply table-row;
-              span {
-                @apply pr-5 py-1 table-cell text-gray-950 max-md:text-sm;
-                &:first-child {
-                  overflow-wrap: anywhere;
-                }
-                a {
-                  @apply text-gray-900 font-medium italic hover:underline hover:text-gray-950 focus-visible:underline focus-visible:text-gray-950;
-                }
-              }
-            }
-          }
-
-          + .empty-message {
-            @apply text-gray-900 italic font-medium text-xs md:text-sm;
-          }
-        }
-        &.empty .file-table {
-          display: none;
+          --kinput-color: var(--color-error);
         }
       }
 
-      &.radio,
-      &.checkbox {
+      &.checkbox,
+      &.radio {
         @apply flex justify-start content-start items-start flex-wrap gap-3 w-full max-md:flex-col;
-
         .field-label {
-          @apply flex-none block text-sm font-semibold text-gray-900 leading-4 pb-2 empty:hidden w-full -mb-3;
+          @apply -mb-3;
         }
-
         label:not(.field-label) {
-          @apply flex-none inline-flex flex-row-reverse justify-between items-center gap-3 px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 font-medium max-w-full;
-          @apply text-gray-950 bg-white border-primary-400;
-          @apply hover:bg-primary-100;
-          @apply focus-within:bg-white focus-within:ring-3 focus-within:ring-secondary-400;
-          overflow-wrap: anywhere;
-
-          input[type='checkbox'],
-          input[type='radio'] {
-            @apply flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat;
-          }
-          input[type='checkbox'] {
-            @apply rounded;
-            background-size: 1.125rem;
-            &:checked {
-              background-image: url(icons/checkbox-checked.svg);
-              &:disabled {
-                background-image: url(icons/checkbox-checked_disabled.svg);
-              }
-            }
-          }
-          input[type='radio'] {
-            @apply rounded-full;
-            background-size: 0.75rem;
-            &:checked {
-              background-image: url(./icons/radio-checked.svg);
-              &:disabled {
-                background-image: url(./icons/radio-checked_disabled.svg);
-              }
-            }
-          }
-
-          &:has(input[disabled]) {
-            @apply text-gray-900 bg-gray-100;
-          }
+          @apply flex-sc gap-2;
         }
-
         &.vertical {
           @apply flex-col items-stretch;
         }
-
         &:not(.vertical) {
           @media (min-width: 768px) {
             &.cols-2 {
@@ -332,38 +242,84 @@
         }
       }
 
-      &.required {
-        .field-label {
-          @apply after:text-warning-500 after:font-bold;
-          &:after {
-            content: ' *';
-          }
+      /* Attachments */
+      .fileinput-button {
+        @apply kbtn kbtn-outline kbtn-lg border-dashed bg-no-repeat focus-within:outline-2 !pl-11 py-2.25;
+        &:before {
+          content: 'x';
+          @apply block absolute left-4 size-6 bg-base-content;
+          mask: url(./icons/file-plus.svg);
         }
       }
-      &.empty-label {
-        .field-label {
-          @apply hidden;
-        }
-        &.required {
-          @apply after:text-warning-500 after:font-bold relative after:absolute after:-top-1 after:-left-0;
-          &:after {
-            content: ' *';
+      .file-table {
+        @apply table;
+        .file-header {
+          @apply table-header-group;
+          .file-row {
+            @apply table-row;
+            span {
+              @apply pr-5 py-1 table-cell text-base-content/70 font-semibold text-xs md:text-sm;
+            }
           }
         }
+        .file-container {
+          @apply table-row-group;
+          .file-row {
+            @apply table-row;
+            span {
+              @apply pr-5 py-1 table-cell max-md:text-sm;
+              &:first-child {
+                overflow-wrap: anywhere;
+              }
+              a {
+                @apply text-base-content/70 font-medium italic hover:underline hover:text-base-content focus-visible:underline focus-visible:text-base-content;
+              }
+            }
+          }
+        }
+
+        + .empty-message {
+          @apply text-base-content/70 italic font-medium text-xs md:text-sm;
+        }
+      }
+      &.empty .file-table {
+        display: none;
       }
     }
   }
 }
 
-@utility checkbox-checked-bg {
-  background-image: url(icons/checkbox-checked.svg);
+@utility kinput {
+  &:focus,
+  &:focus-within {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
 }
-@utility checkbox-disabled-bg {
-  background-image: url(icons/checkbox-checked_disabled.svg);
+@utility kselect {
+  &:focus,
+  &:focus-within {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
 }
-@utility radio-checked-bg {
-  background-image: url(icons/radio-checked.svg);
+@utility ktextarea {
+  &:focus,
+  &:focus-within {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
 }
-@utility radio-disabled-bg {
-  background-image: url(icons/radio-checked_disabled.svg);
+@utility kcheckbox {
+  &:focus-visible {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
+@utility kradio {
+  &:focus-visible {
+    --kinput-color: oklch(from var(--color-primary) l c h / 0.7);
+  }
+}
+
+@custom-variant full-form {
+  &:has(.full-width-form) {
+    @slot;
+  }
 }

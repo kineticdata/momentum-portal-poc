@@ -13,11 +13,11 @@ const buildMyRequestsSearch = (profile, filters) => {
 
   // Limit form types
   search.in('type', 'types');
-  // Add core state query if filtering by either status
+  // Add core state query if filtering by a status
   if (filters.status.open || filters.status.closed || filters.status.draft) {
     search.in('coreState', 'statuses');
   }
-  // Add assignment query, making sure at least one part is always included
+  // Add assignment query
   search.or();
   search.equals('createdBy', 'username');
   search.equals('submittedBy', 'username');
@@ -37,8 +37,6 @@ const buildMyRequestsSearch = (profile, filters) => {
       ].filter(Boolean),
       username: profile.username,
     }),
-    sortOrder: 'createdAt',
-    direction: 'asc',
     include: ['details', 'values', 'form', 'form.attributesMap'],
     limit: 10,
   };

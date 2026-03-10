@@ -26,7 +26,7 @@ export const getChildSlots = (children, validationProps = {}) => {
   // names are not used
   const checkOptional = Array.isArray(optionalSlots);
 
-  const childrenArray = asArray(children);
+  const childrenArray = asArray(children).filter(Boolean);
   // Filter to only valid React elements
   const elementChildren = childrenArray.filter(isValidElement);
 

@@ -119,6 +119,10 @@ Should the form render inline instead of in a modal.
 ![type=string](https://img.shields.io/badge/string-e66e22)  
 The title for the modal when the subform is rendered in a modal.
 
+![name=modalSize](https://img.shields.io/badge/modalSize-gray)
+![type=string](https://img.shields.io/badge/string-e66e22)  
+The size of the modal when the subform is rendered in a modal. Accepts `sm` (default), `md`, `lg`, and `xl`.
+
 ![name=saveLabel](https://img.shields.io/badge/saveLabel-gray)
 ![type=string](https://img.shields.io/badge/string-e66e22)  
 The label for the save button.
@@ -238,41 +242,41 @@ bundle.widgets.Subform({
         property: 'address',
         type: 'text',
         required: true,
-        validate: function(value) {
+        validate: function (value) {
           if (!value.match(/$\d+'/)) {
             return ['Address must start with a number'];
           }
-        }
+        },
       },
       {
         label: 'City, State, Zip',
         property: 'address2',
         type: 'text',
-        required: true
+        required: true,
       },
       {
         label: 'This is my current address',
         property: 'current',
         type: 'checkbox',
-        defaultValue: true
+        defaultValue: true,
       },
       {
         label: 'Date',
         property: 'date',
         type: 'date',
-        defaultValue: new Date().toISOString().slice(0,10),
-        disabled: true
+        defaultValue: new Date().toISOString().slice(0, 10),
+        disabled: true,
       },
     ],
     // Define the title for the modal
     modalTitle: 'Address Information',
     // Define an onSave function that will be triggered when the user clicks
     // the save button in the modal
-    onSave: function(data, api) {
-      // TODO: Do something with the data 
+    onSave: function (data, api) {
+      // TODO: Do something with the data
       // Then close the modal
       api.destroy();
-    }
+    },
   },
   id: 'address-subform',
 });

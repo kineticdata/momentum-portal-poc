@@ -5,9 +5,9 @@ import { generateFormLayout } from '../../../components/forms/FormLayout.jsx';
 import { KineticForm } from '../../../components/kinetic-form/KineticForm.jsx';
 import { Loading } from '../../../components/states/Loading.jsx';
 import { Error } from '../../../components/states/Error.jsx';
-import { Button } from '../../../atoms/Button.jsx';
 import { Panel } from '../../../atoms/Panel.jsx';
 import { useData } from '../../../helpers/hooks/useData.js';
+import { Icon } from '../../../atoms/Icon.jsx';
 
 const ViewParentButton = ({ submission }) => {
   const [open, setOpen] = useState(false);
@@ -17,10 +17,19 @@ const ViewParentButton = ({ submission }) => {
   return (
     <>
       <Panel open={open} onOpenChange={({ open }) => setOpen(open)}>
-        <Button slot="trigger" variant="secondary">
+        <button type="button" slot="trigger" className="kbtn kbtn-lg">
           View Original Request
-        </Button>
-        <div slot="content">
+        </button>
+        <div slot="content" className="flex-c-st gap-6">
+          <div className="flex-bc gap-3">
+            <span className="h3">Original Request</span>
+            <button
+              className="kbtn kbtn-sm kbtn-circle kbtn-ghost absolute right-2 top-2"
+              onClick={() => setOpen(false)}
+            >
+              <Icon name="x" size={20} />
+            </button>
+          </div>
           <KineticForm submissionId={submission.parent.id} review={true} />
         </div>
       </Panel>

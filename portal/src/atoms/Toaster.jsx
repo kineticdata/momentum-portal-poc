@@ -46,35 +46,28 @@ export const Toaster = ({
           <Toast.Root
             key={toast.id}
             className={clsx(
-              'flex flex-col items-stretch gap-3 pl-5 pr-1.5 py-3',
-              'rounded-tl-2.5xl rounded-br-2.5xl shadow-card overflow-hidden',
+              'flex-c-st gap-3 pl-5 pr-1.5 py-3',
+              'rounded-box shadow-lg overflow-hidden',
               'min-w-80 max-w-[calc(100vw-3rem)] md:max-w-screen-sm',
               {
-                'bg-primary-900 text-primary-100': toast.type !== 'error',
-                'bg-warning-500 text-white': toast.type === 'error',
+                'bg-success text-success-content': toast.type !== 'error',
+                'bg-error text-error-content': toast.type === 'error',
               },
             )}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex-sc gap-3">
               <Icon
                 name={clsx({
                   'circle-check-filled': toast.type !== 'error',
                   'exclamation-circle-filled': toast.type === 'error',
                 })}
-                className={clsx('flex-none', {
-                  'text-success-400': toast.type !== 'error',
-                  'text-warning-200': toast.type === 'error',
-                })}
+                className={clsx('flex-none')}
               />
               <Toast.Title className="flex-auto font-medium">
                 {toast.title}
               </Toast.Title>
               <Toast.CloseTrigger asChild>
-                <CloseButton
-                  size="sm"
-                  className="flex-none ml-auto -my-1.5"
-                  inverse
-                />
+                <CloseButton size="sm" className="flex-none ml-auto -my-1.5" />
               </Toast.CloseTrigger>
             </div>
             {toast.description && (

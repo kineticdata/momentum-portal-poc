@@ -5,7 +5,14 @@ Widgets are small, standalone React apps that can be rendered inside Kinetic for
 ## Table of Contents
 
 - [How to Use Widgets](#how-to-use-widgets)
-- [Available Widgets](#available-widgets)
+- [Available Widgets, Utils, and Styles](#available-widgets)
+  - [Markdown](MARKDOWN.md)
+  - [Search](SEARCH.md)
+  - [Signature](SIGNATURE.md)
+  - [Subform](SUBFORM.md)
+  - [Table](TABLE.md)
+  - [Utils](UTILS.md)
+  - [Styles](STYLES.md)
 - [How to Build Widgets](#how-to-build-widgets)
 
 ---
@@ -111,11 +118,21 @@ The table widget renders a table with data sourced from either a static list, a 
 
 [Table Widget Documentation &#x2B9E;](TABLE.md)
 
+---
+
 ### Utils
 
 Utils are a collection of helper functions that provide various functionality, such as rendering toasts and confirmation modals. They are accessed through the `bundle.utils` namespace instead of `bundle.widgets`.
 
-[Utils Documentation &#x2B9E;](Utils.md)
+[Utils Documentation &#x2B9E;](UTILS.md)
+
+---
+
+### Styles
+
+This portal uses Tailwind CSS and DaisyUI for styling, which is compiled to only include classes that are used. This means that not all classes are available to be used in forms. This documentation lists the classes that have been made available.
+
+[Styles Documentation &#x2B9E;](STYLES.md)
 
 ---
 

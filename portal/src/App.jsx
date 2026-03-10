@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useMatch } from 'react-router-dom';
 import t from 'prop-types';
 import clsx from 'clsx';
 import { fetchKapp, fetchProfile, fetchSpace } from '@kineticdata/react';
@@ -15,27 +14,7 @@ import { PrivateRoutes } from './pages/PrivateRoutes.jsx';
 import { PublicRoutes } from './pages/PublicRoutes.jsx';
 import { Login } from './pages/login/Login.jsx';
 import { ConfirmationModal } from './components/confirm/ConfirmationModal.jsx';
-import { ThemeEditor } from './components/theme/ThemeEditor.jsx';
 import { useData } from './helpers/hooks/useData.js';
-
-const useBackgroundGradient = mobile => {
-  const matchesHome = useMatch('/');
-  const matchesProfile = useMatch('/profile');
-  const matchesForm = useMatch('/forms/:kappSlug/*');
-  const matchesForm2 = useMatch('/kapps/:kappSlug/forms/:kappSlug/*');
-  const matchesForm3 = useMatch('/requests/:id/:formMode');
-  const className = 'bg-gradient-to-b from-transparent from-85% to-primary-300';
-
-  // Only add gradient to home and profile pages for mobile
-  if (mobile) {
-    if (matchesHome || matchesProfile) return className;
-    return '';
-  }
-
-  // Add gradiant to all pages except form pages for non mobile
-  if (matchesForm || matchesForm2 || matchesForm3) return '';
-  return className;
-};
 
 export const App = ({
   initialized,
@@ -44,12 +23,8 @@ export const App = ({
   timedOut,
   serverError,
 }) => {
-  // Get redux view state
-  const mobile = useSelector(state => state.view.mobile);
   // Get redux theme state
-  const { css: themeCSS, ready: themeReady } = useSelector(
-    state => state.theme,
-  );
+  const { css: themeCSS } = useSelector(state => state.theme);
   // Update the styles if there is a theme set
   useEffect(() => {
     if (themeCSS) {
@@ -94,7 +69,6 @@ export const App = ({
   useEffect(() => {
     if (spaceInit && !spaceLoading) {
       appActions.setSpace(spaceData);
-      themeActions.setTheme({ ...spaceData, init: true });
     }
   }, [spaceInit, spaceLoading, spaceData]);
 
@@ -135,11 +109,11 @@ export const App = ({
     loading: kappLoading,
     response: kappData,
   } = useData(fetchKapp, kappParams);
-  // Set the space data into redux
+  // Set the kapp data into redux
   useEffect(() => {
     if (kappInit && !kappLoading) {
       appActions.setKapp(kappData);
-      themeActions.setTheme({ ...kappData, init: true });
+      themeActions.setTheme(kappData);
     }
   }, [kappInit, kappLoading, kappData]);
 
@@ -151,25 +125,22 @@ export const App = ({
     closeConfirm();
   }, []);
 
-  const bgGradient = useBackgroundGradient(mobile);
-
   return (
     <>
-      <div className="flex flex-col flex-auto overflow-auto">
+      <div className="flex-c-st flex-auto overflow-auto">
         {/* Header element where we will render headers via a portal */}
-        <header id="app-header" />
+        <header id="app-header" className="flex-none" />
 
         <main
           id="app-main"
           className={clsx(
-            'flex flex-col flex-auto relative overflow-y-auto overflow-x-hidden scrollbar',
-            bgGradient,
+            'flex-auto relative overflow-y-auto overflow-x-hidden scrollbar',
           )}
         >
           {serverError || error ? (
             // If an error occurred during auth or fetching app data, show an
             // error screen
-            <Error error={serverError || error} />
+            <Error error={serverError || error} header={true} />
           ) : !initialized || !space ? (
             // If auth isn't initialized or space record isn't fetched, show a
             // loading screen
@@ -196,9 +167,6 @@ export const App = ({
 
           {/* Toast container */}
           <Toaster />
-
-          {/* Theme Editor */}
-          {themeReady && <ThemeEditor />}
         </main>
 
         {/* Footer element where we will render footers via a portal */}

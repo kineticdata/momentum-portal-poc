@@ -31,7 +31,7 @@ const NewsLink = ({ title, description, link, image, index, mobile }) => {
         <div
           className={clsx(
             // Common styles
-            'text-primary-100 font-medium ',
+            'text-neutral-content font-medium ',
             // Mobile first styles
             'text-sm line-clamp-3',
             // Non mobile styles
@@ -41,7 +41,7 @@ const NewsLink = ({ title, description, link, image, index, mobile }) => {
           {title}
         </div>
         {!mobile && (
-          <div className="flex-none text-primary-100 line-clamp-1">
+          <div className="flex-none text-neutral-content line-clamp-1">
             {description}
           </div>
         )}
@@ -100,7 +100,7 @@ export const NewsSection = () => {
     if (!paused) {
       const timeout = setTimeout(() => {
         setOpenIndex((openIndex + 1) % pageSize);
-      }, 3000);
+      }, 8000);
       return () => clearTimeout(timeout);
     }
   }, [openIndex, paused, pageSize]);
@@ -112,30 +112,32 @@ export const NewsSection = () => {
         {loading && <Loading />}
         {!loading && news?.length > 0 && (
           <Carousel.Root
-            index={openIndex}
-            onIndexChange={({ index }) => setOpenIndex(index)}
+            page={openIndex}
+            onPageChange={({ page }) => setOpenIndex(page)}
             loop={true}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             className={clsx(
               'relative block h-28 md:h-44 overflow-hidden transition',
-              'bg-gray-900 bg-glassmorphism-border p-0.5 rounded-2xl',
             )}
           >
-            <Carousel.Viewport
+            <div
               className={clsx(
-                'relative flex flex-col h-full w-full overflow-hidden',
-                'bg-gray-900 bg-glassmorphism-linear rounded-[0.875rem]',
+                'relative flex flex-col h-full w-full overflow-hidden rounded-2xl bg-neutral',
               )}
             >
               <Carousel.ItemGroup className="flex-auto max-h-full">
                 {news.map((news, index) => (
-                  <Carousel.Item key={index} index={index}>
+                  <Carousel.Item
+                    key={index}
+                    index={index}
+                    className="overflow-hidden"
+                  >
                     <NewsLink index={index} mobile={mobile} {...news} />
                   </Carousel.Item>
                 ))}
               </Carousel.ItemGroup>
-            </Carousel.Viewport>
+            </div>
             <Carousel.IndicatorGroup
               className={clsx(
                 'absolute bottom-0.75 left-1.5 md:bottom-5 md:left-[4.625rem]',
@@ -149,9 +151,9 @@ export const NewsSection = () => {
                     size="custom"
                     aria-label={`Show article ${index + 1}`}
                     className={clsx(
-                      'p-0 border-transparent text-white opacity-20 data-[current]:opacity-100',
-                      'hover:text-secondary-400 hover:opacity-100',
-                      'focus-within:text-secondary-400 focus-within:opacity-100',
+                      'p-0 border-transparent text-neutral-content opacity-20 data-[current]:opacity-100',
+                      'hover:text-accent hover:opacity-100',
+                      'focus-within:text-accent focus-within:opacity-100',
                     )}
                     tabIndex={-1}
                   >

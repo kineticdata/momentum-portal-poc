@@ -19,7 +19,6 @@ import { Icon } from '../../../atoms/Icon.jsx';
 import { executeIntegration } from '../../../helpers/api.js';
 import { callIfFn, downloadCSV } from '../../../helpers/index.js';
 import { useData } from '../../../helpers/hooks/useData.js';
-import { Button, CloseButton } from '../../../atoms/Button.jsx';
 import clsx from 'clsx';
 import { Tooltip } from '../../../atoms/Tooltip.jsx';
 import { openConfirm } from '../../../helpers/confirm.js';
@@ -74,8 +73,8 @@ const TableRenderer = ({
   );
 
   const commonCellClasses = clsx(
-    'bg-white first:rounded-l-xl first:border-l-[0.75rem] last:rounded-r-xl last:border-r-[0.75rem] border-transparent px-3 py-2.5 font-medium h-16',
-    'group-has-[td.selectable]:group-[&:not(:has(button:hover))]:group-hover:bg-primary-100',
+    'bg-base-100 first:rounded-l-box first:border-l-[0.75rem] last:rounded-r-box last:border-r-[0.75rem] border-transparent px-3 py-2.5 font-medium h-16',
+    'group-has-[td.selectable]:group-[&:not(:has(button:hover))]:group-hover:bg-base-200',
     'group-has-[td.selectable]:group-[&:not(:has(button:hover))]:group-hover:cursor-pointer',
   );
 
@@ -103,11 +102,11 @@ const TableRenderer = ({
     <div
       className={clsx(
         // Common styles
-        'flex flex-col bg-gray-100',
+        'flex flex-col bg-base-200',
         // Mobile first styles
         'gap-2 py-5 px-6 max-md:-mx-6 w-screen',
         // Non mobile styles
-        'md:gap-3 md:rounded-2.5xl md:px-5 md:w-full',
+        'md:gap-3 md:rounded-box md:px-5 md:w-full',
       )}
     >
       <div
@@ -144,14 +143,13 @@ const TableRenderer = ({
                 autoComplete="off"
                 aria-label="Filter"
                 className={clsx(
-                  'py-2.75 md:py-2.25 max-md:text-sm font-medium md:transition-all',
-                  'pl-10 pr-0.5 group-focus-within:px-12 group-[.is-filtered]:px-12',
-                  'border border-primary-300 rounded-full outline-0',
-                  'text-gray-950 bg-white hover:bg-primary-100',
-                  'focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400',
-                  'w-11 group-focus-within:w-48 group-[.is-filtered]:w-48',
+                  'kbtn kbtn-circle kbtn-lg kbtn-outline border-base-300 bg-base-100 md:transition-all',
+                  'text-left max-md:text-sm font-medium',
+                  'pl-11 pr-0.5 group-focus-within:px-12 group-[.is-filtered]:px-12',
+                  'group-focus-within:w-64 group-[.is-filtered]:w-64',
                   'max-sm:group-focus-within:w-full max-sm:group-[.is-filtered]:w-full',
-                  'cursor-pointer group-focus-within:cursor-auto group-[.is-filtered]:cursor-auto',
+                  'group-focus-within:cursor-auto group-[.is-filtered]:cursor-auto',
+                  'not-group-focus-within:not-group-[.is-filtered]:hover:bg-base-300',
                 )}
                 onFocus={() => setFilterFocused(true)}
                 onBlur={() => setFilterFocused(false)}
@@ -163,20 +161,22 @@ const TableRenderer = ({
               <Icon
                 name="search"
                 className={clsx(
-                  'absolute top-0 pointer-events-none my-2.5',
-                  'left-2.5 group-focus-within:left-4 group-[.is-filtered]:left-4',
-                  'text-gray-950 group-focus-within:text-gray-500 group-[.is-filtered]:text-gray-500',
+                  'absolute top-0 pointer-events-none my-3 z-1',
+                  'left-3 group-focus-within:left-4 group-[.is-filtered]:left-4',
+                  'text-base-content group-focus-within:text-base-content/60 group-[.is-filtered]:text-base-content/60',
                 )}
               />
               {query && (
-                <CloseButton
-                  className="absolute right-0 top-0"
+                <button
+                  className="kbtn kbtn-sm kbtn-circle kbtn-ghost absolute right-0 top-0 m-2 z-1"
                   aria-label="Clear Filter"
                   onClick={() => {
                     onQueryChange();
                     filterRef.current?.focus();
                   }}
-                />
+                >
+                  <Icon name="x" size={20} />
+                </button>
               )}
             </div>
           </Tooltip>
@@ -185,17 +185,21 @@ const TableRenderer = ({
           <Tooltip content="Columns" position="top" alignment="middle">
             <span slot="trigger">
               <Popover alignment="end">
-                <Button
+                <button
                   slot="trigger"
-                  variant="secondary"
-                  icon="layout-columns"
+                  type="button"
+                  className="kbtn kbtn-circle kbtn-lg kbtn-outline kbtn-base"
                   aria-label="Columns"
-                />
-                <div slot="content" className="flex flex-col gap-2">
-                  <div className="flex gap-3 justify-between items-center">
+                >
+                  <Icon name="layout-columns" />
+                </button>
+                <div slot="content" className="flex-c-st gap-2">
+                  <div className="flex-bc gap-3">
                     <span className="h4 text-balance">Columns</span>
                     <Popover.CloseTrigger asChild>
-                      <CloseButton />
+                      <button className="kbtn kbtn-sm kbtn-circle kbtn-ghost absolute right-2 top-2">
+                        <Icon name="x" size={20} />
+                      </button>
                     </Popover.CloseTrigger>
                   </div>
 
@@ -204,7 +208,7 @@ const TableRenderer = ({
                       <div className="w-full" key={col.property}>
                         <label
                           htmlFor={`${col.property}-vis`}
-                          className="relative inline-flex w-full"
+                          className="unstyled relative flex-bc flex-row-reverse w-full"
                         >
                           <input
                             id={`${col.property}-vis`}
@@ -213,53 +217,14 @@ const TableRenderer = ({
                             checked={col.visible}
                             onChange={() => toggleColumn(col.property)}
                             aria-label="Set column visibility"
-                            className="peer absolute inset-0 appearance-none rounded-2.5xl outline-0 focus-visible:ring-3 focus-visible:ring-secondary-400"
+                            className="peer unstyled ktoggle ktoggle-primary"
                           />
                           <span
                             className={clsx(
-                              'font-medium text-primary-900 peer-disabled:text-gray-900 truncate mr-2',
+                              'font-medium peer-disabled:text-base-content/60 truncate mr-2',
                             )}
                           >
                             {col.label}
-                          </span>
-                          <span
-                            className={clsx(
-                              'ml-auto relative flex border rounded-2.5xl text-primary-900 peer-disabled:text-gray-900 p-0.25 gap-0.25 w-12 pointer-events-none',
-                              {
-                                'border-primary-500 bg-secondary-400':
-                                  col.visible,
-                                'border-primary-300 bg-gray-200': !col.visible,
-                              },
-                            )}
-                          >
-                            <Icon
-                              name="check"
-                              size={20}
-                              className={clsx('transition-all', {
-                                'opacity-0': !col.visible,
-                                'opacity-100': col.visible,
-                              })}
-                            />
-                            <Icon
-                              name="x"
-                              size={20}
-                              className={clsx('transition-all', {
-                                'opacity-100': !col.visible,
-                                'opacity-0': col.visible,
-                              })}
-                            />
-                            <Icon
-                              name="circle"
-                              filled
-                              size={20}
-                              className={clsx(
-                                'absolute top-0.25 transition-all',
-                                {
-                                  'left-0.5': !col.visible,
-                                  'left-6': col.visible,
-                                },
-                              )}
-                            />
                           </span>
                         </label>
                       </div>
@@ -272,10 +237,10 @@ const TableRenderer = ({
         )}
         {allowExport !== false && (
           <Tooltip content="Export" position="top" alignment="middle">
-            <Button
+            <button
               slot="trigger"
-              variant="secondary"
-              icon="table-down"
+              type="button"
+              className="kbtn kbtn-circle kbtn-lg kbtn-outline kbtn-base"
               aria-label="Export"
               onClick={() => {
                 const data = tableApi.getData();
@@ -287,33 +252,39 @@ const TableRenderer = ({
                   });
                 }
               }}
-            />
+            >
+              <Icon name="table-down" />
+            </button>
           </Tooltip>
         )}
         {tableApi.reloadData && (
           <Tooltip content="Reload" position="top" alignment="middle">
-            <Button
+            <button
               slot="trigger"
-              variant="secondary"
-              icon="refresh"
+              type="button"
+              className={clsx(
+                'kbtn kbtn-circle kbtn-lg kbtn-outline kbtn-base',
+                {
+                  'animate-spin': loading,
+                },
+              )}
               aria-label="Reload"
-              className={clsx({
-                'animate-spin': loading,
-              })}
               onClick={tableApi.reloadData}
-            />
+            >
+              <Icon name="refresh" />
+            </button>
           </Tooltip>
         )}
         {addAction && (
-          <Button
-            variant="primary"
-            icon={addAction.icon || 'plus'}
-            className="max-lg:rounded-full"
+          <button
+            type="button"
+            className="kbtn kbtn-lg kbtn-primary max-lg:kbtn-circle"
             onClick={() => addAction.onClick(tableApi)}
             aria-label={addAction.label || 'Add Row'}
           >
+            <Icon name={addAction.icon || 'plus'}></Icon>
             <span className="max-lg:hidden">{addAction.label}</span>
-          </Button>
+          </button>
         )}
       </div>
 
@@ -338,8 +309,8 @@ const TableRenderer = ({
                     className={clsx(
                       'group relative bg-transparent p-3 font-medium text-left whitespace-nowrap',
                       {
-                        'text-gray-950': sortColumn === column.property,
-                        'text-gray-900': sortColumn !== column.property,
+                        'text-base-content': sortColumn === column.property,
+                        'text-base-content/60': sortColumn !== column.property,
                       },
                       column.headerCellClass,
                     )}
@@ -350,7 +321,7 @@ const TableRenderer = ({
                     {sortable && column.sortable !== false && (
                       <>
                         <button
-                          className="peer absolute inset-0 focus-visible:ring-3 focus-visible:ring-secondary-400 outline-0 rounded-xl"
+                          className="peer absolute inset-0 focus-ring rounded-box"
                           type="button"
                           onClick={() =>
                             setSortData([
@@ -393,37 +364,47 @@ const TableRenderer = ({
           </thead>
           <tbody>
             {error ? (
-              <tr className={'group rounded-xl shadow-card'}>
+              <tr className={'group rounded-box'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-warning-500')}
+                  className={clsx(commonCellClasses, 'text-base-content/60')}
                 >
+                  <span className="kstatus kstatus-error mr-2"></span>
                   {error}
                 </td>
               </tr>
             ) : !currentTableData ? (
-              <tr className={'group rounded-xl shadow-card'}>
+              <tr className={'group rounded-box'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-gray-900 italic')}
+                  className={clsx(
+                    commonCellClasses,
+                    'text-base-content/60 italic',
+                  )}
                 >
                   {messages?.loading || 'Loading...'}
                 </td>
               </tr>
             ) : count === 0 ? (
-              <tr className={'group rounded-xl shadow-card'}>
+              <tr className={'group rounded-box'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-gray-900 italic')}
+                  className={clsx(
+                    commonCellClasses,
+                    'text-base-content/60 italic',
+                  )}
                 >
                   {messages?.empty || 'No rows found.'}
                 </td>
               </tr>
             ) : queryValue && filteredCount === 0 ? (
-              <tr className={'group rounded-xl shadow-card'}>
+              <tr className={'group rounded-box'}>
                 <td
                   colSpan={colSpan}
-                  className={clsx(commonCellClasses, 'text-gray-900 italic')}
+                  className={clsx(
+                    commonCellClasses,
+                    'text-base-content/60 italic',
+                  )}
                 >
                   {messages?.noMatches || 'No rows match your filter.'}
                 </td>
@@ -432,10 +413,11 @@ const TableRenderer = ({
             {currentTableData?.map(row => (
               <tr
                 key={row.key}
+                data-test-id={row.raw.id || undefined}
                 className={clsx(
-                  'group rounded-xl shadow-card',
-                  'has-[td.selectable>button:focus]:ring-3',
-                  'has-[td.selectable>button:focus]:ring-secondary-400',
+                  'group rounded-box',
+                  'has-[td.selectable>button:focus]:outline-2',
+                  'has-[td.selectable>button:focus]:outline-solid',
                 )}
                 onClick={
                   selectAction
@@ -451,7 +433,8 @@ const TableRenderer = ({
               >
                 {selectAction && (
                   <td className={clsx(commonCellClasses, '!p-0 selectable')}>
-                    <Button
+                    <button
+                      type="button"
                       aria-label={selectAction.label || 'Select Row'}
                       className="sr-only"
                       onClick={e => {
@@ -478,15 +461,16 @@ const TableRenderer = ({
                     style={column.bodyCellStyles}
                   >
                     {column.onClick ? (
-                      <Button
-                        variant="tertiary"
+                      <button
+                        type="button"
+                        className="kbtn kbtn-lg kbtn-ghost underline"
                         onClick={e => {
                           e.stopPropagation();
                           column.onClick(row.raw, row.index, tableApi);
                         }}
                       >
                         {row.columns[column.property]?.displayValue}
-                      </Button>
+                      </button>
                     ) : (
                       row.columns[column.property]?.displayValue
                     )}
@@ -496,16 +480,18 @@ const TableRenderer = ({
                   <td className={clsx(commonCellClasses, '!px-0.25')}>
                     <span className="flex gap-1">
                       {rowActions.map((action, i) => (
-                        <Button
+                        <button
+                          type="button"
+                          className="kbtn kbtn-lg kbtn-ghost kbtn-circle"
                           key={`${row.key}-action-${i}`}
-                          variant="tertiary"
-                          icon={action.icon}
                           aria-label={action.label}
                           onClick={e => {
                             e.stopPropagation();
                             action.onClick(row.raw, row.index, tableApi);
                           }}
-                        />
+                        >
+                          <Icon name={action.icon} />
+                        </button>
                       ))}
                     </span>
                   </td>
@@ -522,7 +508,7 @@ const TableRenderer = ({
                     <th
                       key={column.property}
                       className={clsx(
-                        'bg-transparent text-gray-900 px-3 py-1.5 font-normal text-sm text-left',
+                        'bg-transparent text-text-content/60 px-3 py-1.5 font-normal text-sm text-left',
                         column.footerCellClass,
                       )}
                       style={column.footerCellStyles}
@@ -542,28 +528,31 @@ const TableRenderer = ({
 
       <div
         className={clsx(
-          'flex justify-center items-center gap-2 lg:gap-5 bg-white px-3 py-2.5 font-medium rounded-xl shadow-card',
+          'flex-cc gap-2 lg:gap-5 bg-base-100 px-3 py-2.5 font-medium rounded-box',
         )}
       >
         <span className="max-md:hidden flex-1 text-balance">
           Showing: {queryValue ? `${filteredCount} of ${count}` : count}
         </span>
 
-        <Button
-          variant="secondary"
+        <button
+          type="button"
+          className="kbtn kbtn-lg kbtn-ghost kbtn-circle ml-auto"
           disabled={pageNumber <= 1}
           onClick={() => goToPage(1)}
-          icon="chevron-left-pipe"
           aria-label="Go to first page"
-          className="ml-auto"
-        />
-        <Button
-          variant="secondary"
+        >
+          <Icon name="chevron-left-pipe" />
+        </button>
+        <button
+          type="button"
+          className="kbtn kbtn-lg kbtn-ghost kbtn-circle"
           disabled={pageNumber <= 1}
           onClick={() => goToPage(pageNumber - 1)}
-          icon="chevron-left"
           aria-label="Go to previous page"
-        />
+        >
+          <Icon name="chevron-left" />
+        </button>
         <Menu
           items={Array.from(Array(pageCount).keys()).map(pageIndex => ({
             label: `${pageIndex + 1}`,
@@ -571,29 +560,37 @@ const TableRenderer = ({
           }))}
           alignment="middle"
         >
-          <Button slot="trigger" variant="primary" aria-label="Go To Page">
+          <button
+            slot="trigger"
+            type="button"
+            className="kbtn kbtn-lg kbtn-ghost rounded-full"
+            aria-label="Go To Page"
+          >
             {currentTableData ? (
               `${pageNumber}/${pageCount}`
             ) : (
               <Icon name="loader-2" className="animate-spin"></Icon>
             )}
-          </Button>
+          </button>
         </Menu>
-        <Button
-          variant="secondary"
+        <button
+          type="button"
+          className="kbtn kbtn-lg kbtn-ghost kbtn-circle"
           disabled={pageNumber >= pageCount}
           onClick={() => goToPage(pageNumber + 1)}
-          icon="chevron-right"
           aria-label="Go to next page"
-        />
-        <Button
-          variant="secondary"
+        >
+          <Icon name="chevron-right" />
+        </button>
+        <button
+          type="button"
+          className="kbtn kbtn-lg kbtn-ghost kbtn-circle mr-auto"
           disabled={pageNumber >= pageCount}
           onClick={() => goToPage(pageCount)}
-          icon="chevron-right-pipe"
           aria-label="Go to last page"
-          className="mr-auto"
-        />
+        >
+          <Icon name="chevron-right-pipe" />
+        </button>
 
         <span className="max-md:hidden flex-1 text-right">
           {pageSizes?.length > 1 && (
@@ -606,14 +603,15 @@ const TableRenderer = ({
                 }))}
                 alignment="end"
               >
-                <Button
+                <button
                   slot="trigger"
-                  variant="secondary"
+                  type="button"
+                  className="kbtn kbtn-lg kbtn-soft rounded-full"
                   aria-label="Change Page Size"
                 >
                   {pageSize || 'All'}
                   <Icon name="chevron-down" />
-                </Button>
+                </button>
               </Menu>
             </>
           )}
@@ -663,7 +661,7 @@ const fetchTableData = ({ field, data, integration, rowTransform }) => {
     try {
       const value = field.value();
       return Promise.resolve({ rows: value ? JSON.parse(value) : [] });
-    } catch (e) {
+    } catch {
       return Promise.resolve({
         error: 'The data for this table is not valid JSON.',
       });
