@@ -6,8 +6,9 @@ import { Requests } from './tickets/requests/Requests.jsx';
 import { Form } from './forms/Form.jsx';
 import { Profile } from './profile/Profile.jsx';
 import { SettingsRouting } from './settings/index.jsx';
-import { DesktopHeader } from '../components/header/DesktopHeader.jsx';
-import { MobileFooter } from '../components/footer/MobileFooter.jsx';
+import { Header } from '../components/header/Header.jsx';
+import { SearchModal } from '../components/search/SearchModal.jsx';
+import { Theme } from './theme/index.jsx';
 
 const Redirect = ({ to }) => {
   const params = useParams();
@@ -20,40 +21,58 @@ const Redirect = ({ to }) => {
 };
 
 export const PrivateRoutes = () => {
-  const { mobile } = useSelector(state => state.view);
+  const spaceAdmin = useSelector(state => state.app.profile?.spaceAdmin);
   return (
-    <>
-      {!mobile && <DesktopHeader></DesktopHeader>}
-      <Routes>
-        {/* Canonical route for submissions */}
-        <Route
-          path="/kapps/:kappSlug/forms/:formSlug/submissions/:submissionId"
-          element={
-            <Redirect
-              to={params =>
-                `/kapps/${params.kappSlug}/forms/${params.formSlug}/${params.submissionId}`
-              }
-            />
-          }
-        />
-        {/* Canonical route for forms */}
-        <Route
-          path="/kapps/:kappSlug/forms/:formSlug/:submissionId?"
-          element={<Form />}
-        />
-        {/* Canonical route for kapps */}
-        <Route path="/kapps/:kappSlug" element={<Redirect to="/" />} />
+    <Routes>
+      {/* Theme page */}
+      {spaceAdmin && <Route path="/theme" element={<Theme />} />}
 
-        {/* Portal routes */}
-        <Route path="/actions/*" element={<Actions />} />
-        <Route path="/requests/*" element={<Requests />} />
-        <Route path="/forms/:formSlug/:submissionId?" element={<Form />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings/*" element={<SettingsRouting />} />
-        <Route path="/login" element={<Navigate to="/" />} />
-        <Route path="/*" element={<Home />} />
-      </Routes>
-      {mobile && <MobileFooter></MobileFooter>}
-    </>
+      {/* Other Routes*/}
+      <Route
+        path="/*"
+        element={
+          <>
+            {/* Shared header */}
+            <Header />
+
+            <Routes>
+              {/* Canonical route for submissions */}
+              <Route
+                path="/kapps/:kappSlug/forms/:formSlug/submissions/:submissionId"
+                element={
+                  <Redirect
+                    to={params =>
+                      `/kapps/${params.kappSlug}/forms/${params.formSlug}/${params.submissionId}`
+                    }
+                  />
+                }
+              />
+              {/* Canonical route for forms */}
+              <Route
+                path="/kapps/:kappSlug/forms/:formSlug/:submissionId?"
+                element={<Form />}
+              />
+              {/* Canonical route for kapps */}
+              <Route path="/kapps/:kappSlug" element={<Redirect to="/" />} />
+
+              {/* Portal routes */}
+              <Route path="/actions/*" element={<Actions />} />
+              <Route path="/requests/*" element={<Requests />} />
+              <Route
+                path="/forms/:formSlug/:submissionId?"
+                element={<Form />}
+              />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings/*" element={<SettingsRouting />} />
+              <Route path="/login" element={<Navigate to="/" />} />
+              <Route path="/*" element={<Home />} />
+            </Routes>
+
+            {/* Global search modal */}
+            <SearchModal />
+          </>
+        }
+      />
+    </Routes>
   );
 };

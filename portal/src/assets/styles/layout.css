@@ -3,20 +3,6 @@
  *
  * Styling for the general layout of the application. Includes styling for the
  * root elements and wrapper elements.
- *
- * Custom Properties:
- *  --gutter-size
- *    Amount of padding applied to the wrapper elements.
- *  --gutter-inv-size
- *    Negative value of the amount of padding applied to the wrapper elements.
- *
- * Custom Classes:
- *  .stretch
- *    Stretches the margin and padding of inner elements to the edge of the
- *    screen.
- *  .stretch-wide
- *    Stretches the margin of inner elements to the edge of the
- *    screen.
  ******************************************************************************/
 
 @layer base {
@@ -29,7 +15,7 @@
   }
 
   #root {
-    @apply flex h-full bg-gray-100 text-gray-950 overflow-hidden;
+    @apply flex h-full bg-base-100 text-base-content overflow-hidden;
     /*
      * For mobile screens, set the flex direction to column so that panels
      * render at the bottom instead of on the right.
@@ -43,54 +29,141 @@
   #app-header,
   #app-main,
   #app-footer {
-    /* Adjust gutter size based on screen size. */
-    --gutter-size: 1.5rem;
-    --gutter-inv-size: -1.5rem;
-    @media (min-width: 768px) and (max-width: 1279px) {
-      --gutter-size: 3rem;
-      --gutter-inv-size: -3rem;
-    }
-    @media (min-width: 1280px) {
-      --gutter-size: 6rem;
-      --gutter-inv-size: -6rem;
-    }
-
-    /* Set the gutter widths for the design on the wrapper elements. */
-    @apply px-(--gutter-size);
   }
 
   hr {
-    @apply border-gray-200;
+    @apply border-base-300;
   }
 }
 
-@utility stretch {
-  @apply mx-(--gutter-inv-size) px-(--gutter-size);
+/* Gutter utilities */
+
+@utility gutter-sm {
+  @apply px-5;
+}
+@utility gutter-md {
+  @apply px-12;
+}
+@utility gutter-lg {
+  @apply px-24;
+}
+@utility gutter-xl {
+  @apply px-42;
+}
+@utility gutter {
+  @apply gutter-sm md:gutter-md xl:gutter-lg 2xl:gutter-xl;
 }
 
-@utility stretch-wide {
-  @apply mx-(--gutter-inv-size);
-}
+/* Additional flex utility */
 
-@utility w-stretch {
-  width: calc(100% + var(--gutter-size, 0) * 2);
-}
-
-@utility layout-row {
-  @apply flex items-center;
-}
-@utility layout-row-center {
-  @apply flex justify-center items-center;
-}
-@utility layout-row-end {
-  @apply flex justify-end items-center;
-}
-@utility layout-row-between {
-  @apply flex justify-between items-center;
-}
-@utility layout-column {
-  @apply flex flex-col;
-}
 @utility flex-full {
   flex: 1 0 auto;
+}
+
+/* Flex utilities for row layouts */
+
+@utility flex-ss {
+  @apply flex flex-row justify-start items-start;
+}
+@utility flex-sc {
+  @apply flex flex-row justify-start items-center;
+}
+@utility flex-se {
+  @apply flex flex-row justify-start items-end;
+}
+@utility flex-st {
+  @apply flex flex-row justify-start items-stretch;
+}
+
+@utility flex-cs {
+  @apply flex flex-row justify-center items-start;
+}
+@utility flex-cc {
+  @apply flex flex-row justify-center items-center;
+}
+@utility flex-ce {
+  @apply flex flex-row justify-center items-end;
+}
+@utility flex-ct {
+  @apply flex flex-row justify-center items-stretch;
+}
+
+@utility flex-es {
+  @apply flex flex-row justify-end items-start;
+}
+@utility flex-ec {
+  @apply flex flex-row justify-end items-center;
+}
+@utility flex-ee {
+  @apply flex flex-row justify-end items-end;
+}
+@utility flex-et {
+  @apply flex flex-row justify-end items-stretch;
+}
+
+@utility flex-bs {
+  @apply flex flex-row justify-between items-start;
+}
+@utility flex-bc {
+  @apply flex flex-row justify-between items-center;
+}
+@utility flex-be {
+  @apply flex flex-row justify-between items-end;
+}
+@utility flex-bt {
+  @apply flex flex-row justify-between items-stretch;
+}
+
+/* Flex utilities for column layouts */
+
+@utility flex-c-ss {
+  @apply flex flex-col justify-start items-start;
+}
+@utility flex-c-sc {
+  @apply flex flex-col justify-start items-center;
+}
+@utility flex-c-se {
+  @apply flex flex-col justify-start items-end;
+}
+@utility flex-c-st {
+  @apply flex flex-col justify-start items-stretch;
+}
+
+@utility flex-c-cs {
+  @apply flex flex-col justify-center items-start;
+}
+@utility flex-c-cc {
+  @apply flex flex-col justify-center items-center;
+}
+@utility flex-c-ce {
+  @apply flex flex-col justify-center items-end;
+}
+@utility flex-c-ct {
+  @apply flex flex-col justify-center items-stretch;
+}
+
+@utility flex-c-es {
+  @apply flex flex-col justify-end items-start;
+}
+@utility flex-c-ec {
+  @apply flex flex-col justify-end items-center;
+}
+@utility flex-c-ee {
+  @apply flex flex-col justify-end items-end;
+}
+@utility flex-c-et {
+  @apply flex flex-col justify-end items-stretch;
+}
+
+@utility flex-c-bs {
+  @apply flex flex-col justify-between items-start;
+}
+@utility flex-c-bc {
+  @apply flex flex-col justify-between items-center;
+}
+@utility flex-c-be {
+  @apply flex flex-col justify-between items-end;
+}
+@utility flex-c-bt {
+  @apply flex flex-col justify-between items-stretch;
 }

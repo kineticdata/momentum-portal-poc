@@ -9,13 +9,7 @@ export const themeActions = regRedux(
   { ...themeState },
   {
     setTheme(state, payload) {
-      calculateThemeState(
-        state,
-        getAttributeValue(payload.kapp || payload.space, 'Theme'),
-        payload.kapp ? 'Kapp' : 'Space',
-        payload.updateLive,
-        payload.init,
-      );
+      calculateThemeState(state, getAttributeValue(payload.kapp, 'Theme'));
     },
     enableEditor(state) {
       state.editor = true;

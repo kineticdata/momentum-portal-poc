@@ -8,7 +8,11 @@ import {
   useState,
 } from 'react';
 import t from 'prop-types';
-import { Combobox, createListCollection } from '@ark-ui/react/combobox';
+import {
+  Combobox,
+  createListCollection,
+  useListCollection,
+} from '@ark-ui/react/combobox';
 import { Portal } from '@ark-ui/react/portal';
 import { defineFilter } from '@kineticdata/react';
 import { debounce } from 'lodash-es';
@@ -117,7 +121,6 @@ const SearchComponent = forwardRef(
     const previousQuery = useDeferredValue(query);
     // Function to update the query value with a debounce so we don't fire too
     // many queries as the user types
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSetQuery = useMemo(
       () =>
         usesIntegration ? debounce(value => setQuery(value), 300) : setQuery,
@@ -161,15 +164,15 @@ const SearchComponent = forwardRef(
     const isLoading = usesIntegration && (loading || isQueryStale);
 
     // Define the collection to use for the combobox field
-    const collection = useMemo(
-      () =>
-        createListCollection({
-          items: (open ? !isLoading && data : selection) || [],
-          itemToValue: optionToValue,
-          itemToString: optionToLabel,
-        }),
-      [open, isLoading, data, selection, optionToValue, optionToLabel],
-    );
+    const { collection, set } = useListCollection({
+      initialItems: (open ? !isLoading && data : selection) || [],
+      itemToValue: optionToValue,
+      itemToString: optionToLabel,
+    });
+    // Update collection when data changes
+    useEffect(() => {
+      set((open ? !isLoading && data : selection) || []);
+    }, [set, open, isLoading, data, selection]);
 
     // State for disabled state of the field
     const [isDisabled, setIsDisabled] = useState(!!disabled);
@@ -231,8 +234,9 @@ const SearchComponent = forwardRef(
           collection={collection}
           onInputValueChange={({ inputValue }) => {
             setInputValue(inputValue);
-            // If the input value is empty, set the query immediately
-            if (!inputValue) setQuery(inputValue);
+            // If the input value is empty or the search is closed, set the
+            // query immediately
+            if (!inputValue || !open) setQuery(inputValue);
           }}
           value={selection.map(optionToValue)}
           onValueChange={handleChange}
@@ -264,14 +268,17 @@ const SearchComponent = forwardRef(
                     {icon && (
                       <Icon
                         name={'search'}
-                        className="absolute left-4 top-0 text-gray-500 my-2.5"
+                        className="absolute left-4 top-0 text-base-content/50 my-2.5 z-1"
                       />
                     )}
-                    {showClear && !isDisabled && (
+                    {!isDisabled && (
                       <Combobox.ClearTrigger
                         asChild
-                        className="absolute right-0 top-0"
-                        onClick={() => ctx.setOpen(true)}
+                        className={clsx(
+                          'absolute right-0 top-0 z-1',
+                          !showClear && 'hidden',
+                        )}
+                        onClick={() => setTimeout(() => ctx.setOpen(true), 0)}
                         tabIndex={0}
                       >
                         <CloseButton />
@@ -282,17 +289,18 @@ const SearchComponent = forwardRef(
                     <Combobox.Positioner>
                       <Combobox.Content
                         className={clsx(
-                          'py-2 bg-white border border-gray-200 rounded-sm min-w-[10rem] shadow-lg z-30',
+                          'py-2 bg-base-100 border border-base-300 rounded-sm min-w-[10rem] shadow-lg z-30',
                         )}
                       >
                         <Combobox.ItemGroup>
                           {error?.message && (
-                            <div className="py-1.5 px-4 min-w-full text-warning-500">
+                            <div className="py-1.5 px-4 min-w-full text-base-content/60">
+                              <span className="kstatus kstatus-error mr-2"></span>
                               {error?.message}
                             </div>
                           )}
                           {statusMessage && (
-                            <div className="py-1.5 px-4 min-w-full text-gray-900">
+                            <div className="py-1.5 px-4 min-w-full text-base-content/60">
                               {statusMessage}
                             </div>
                           )}
@@ -301,14 +309,14 @@ const SearchComponent = forwardRef(
                               key={optionToValue(item)}
                               item={optionToValue(item)}
                               className={clsx(
-                                'flex flex-col gap-1 items-stretch py-1.5 px-4 min-w-full hover:bg-gray-200 data-[highlighted]:bg-gray-200',
+                                'flex flex-col gap-1 items-stretch py-1.5 px-4 min-w-full hover:bg-base-200 data-[highlighted]:bg-base-200',
                               )}
                             >
                               <Combobox.ItemText>
                                 {optionToTitle(item)}
                               </Combobox.ItemText>
                               {optionToDescription && (
-                                <Combobox.ItemText className="text-sm text-gray-900">
+                                <Combobox.ItemText className="text-sm text-base-content/60">
                                   {optionToDescription(item)}
                                 </Combobox.ItemText>
                               )}

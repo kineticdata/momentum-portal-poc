@@ -4,8 +4,8 @@ import { ark } from '@ark-ui/react/factory';
 import { Dialog } from '@ark-ui/react/dialog';
 import { Portal } from '@ark-ui/react/portal';
 import { getChildSlots } from '../helpers/atoms.js';
-import { CloseButton } from './Button.jsx';
 import { Toaster } from './Toaster.jsx';
+import { Icon } from './Icon.jsx';
 
 /**
  * A modal.
@@ -23,7 +23,7 @@ import { Toaster } from './Toaster.jsx';
  *  property defining what the new state of the component is or should be.
  * @param {Function} [props.onExitComplete] Function to call after the modal
  *  finishes closing.
- * @param {string} props.title The title text for the modal.
+ * @param {string} [props.title] The title text for the modal.
  * @param {('sm'|'md'|'lg'|'xl')} [size=sm] The size of the modal
  * @param {boolean} [props.closeOnEscape=true] Should the modal close when the
  *  escape key is pressed.
@@ -32,6 +32,7 @@ import { Toaster } from './Toaster.jsx';
  * @param {string} [props.toasterId] The id for a Toaster component that should
  *  be rendered inside the modal to allow for toasts that can be interacted
  *  with without the modal getting closed.
+ * @param {Object} [props.portal] Ref to a container for the portal to use.
  * @param {JSX.Element|JSX.Element[]} [props.children] Elements to inject into
  *  available slots in the modal. Available slots are:
  *  - trigger: Component that toggles the modal open state when interacted with.
@@ -50,6 +51,7 @@ export const Modal = ({
   closeOnEscape,
   closeOnInteractOutside,
   toasterId,
+  portal,
   children,
 }) => {
   const slots = getChildSlots(children, {
@@ -71,38 +73,31 @@ export const Modal = ({
       {slots.trigger && (
         <Dialog.Trigger asChild>{slots.trigger}</Dialog.Trigger>
       )}
-      <Portal>
-        <Dialog.Backdrop className="fixed inset-0 bg-black/20" />
-        <Dialog.Positioner className="fixed inset-0 flex flex-col justify-around items-center">
+      <Portal container={portal}>
+        <Dialog.Backdrop className="fixed inset-0 bg-black/20 z-40" />
+        <Dialog.Positioner className="kmodal">
           <Dialog.Content
-            className={clsx(
-              // Common styles
-              'data-[state=open]:flex flex-col items-stretch py-3 bg-white',
-              'max-h-[calc(100vh-3rem)] rounded-[40px] shadow-lg',
-              // Mobile first styles
-              'max-md:w-screen',
-              // Non mobile styles
-              'md:max-w-[calc(100vw-3rem)]',
-              {
-                'md:w-screen-sm': size === 'sm',
-                'md:w-screen-md': size === 'md',
-                'md:w-screen-lg': size === 'lg',
-                'md:w-screen': size === 'xl',
-              },
-            )}
+            className={clsx('kmodal-box', {
+              'md:w-screen-sm': size === 'sm',
+              'md:w-screen-md': size === 'md',
+              'md:w-screen-lg': size === 'lg',
+              'md:w-screen': size === 'xl',
+            })}
           >
-            <div className="flex justify-between items-center gap-2 py-3 px-6">
+            <Dialog.CloseTrigger asChild>
+              <button className="kbtn kbtn-sm kbtn-circle kbtn-ghost absolute right-2 top-2">
+                <Icon name="x" size={20} />
+              </button>
+            </Dialog.CloseTrigger>
+            <div className="flex justify-between items-center gap-2">
               <Dialog.Title className="flex-auto" asChild={!!slots.title}>
                 {slots.title || title}
               </Dialog.Title>
-              <Dialog.CloseTrigger asChild>
-                <CloseButton />
-              </Dialog.CloseTrigger>
             </div>
             {slots.description && (
               <Dialog.Description
                 asChild
-                className="overflow-auto scrollbar-white py-3 px-6"
+                className="overflow-auto scrollbar-white"
               >
                 {slots.description}
               </Dialog.Description>
@@ -110,7 +105,7 @@ export const Modal = ({
             {slots.body && (
               <ark.div
                 asChild
-                className="overflow-auto scrollbar-white py-3 px-6"
+                className="overflow-auto scrollbar-white -my-4 -mx-8 py-4 px-8"
               >
                 {slots.body}
               </ark.div>
@@ -118,7 +113,7 @@ export const Modal = ({
             {slots.footer && (
               <ark.div
                 asChild
-                className="flex justify-start flex-row-reverse gap-2 py-3 px-6"
+                className="flex justify-start flex-row-reverse gap-2"
               >
                 {slots.footer}
               </ark.div>
@@ -140,8 +135,9 @@ Modal.propTypes = {
   onExitComplete: t.func,
   closeOnEscape: t.bool,
   closeOnInteractOutside: t.bool,
-  title: t.string.isRequired,
+  title: t.string,
   size: t.string,
   toasterId: t.string,
+  portal: t.object,
   children: t.node,
 };

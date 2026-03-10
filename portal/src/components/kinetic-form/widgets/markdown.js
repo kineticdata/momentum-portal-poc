@@ -14,11 +14,14 @@ import {
  * @param {Object} props.field Kinetic field object
  */
 const MarkdownComponent = forwardRef(
-  ({ className, disabled, field, editorProps }, ref) => {
+  ({ className, disabled, content, field, editorProps }, ref) => {
     const editorRef = useRef();
 
     // Function to get the value from the Kinetic field
-    const getValue = useCallback(() => field.value(), [field]);
+    const getValue = useCallback(
+      () => (field ? field.value() : content),
+      [field, content],
+    );
     // Function to update the value externally
     const setValue = useCallback(
       v => editorRef.current?.getInstance().setMarkdown(v),
@@ -27,18 +30,18 @@ const MarkdownComponent = forwardRef(
 
     // State for disabled state of the editor
     const [isDisabled, setIsDisabled] = useState(
-      disabled ?? field.form().reviewMode(),
+      disabled ?? (!field || field.form().reviewMode()),
     );
 
-    // Change handler fore the editor to have it update the Kinetic field
+    // Change handler for the editor to have it update the Kinetic field
     const handleChange = () => {
-      field.value(editorRef.current.getInstance().getMarkdown());
+      if (field) field.value(editorRef.current.getInstance().getMarkdown());
     };
 
     // Define API ref
     const api = useRef({
-      enable: () => setIsDisabled(false),
-      disable: () => setIsDisabled(true),
+      enable: field ? () => setIsDisabled(false) : undefined,
+      disable: field ? () => setIsDisabled(true) : undefined,
       getValue,
       setValue,
     });
@@ -84,23 +87,34 @@ const MarkdownComponent = forwardRef(
 MarkdownComponent.propTypes = {
   className: t.string,
   disabled: t.bool,
-  field: t.object.isRequired,
+  content: t.string,
+  field: t.object,
   editorProps: t.object,
 };
 
 /**
  * Additional validations to be performed on the configurations of this widget.
  */
-const validateConfig = field => {
+const validateConfig = (field, config) => {
   let valid = true;
 
   // Field must be a text field with 2+ rows so it's a textarea to properly
   // save the whitespace of markdown
-  if (field?.element()?.[0]?.tagName !== 'TEXTAREA') {
-    console.error(
-      'Markdown Widget Error: The field parameter must be a Kinetic field of type "text" with 2 or more rows.',
-    );
-    valid = false;
+  if (field) {
+    valid = !!validateField(field, 'text', 'Markdown');
+    if (valid && field?.element()?.[0]?.tagName !== 'TEXTAREA') {
+      console.error(
+        'Markdown Widget Error: The field parameter must be a Kinetic field of type "text" with 2 or more rows.',
+      );
+      valid = false;
+    }
+  } else {
+    if (typeof config.content !== 'string') {
+      console.error(
+        'Markdown Widget Error: The `content` property must be provided if a Kinetic field is not used.',
+      );
+      valid = false;
+    }
   }
 
   return valid;
@@ -120,7 +134,6 @@ const validateConfig = field => {
 export const Markdown = ({ container, field, config, id } = {}) => {
   if (
     validateContainer(container, 'Markdown') &&
-    validateField(field, 'text', 'Markdown') &&
     validateConfig(field, config)
   ) {
     return registerWidget(Markdown, {
@@ -138,6 +151,7 @@ export const Markdown = ({ container, field, config, id } = {}) => {
 /**
  * @typedef {Object} MarkdownWidgetConfig
  * @property {string} [className] Classes to add to the widget wrapper.
+ * @property {boolean} [content] Content to render when a field isn't provided.
  * @property {boolean} [disabled] Should the markdown editor be disabled.
  *  If omitted, will use the reviewMode of the form to determine.
  * @property {Object} [editorProps] Object of props to pass through to the

@@ -5,7 +5,7 @@ import { Icon } from '../../atoms/Icon.jsx';
 export const Loading = ({ className, size = 48, small, xsmall }) => (
   <div
     className={clsx(
-      'flex justify-center items-center text-gray-500',
+      'flex justify-center items-center text-base-content/60',
       { 'p-6': !small && !xsmall, 'p-3': small, 'p-1': xsmall },
       className,
     )}

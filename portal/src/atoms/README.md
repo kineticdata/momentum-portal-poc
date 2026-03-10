@@ -95,7 +95,7 @@ Our `Modal` atom can define the body slot using code that looks like this:
 If you then provide a slot as follows:
 
 ```jsx
-<form slot="body" className="bg-gray-100">
+<form slot="body" className="bg-base-100">
   Modal Body Content
 </form>
 ```
@@ -103,7 +103,7 @@ If you then provide a slot as follows:
 The resulting DOM will be:
 
 ```jsx
-<form className="p-4 bg-gray-100">Modal Body Content</form>
+<form className="p-4 bg-base-100">Modal Body Content</form>
 ```
 
 This allows us to not have additional superfluous wrapper elements just to add styles and removes clutter in the DOM.

@@ -15,8 +15,6 @@ import { getCsrfToken } from '@kineticdata/react';
 import { toastError } from '../../../helpers/toasts.js';
 import { Provider, useSelector } from 'react-redux';
 import { store } from '../../../redux.js';
-import radioChecked from '../../../assets/styles/icons/radio-checked.svg';
-import radioDisabled from '../../../assets/styles/icons/radio-checked_disabled.svg';
 
 /**
  * @param {Object} props.field Kinetic field object
@@ -28,7 +26,7 @@ const SignatureComponent = forwardRef(
       field,
       modalTitle = 'Sign your form',
       signaturePadLabel = 'Signature',
-      fullNameLabel = 'Full Name*',
+      fullNameLabel = 'Full Name',
       agreementText = 'I understand this is a legal representation of my signature.',
       savedButtonLabel = 'Save',
       savedFileName = 'signature_widget',
@@ -60,10 +58,6 @@ const SignatureComponent = forwardRef(
       { font: 'Nothing You Could Do' },
       { font: 'Comforter Brush' },
     ];
-
-    const tabClasses = clsx(
-      'flex items-center justify-center gap-1 px-3 py-2 h-[2.25rem] w-[6rem] rounded-2.5xl',
-    );
 
     // Function to get the value
     const getValue = useCallback(() => field.value(), [field]);
@@ -164,31 +158,33 @@ const SignatureComponent = forwardRef(
 
     return (
       <WidgetAPI ref={ref} api={api.current}>
-        <div className={clsx('flex flex-col')}>
-          <div className="flex items-center justify-between w-full">
+        <div className="flex-sc w-full gap-3">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="w-60 sm:w-68 h-14 kbtn kbtn-outline text-base border-base-300 hover:bg-base-200"
+          >
+            {savedSignature ? (
+              <img
+                src={savedSignature}
+                alt="signature"
+                className="max-h-full max-w-full object-contain rounded-box"
+              />
+            ) : (
+              <span className="flex-cc gap-2">
+                {buttonLabel} <Icon name="writing" aria-label="signature" />
+              </span>
+            )}
+          </button>
+          {savedSignature && (
             <button
               type="button"
-              onClick={() => setOpen(true)}
-              className="w-[17rem] h-[3.5rem] bg-white border border-primary-400 rounded-2.5xl hover:bg-primary-100 flex items-center justify-center focus-visible:bg-primary-100 outline-0"
+              className="kbtn kbtn-ghost rounded-full"
+              onClick={reset}
             >
-              {savedSignature ? (
-                <img
-                  src={savedSignature}
-                  alt="signature"
-                  className="max-h-full max-w-full object-contain rounded-2.5xl"
-                />
-              ) : (
-                <span className="flex items-center gap-2">
-                  {buttonLabel} <Icon name="writing" aria-label="signature" />
-                </span>
-              )}
+              {clearButtonLabel}
             </button>
-            {savedSignature && (
-              <button className="ml-6 font-semibold" onClick={reset}>
-                {clearButtonLabel}
-              </button>
-            )}
-          </div>
+          )}
         </div>
         <Modal
           title={modalTitle}
@@ -202,28 +198,12 @@ const SignatureComponent = forwardRef(
               value={activeTab}
               onValueChange={tab => setActiveTab(tab.value)}
             >
-              <Tabs.List className="justify-center flex p-2 bg-primary-100 rounded-[3.75rem] w-[16rem] gap-8 mb-6">
-                <Tabs.Trigger
-                  value="draw"
-                  className={clsx(
-                    tabClasses,
-                    activeTab === 'draw'
-                      ? 'bg-primary-900 text-primary-100'
-                      : 'bg-primary-100 text-grey-900',
-                  )}
-                >
+              <Tabs.List className="ktabs ktabs-box w-fit mb-6">
+                <Tabs.Trigger value="draw" className={clsx('ktab')}>
                   <Icon name="writing" aria-label="draw"></Icon>
                   Draw
                 </Tabs.Trigger>
-                <Tabs.Trigger
-                  value="type"
-                  className={clsx(
-                    tabClasses,
-                    activeTab === 'type'
-                      ? 'bg-primary-900 text-primary-100'
-                      : 'bg-primary-100 text-grey-900',
-                  )}
-                >
+                <Tabs.Trigger value="type" className={clsx('ktab')}>
                   <Icon name="keyboard" aria-label="keyboard"></Icon>
                   Type
                 </Tabs.Trigger>
@@ -236,21 +216,20 @@ const SignatureComponent = forwardRef(
                       .then(url => setImageUrl(url))
                   }
                 >
-                  <div className="mb-2 font-semibold text-gray-900">
+                  <div className="mb-2 font-semibold text-base-content/60">
                     <SignaturePad.Label>{signaturePadLabel}</SignaturePad.Label>
                   </div>
                   <SignaturePad.Control
                     className={clsx(
-                      'border border-primary-400 bg-gray-100 relative rounded-2.5xl transition-all',
-                      'hover:bg-primary-100',
-                      'focus-within:ring-3 focus-within:ring-secondary-400',
+                      'border bg-base-200 relative rounded-box transition-all',
+                      'focus-within:ring-3 focus-within:ring-primary/40 outline-0',
                     )}
                   >
                     <SignaturePad.Segment />
                     <SignaturePad.Guide
                       className={clsx(
-                        'h-[12.5rem] relative rounded-2.5xl',
-                        'border-primary-400',
+                        'h-[12.5rem] relative rounded-box',
+                        'border-base-300',
                       )}
                     >
                       <SignaturePad.ClearTrigger
@@ -259,44 +238,30 @@ const SignatureComponent = forwardRef(
                       >
                         <Icon name="refresh" aria-label="reset"></Icon>
                       </SignaturePad.ClearTrigger>
-                      <div className="flex justify-between items-center absolute bottom-4 left-5 right-6 border-t-2 border-gray-200"></div>
+                      <div className="flex-bc absolute bottom-4 left-5 right-6 border-t-2 border-base-300"></div>
                     </SignaturePad.Guide>
                   </SignaturePad.Control>
                 </SignaturePad.Root>
               </Tabs.Content>
               <Tabs.Content value="type">
-                <div className="mb-4">
-                  <label
-                    htmlFor="fullName"
-                    className="block text-sm font-semibold text-gray-900 mb-2"
-                  >
-                    {fullNameLabel}
-                  </label>
-                  <div className="field w-full">
-                    <input
-                      type="text"
-                      value={fullName}
-                      onChange={e => setFullName(e.target.value)}
-                      className="block px-5 md:px-6 py-2.75 md:py-2.25 max-md:text-sm border rounded-2.5xl outline-0 w-full font-semibold
-               text-primary-900 bg-white border-primary-400
-               hover:bg-primary-100 focus-visible:bg-white focus-visible:ring-3 focus-visible:ring-secondary-400
-               disabled:text-gray-900 disabled:bg-gray-100"
-                    />
-                  </div>
+                <div className="field required w-full mb-4">
+                  <label htmlFor="fullName">{fullNameLabel}</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    value={fullName}
+                    onChange={e => setFullName(e.target.value)}
+                  />
                 </div>
-                <hr className="mb-4 mt-6 border-primary-400" />
-                <div className="grid grid-cols-2 gap-4 radio-btn">
+                <hr className="mb-4 mt-6" />
+                <div className="grid grid-cols-2 gap-4">
                   {signatureFonts.map(style => (
                     <label
                       key={style.font}
-                      className="flex items-center justify-between border rounded-2.5xl p-4 w-[18rem] h-16 cursor-pointer transition-all
-             text-primary-900 bg-white border-primary-400 hover:bg-primary-100
-             focus-within:bg-white focus-within:ring-3 focus-within:ring-secondary-400
-             overflow-wrap-anywhere disabled:text-gray-900 disabled:bg-gray-100"
-                      onClick={() => setSelectedStyle(style.font)}
+                      className="kbtn kbtn-outline flex-bc border-base-300 h-16 transition-all overflow-wrap-anywhere hover:bg-base-200"
                     >
                       <span
-                        className="text-2xl text-primary-900 uppercase"
+                        className="text-2xl py-1.5 uppercase"
                         style={{
                           fontFamily: style.font,
                           display: 'inline-block',
@@ -306,19 +271,18 @@ const SignatureComponent = forwardRef(
                           textOverflow: 'ellipsis',
                         }}
                       >
-                        {fullName}
+                        {fullName || (
+                          <span className="text-base-content/60">
+                            Full Name
+                          </span>
+                        )}
                       </span>
-
                       <input
                         type="radio"
+                        className="kradio kradio-primary"
                         value={style.font}
                         checked={selectedStyle === style.font}
                         onChange={() => setSelectedStyle(style.font)}
-                        className={clsx(
-                          'flex-none appearance-none w-5 h-5 border-2 border-primary-400 bg-secondary-400 outline-0 bg-center bg-no-repeat rounded-full bg-[length:0.75rem]',
-                          `checked:radio-checked-bg`,
-                          `disabled:checked:radio-disabled-bg`,
-                        )}
                       />
                     </label>
                   ))}
@@ -327,20 +291,15 @@ const SignatureComponent = forwardRef(
             </Tabs.Root>
           </div>
           <div slot="footer">
-            <div className="flex flex-col items-center gap-2 w-full">
-              <p className="text-center text-small text-gray-900">
+            <div className="flex-c-cc gap-2 w-full">
+              <p className="text-center text-small text-base-content/60">
                 {agreementText}
               </p>
               <button
                 type="button"
+                className="kbtn kbtn-lg kbtn-primary kbtn-block"
                 onClick={onSave}
                 disabled={isSaveDisabled}
-                className={clsx(
-                  'w-full rounded-2.5xl bg-secondary-400 button-text py-2 font-semibold border border-primary-500',
-                  {
-                    'disabled:bg-gray-200 text-gray-900 font-medium': !imageUrl,
-                  },
-                )}
               >
                 {savedButtonLabel}
               </button>

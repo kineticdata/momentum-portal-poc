@@ -6,14 +6,14 @@ import {
   useRef,
   useState,
 } from 'react';
+import clsx from 'clsx';
 import t from 'prop-types';
 import { CoreForm, generateKey, KineticLib } from '@kineticdata/react';
-import { Button } from '../../../atoms/Button.jsx';
-import { getChildSlots } from '../../../helpers/atoms.js';
-import { Loading as Pending } from '../../states/Loading.jsx';
 import { registerWidget, validateContainer, WidgetAPI } from './index.js';
-import { asArray, callIfFn } from '../../../helpers/index.js';
 import { Modal } from '../../../atoms/Modal.jsx';
+import { getChildSlots } from '../../../helpers/atoms.js';
+import { asArray, callIfFn } from '../../../helpers/index.js';
+import { Loading as Pending } from '../../states/Loading.jsx';
 
 // Asynchronously import the global dependencies that are used in the embedded
 // forms. Note that we deliberately do this as a const so that it should start
@@ -21,7 +21,14 @@ import { Modal } from '../../../atoms/Modal.jsx';
 // CoreForm component will wait for this to be loaded.
 const globals = import('../globals.jsx');
 
-const SubformLayout = ({ inline, title, toasterId, destroy, children }) => {
+const SubformLayout = ({
+  inline,
+  title,
+  modalSize,
+  toasterId,
+  destroy,
+  children,
+}) => {
   const slots = getChildSlots(children, {
     componentName: 'SubformLayout',
     requiredSlots: ['content'],
@@ -39,6 +46,7 @@ const SubformLayout = ({ inline, title, toasterId, destroy, children }) => {
       open={true}
       onOpenChange={({ open }) => !open && destroy()}
       title={title}
+      size={modalSize}
       toasterId={toasterId}
     >
       <div slot="body">
@@ -92,6 +100,7 @@ SubformComponent.propTypes = {
   onError: t.func,
   inline: t.bool,
   modalTitle: t.string,
+  modalSize: t.string,
   saveLabel: t.string,
   destroy: t.func,
 };
@@ -109,6 +118,7 @@ const KineticSubformComponent = forwardRef(
       onError,
       inline,
       modalTitle,
+      modalSize,
       saveLabel = 'Save',
       destroy,
     },
@@ -187,13 +197,14 @@ const KineticSubformComponent = forwardRef(
           <SubformLayout
             inline={inline}
             title={modalTitle || kFormRef.current?.name() || 'Loading...'}
+            modalSize={modalSize}
             toasterId={toasterId}
             destroy={destroy}
           >
             {errors?.length > 0 && (
               <div
                 slot="errors"
-                className="text-warning-500 w-full mb-5"
+                className="kalert kalert-error kalert-vertical w-full justify-start justify-items-start text-left gap-1 mb-5"
                 role="alert"
                 aria-live="assertive"
                 tabIndex={0}
@@ -219,14 +230,14 @@ const KineticSubformComponent = forwardRef(
               onError={error}
             />
             {ready && !disabled && onSave && (
-              <Button
+              <button
                 slot="save"
-                variant="primary"
-                className="flex-1"
+                type="button"
+                className="flex-1 kbtn kbtn-lg kbtn-primary"
                 onClick={save}
               >
                 {saveLabel}
-              </Button>
+              </button>
             )}
           </SubformLayout>
         </KineticLib>
@@ -253,12 +264,7 @@ const Label = ({ label, id, required, children }) => (
   <label htmlFor={id}>
     {children}
     {label}
-    {required && (
-      <>
-        <span className="text-warning-500">*</span>
-        <em className="sr-only">Required</em>
-      </>
-    )}
+    {required && <em className="sr-only">Required</em>}
   </label>
 );
 
@@ -267,7 +273,7 @@ const buildInputField =
   ({ label, value, required, disabled, onChange }) => {
     const id = useMemo(() => generateKey(12), []);
     return (
-      <div className="field">
+      <div className={clsx('field', { required })}>
         <Label label={label} id={id} required={required} />
         <input
           type={type}
@@ -289,7 +295,7 @@ const TimeField = buildInputField('time');
 const CheckboxField = ({ label, value, required, disabled, onChange }) => {
   const id = useMemo(() => generateKey(12), []);
   return (
-    <div className="field">
+    <div className={clsx('field', { required })}>
       <Label label={label} id={id} required={required}>
         <input
           type="checkbox"
@@ -331,6 +337,7 @@ const CustomSubformComponent = forwardRef(
       onSave,
       inline,
       modalTitle,
+      modalSize,
       saveLabel = 'Save',
       destroy,
     },
@@ -399,13 +406,14 @@ const CustomSubformComponent = forwardRef(
         <SubformLayout
           inline={inline}
           title={modalTitle || 'Loading...'}
+          modalSize={modalSize}
           toasterId={toasterId}
           destroy={destroy}
         >
           {errors?.length > 0 && (
             <div
               slot="errors"
-              className="text-warning-500 w-full mb-5"
+              className="kalert kalert-error kalert-vertical w-full justify-start justify-items-start text-left gap-1 mb-5"
               role="alert"
               aria-live="assertive"
               tabIndex={0}
@@ -435,14 +443,14 @@ const CustomSubformComponent = forwardRef(
             })}
           </div>
           {!disabled && onSave && (
-            <Button
+            <button
               slot="save"
-              variant="primary"
-              className="flex-1"
+              type="button"
+              className="flex-1 kbtn kbtn-lg kbtn-primary"
               onClick={save}
             >
               {saveLabel}
-            </Button>
+            </button>
           )}
         </SubformLayout>
       </WidgetAPI>
@@ -507,7 +515,7 @@ const validateConfig = config => {
  * instance of the widget and render it into the provided container.
  *
  * @param {HTMLElement} container HTML Element into which to render the widget.
- * @param {MarkdownWidgetConfig} config Configuration object for the widget.
+ * @param {SubformWidgetConfig} config Configuration object for the widget.
  * @param {string} [id] Optional id that can be used to retrieve a reference to
  *  the widget's API functions using the `Subform.get` function.
  */
@@ -546,6 +554,7 @@ export const Subform = ({ container, config, id } = {}) => {
  *  modal.
  * @property {string} [modalTitle] The title for the modal when the subform is
  *  rendered in a modal.
+ * @property {string} [modalSize] The size of the modal.
  * @property {string} [saveLabel] The label for the save button.
  */
 

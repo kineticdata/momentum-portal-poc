@@ -22,7 +22,7 @@
      * Position and size the panels container either on the bottom of the screen
      * for mobile, or on the right of the screen for larger sizes.
      */
-    @apply relative overflow-visible max-md:w-full max-md:h-0 md:w-0 md:h-full;
+    @apply relative overflow-visible max-md:w-full max-md:h-0 md:w-0 md:h-full z-20;
 
     /* Style each panel positioner element. */
     [data-scope='dialog'][data-part='positioner'] {
