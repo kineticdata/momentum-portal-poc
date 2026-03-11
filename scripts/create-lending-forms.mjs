@@ -13,26 +13,37 @@ import { createApiClient } from './lib/api-client.mjs';
 // Config
 // ---------------------------------------------------------------------------
 
-const server = process.env.KINETIC_SERVER_URL || 'https://publicis-dev.kinops.io';
-const user = process.env.KINETIC_USERNAME || 'KINETIC_USERNAME';
-const pass = process.env.KINETIC_PASSWORD || 'KINETIC_PASSWORD';
+const server = process.env.KINETIC_SERVER_URL;
+const user = process.env.KINETIC_USERNAME;
+const pass = process.env.KINETIC_PASSWORD;
 const kappSlug = 'commercial-lending';
 
-const client = createApiClient({
-  baseUrl: `${server}/app/api/v1`,
-  username: user,
-  password: pass,
-});
-
-async function api(method, urlPath, body) {
-  const res = await client[method.toLowerCase()](urlPath, { body });
-  if (!res.ok) {
-    console.error(`${method} ${urlPath} → ${res.status}`);
-    console.error(typeof res.data === 'string' ? res.data : JSON.stringify(res.data, null, 2));
-    return null;
-  }
-  return res.data;
+if (!server || !user || !pass) {
+  console.error('Required env vars: KINETIC_SERVER_URL, KINETIC_USERNAME, KINETIC_PASSWORD');
+  process.exit(1);
 }
+
+let client;
+if (server) {
+  client = createApiClient({
+    baseUrl: `${server}/app/api/v1`,
+    username: user,
+    password: pass,
+  });
+}
+
+function makeApi(apiClient) {
+  return async function api(method, urlPath, body) {
+    const res = await apiClient[method.toLowerCase()](urlPath, { body });
+    if (!res.ok) {
+      console.error(`${method} ${urlPath} → ${res.status}`);
+      console.error(typeof res.data === 'string' ? res.data : JSON.stringify(res.data, null, 2));
+      return null;
+    }
+    return res.data;
+  };
+}
+
 
 // ---------------------------------------------------------------------------
 // Field helpers
@@ -402,19 +413,21 @@ const forms = [
 // Run
 // ---------------------------------------------------------------------------
 
-async function main() {
-  console.log(`Creating ${forms.length} forms in kapp "${kappSlug}" at ${server}...`);
-
+export async function createLendingForms(apiClient, slug = kappSlug) {
+  const apiFn = makeApi(apiClient);
+  console.log(`Creating ${forms.length} forms in kapp "${slug}"...`);
   for (const form of forms) {
-    const result = await api('POST', `/kapps/${kappSlug}/forms`, form);
+    const result = await apiFn('POST', `/kapps/${slug}/forms`, form);
     if (result) {
       console.log(`✓ Created: ${form.name} (${form.slug})`);
     } else {
       console.log(`✗ Failed: ${form.name} (${form.slug})`);
     }
   }
-
   console.log('\nDone.');
 }
 
-main().catch(console.error);
+// Standalone runner
+if (import.meta.url === `file://${process.argv[1]}`) {
+  createLendingForms(client).catch(console.error);
+}

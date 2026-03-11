@@ -14,15 +14,23 @@
 import { randomUUID } from 'crypto';
 import { createApiClient } from './lib/api-client.mjs';
 
-const server = process.env.KINETIC_SERVER_URL || 'https://publicis-dev.kinops.io';
-const user = process.env.KINETIC_USERNAME || 'KINETIC_USERNAME';
-const pass = process.env.KINETIC_PASSWORD || 'KINETIC_PASSWORD';
+const server = process.env.KINETIC_SERVER_URL;
+const user = process.env.KINETIC_USERNAME;
+const pass = process.env.KINETIC_PASSWORD;
 
-const client = createApiClient({
-  baseUrl: `${server}/app/api/v1`,
-  username: user,
-  password: pass,
-});
+if (!server || !user || !pass) {
+  console.error('Required env vars: KINETIC_SERVER_URL, KINETIC_USERNAME, KINETIC_PASSWORD');
+  process.exit(1);
+}
+
+let client;
+if (server) {
+  client = createApiClient({
+    baseUrl: `${server}/app/api/v1`,
+    username: user,
+    password: pass,
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Workflow definition (treeJson format)
@@ -490,37 +498,37 @@ const loanWorkflow = {
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
-async function main() {
-  console.log(`Creating loan application workflow on ${server}...\n`);
+export async function createLoanWorkflow(apiClient) {
+  console.log('Creating loan application workflow...\n');
 
-  try {
-    const payload = {
-      name: loanWorkflow.name,
-      event: 'Submission Submitted',
-      treeId: randomUUID(),
-      treeJson: loanWorkflow,
-    };
+  const payload = {
+    name: loanWorkflow.name,
+    event: 'Submission Submitted',
+    treeId: randomUUID(),
+    treeJson: loanWorkflow,
+  };
 
-    const { status, ok, data } = await client.post(
-      '/kapps/commercial-lending/forms/loan-application/workflows?force=true',
-      { body: payload },
-    );
+  const { status, ok, data } = await apiClient.post(
+    '/kapps/commercial-lending/forms/loan-application/workflows?force=true',
+    { body: payload },
+  );
 
-    if (!ok) {
-      console.error(`❌ Failed to create workflow (HTTP ${status}):`);
-      console.error(JSON.stringify(data, null, 2));
-      process.exit(1);
-    }
-
-    console.log('✅ Loan Application Submitted workflow created successfully!');
-    console.log(`   Name:  ${data.workflow?.name || loanWorkflow.name}`);
-    console.log(`   Event: ${data.workflow?.event || 'Submission Submitted'}`);
-    console.log(`   Stages: Pre-Screening → Document Verification → Credit Assessment → Loan Approval`);
-  } catch (err) {
-    console.error('❌ Error:', err.message);
-    if (err.cause) console.error('   Cause:', err.cause);
-    process.exit(1);
+  if (!ok) {
+    console.error(`❌ Failed to create workflow (HTTP ${status}):`);
+    console.error(JSON.stringify(data, null, 2));
+    throw new Error(`Workflow creation failed: HTTP ${status}`);
   }
+
+  console.log('✅ Loan Application Submitted workflow created successfully!');
+  console.log(`   Name:  ${data.workflow?.name || loanWorkflow.name}`);
+  console.log(`   Event: ${data.workflow?.event || 'Submission Submitted'}`);
+  console.log(`   Stages: Pre-Screening → Document Verification → Credit Assessment → Loan Approval`);
 }
 
-main();
+// Standalone runner
+if (import.meta.url === `file://${process.argv[1]}`) {
+  createLoanWorkflow(client).catch(err => {
+    console.error('❌ Error:', err.message);
+    process.exit(1);
+  });
+}

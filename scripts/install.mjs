@@ -36,6 +36,9 @@ import { createApiClient, createOAuthApiClient, createLogger } from "./lib/api-c
 import { installCore } from "./lib/core-installer.mjs";
 import { installTask } from "./lib/task-installer.mjs";
 import { installIntegrator } from "./lib/integrator-installer.mjs";
+import { createLendingForms } from "./create-lending-forms.mjs";
+import { createLoanWorkflow } from "./create-loan-workflow.mjs";
+import { seedDemoData } from "./seed-demo-data.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const logger = createLogger();
@@ -268,13 +271,17 @@ async function main() {
   }
 
   // --------------------------------------------------------------------------
-  // Add project-specific installation steps below.
-  // Examples:
-  //   - Seed form submissions (reference data, config records)
-  //   - Create additional teams or team memberships
-  //   - Set form attributes programmatically
-  //   - Build form indexes
+  // Commercial Lending: create task/approval forms and workflow, then seed data
   // --------------------------------------------------------------------------
+
+  logger.info("Creating commercial lending forms...");
+  await createLendingForms(coreApi);
+
+  logger.info("Creating loan application workflow...");
+  await createLoanWorkflow(coreApi);
+
+  logger.info("Seeding demo loan applications...");
+  await seedDemoData(coreApi, vars.core.service_user_username);
 
   logger.info(`Finished installing the "${TEMPLATE_NAME}" template.`);
 }

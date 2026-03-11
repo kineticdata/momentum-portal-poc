@@ -7,16 +7,24 @@
 
 import { createApiClient } from './lib/api-client.mjs';
 
-const server = process.env.KINETIC_SERVER_URL || 'https://publicis-dev.kinops.io';
-const user = process.env.KINETIC_USERNAME || '';
-const pass = process.env.KINETIC_PASSWORD || '';
+const server = process.env.KINETIC_SERVER_URL;
+const user = process.env.KINETIC_USERNAME;
+const pass = process.env.KINETIC_PASSWORD;
+
+if (!server || !user || !pass) {
+  console.error('Required env vars: KINETIC_SERVER_URL, KINETIC_USERNAME, KINETIC_PASSWORD');
+  process.exit(1);
+}
 const kappSlug = 'commercial-lending';
 
-const client = createApiClient({
-  baseUrl: `${server}/app/api/v1`,
-  username: user,
-  password: pass,
-});
+let client;
+if (server) {
+  client = createApiClient({
+    baseUrl: `${server}/app/api/v1`,
+    username: user,
+    password: pass,
+  });
+}
 
 const now = new Date();
 const daysAgo = (n) => new Date(now - n * 86400000).toISOString();
@@ -255,7 +263,7 @@ const loanApplications = [
   },
 ];
 
-async function main() {
+export async function seedDemoData(apiClient, username) {
   console.log(`Seeding ${loanApplications.length} demo loan applications...`);
 
   for (const app of loanApplications) {
@@ -263,16 +271,16 @@ async function main() {
       values: app.values,
       coreState: app.coreState,
       createdAt: app.createdAt,
-      createdBy: user,
+      createdBy: username,
       updatedAt: app.createdAt,
-      updatedBy: user,
+      updatedBy: username,
     };
     if (app.coreState === 'Submitted') {
       body.submittedAt = app.submittedAt;
-      body.submittedBy = user;
+      body.submittedBy = username;
     }
 
-    const res = await client.patch(`/kapps/${kappSlug}/forms/loan-application/submissions`, { body });
+    const res = await apiClient.patch(`/kapps/${kappSlug}/forms/loan-application/submissions`, { body });
     if (res.ok) {
       console.log(`  ✓ ${app.values['Borrower Name']} — Stage: ${app.values['Stage']}`);
     } else {
@@ -284,4 +292,7 @@ async function main() {
   console.log('\nDone.');
 }
 
-main().catch(console.error);
+// Standalone runner
+if (import.meta.url === `file://${process.argv[1]}`) {
+  seedDemoData(client, user).catch(console.error);
+}
