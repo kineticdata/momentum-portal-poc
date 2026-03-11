@@ -1,0 +1,17 @@
+{
+  "space_slug": "my-space",
+  "domain": "kinops.io",
+  "space_name": "My Space",
+  "username": "your-username",
+  "password": "your-password",
+
+  "smtp": {
+    "server": "smtp.example.com",
+    "port": "587",
+    "tls": "true",
+    "username": "smtp-username",
+    "password": "smtp-password"
+  },
+
+  "users": []
+}

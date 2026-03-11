@@ -1,7 +1,32 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C /Users/jamesdavies/dev/kinetic-platform-ai-skills remote -v)"
+      "Bash(git -C /Users/jamesdavies/dev/kinetic-platform-ai-skills remote -v)",
+      "Bash(curl -s -u 'KINETIC_USERNAME:KINETIC_PASSWORD' 'https://publicis-dev.kinops.io/app/api/v1/workflows')",
+      "Bash(grep -E \"\\\\.\\(json|mjs|md\\)$\")",
+      "mcp__kinetic-platform-publicis__list_kapps",
+      "mcp__kinetic-platform-publicis__list_teams",
+      "mcp__kinetic-platform-publicis__list_kapp_attribute_definitions",
+      "mcp__kinetic-platform-publicis__list_form_attribute_definitions",
+      "mcp__kinetic-platform-publicis__list_kapp_form_types",
+      "mcp__kinetic-platform-publicis__list_kapp_security_policy_definitions",
+      "mcp__kinetic-platform-publicis__create_team",
+      "mcp__kinetic-platform-publicis__create_kapp_attribute_definition",
+      "mcp__kinetic-platform-publicis__create_form_attribute_definition",
+      "mcp__kinetic-platform-publicis__create_kapp_form_type",
+      "mcp__kinetic-platform-publicis__create_kapp_security_policy_definition",
+      "mcp__kinetic-platform-publicis__create_form",
+      "Bash(export REACT_APP_PROXY_HOST=https://publicis-dev.kinops.io)",
+      "Bash(export KINETIC_USER=KINETIC_USERNAME)",
+      "Bash(export KINETIC_PASS='KINETIC_PASSWORD')",
+      "Bash(node /Users/jamesdavies/dev/pocs/customer-project-publicis-sapient/scripts/create-lending-forms.mjs)",
+      "Bash(./node_modules/.bin/vite build)",
+      "mcp__kinetic-platform-publicis__core_retrieveFormWorkflows",
+      "Bash(node scripts/create-loan-workflow.mjs)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(node_modules/.bin/vite build)",
+      "Bash(lsof -ti :3000,5173,4173,8080,3001,4000)",
+      "mcp__kinetic-platform-publicis__core_listForms"
     ]
   }
 }

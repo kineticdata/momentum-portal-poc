@@ -43,10 +43,17 @@ const getMenuItems = profile =>
   [
     {
       items: [
-        { label: 'Home', to: '/' },
-        { label: 'Submit a Request', onClick: () => openSearch() },
-        { label: 'Check Status', to: '/requests' },
-        { label: 'My Work', to: '/actions' },
+        { label: 'Dashboard', to: '/', icon: 'layout-dashboard' },
+        { label: 'Loan Pipeline', to: '/pipeline', icon: 'columns-3' },
+        { label: 'My Queue', to: '/queue', icon: 'list-check' },
+        { label: 'New Application', to: '/apply', icon: 'file-plus' },
+      ],
+    },
+    {
+      title: 'Operations',
+      items: [
+        { label: 'All Requests', to: '/requests' },
+        { label: 'Actions', to: '/actions' },
       ],
     },
     profile?.spaceAdmin && {

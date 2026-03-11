@@ -1,0 +1,161 @@
+{
+  "builderVersion": "",
+  "schemaVersion": "1.0",
+  "version": "",
+  "processOwnerEmail": "",
+  "lastId": 30,
+  "name": "Loan Application Submitted",
+  "notes": "Orchestrates the end-to-end commercial loan review pipeline:\nPre-Screening → Document Verification → Credit Assessment → Loan Approval",
+  "connectors": [
+    { "from": "start", "to": "utilities_echo_v1_1", "label": "", "value": "", "type": "Complete" },
+    { "from": "utilities_echo_v1_1", "to": "routine_task_2", "label": "", "value": "", "type": "Complete" },
+    {
+      "from": "routine_task_2",
+      "to": "routine_task_3",
+      "label": "Pre-Screening Complete",
+      "value": "@results['Pre-Screening Review']['Status'] != \"Canceled\"",
+      "type": "Complete"
+    },
+    {
+      "from": "routine_task_2",
+      "to": "system_tree_return_v1_30",
+      "label": "Canceled",
+      "value": "@results['Pre-Screening Review']['Status'] == \"Canceled\"",
+      "type": "Complete"
+    },
+    {
+      "from": "routine_task_3",
+      "to": "routine_approval_4",
+      "label": "Verification Complete",
+      "value": "@results['Document Verification']['Status'] != \"Canceled\"",
+      "type": "Complete"
+    },
+    {
+      "from": "routine_task_3",
+      "to": "system_tree_return_v1_30",
+      "label": "Canceled",
+      "value": "@results['Document Verification']['Status'] == \"Canceled\"",
+      "type": "Complete"
+    },
+    {
+      "from": "routine_approval_4",
+      "to": "routine_approval_5",
+      "label": "Approved",
+      "value": "@results['Credit Assessment']['Approval Decision'] != \"Denied\"",
+      "type": "Complete"
+    },
+    {
+      "from": "routine_approval_4",
+      "to": "system_tree_return_v1_30",
+      "label": "Denied",
+      "value": "@results['Credit Assessment']['Approval Decision'] == \"Denied\"",
+      "type": "Complete"
+    },
+    { "from": "routine_approval_5", "to": "system_tree_return_v1_30", "label": "", "value": "", "type": "Complete" }
+  ],
+  "nodes": [
+    {
+      "configured": true, "defers": false, "deferrable": false, "visible": false,
+      "name": "Start", "messages": [],
+      "dependents": { "task": [{ "label": "", "type": "Complete", "value": "", "content": "utilities_echo_v1_1" }] },
+      "id": "start", "position": { "x": 10, "y": 10 }, "version": 1, "parameters": [],
+      "definitionId": "system_start_v1"
+    },
+    {
+      "configured": true, "defers": false, "deferrable": false, "visible": true,
+      "name": "Build Submission Details", "messages": [],
+      "dependents": { "task": [{ "label": "", "type": "Complete", "value": "", "content": "routine_task_2" }] },
+      "id": "utilities_echo_v1_1", "position": { "x": 10, "y": 120 }, "version": 1,
+      "parameters": [
+        {
+          "dependsOnId": "", "dependsOnValue": "", "description": "",
+          "id": "input", "label": "Input", "menu": "",
+          "value": "<%= \"Borrower: #{@values['Borrower Name']} | Amount: #{@values['Loan Amount']} | Type: #{@values['Loan Type']}\" %>",
+          "required": true
+        }
+      ],
+      "definitionId": "utilities_echo_v1"
+    },
+    {
+      "configured": true, "defers": true, "deferrable": true, "visible": true,
+      "name": "Pre-Screening Review", "messages": [],
+      "dependents": {
+        "task": [
+          { "label": "Pre-Screening Complete", "type": "Complete", "value": "@results['Pre-Screening Review']['Status'] != \"Canceled\"", "content": "routine_task_3" },
+          { "label": "Canceled", "type": "Complete", "value": "@results['Pre-Screening Review']['Status'] == \"Canceled\"", "content": "system_tree_return_v1_30" }
+        ]
+      },
+      "id": "routine_task_2", "position": { "x": 10, "y": 260 }, "version": 1,
+      "parameters": [
+        { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Assignees", "label": "Assignees", "menu": "", "value": "Relationship Managers", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": false },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Task Summary", "label": "Task Summary", "menu": "", "value": "Pre-Screening Review — <%= @values['Borrower Name'] %> (<%= @submission['Handle'] %>)", "required": false }
+      ],
+      "definitionId": "routine_task"
+    },
+    {
+      "configured": true, "defers": true, "deferrable": true, "visible": true,
+      "name": "Document Verification", "messages": [],
+      "dependents": {
+        "task": [
+          { "label": "Verification Complete", "type": "Complete", "value": "@results['Document Verification']['Status'] != \"Canceled\"", "content": "routine_approval_4" },
+          { "label": "Canceled", "type": "Complete", "value": "@results['Document Verification']['Status'] == \"Canceled\"", "content": "system_tree_return_v1_30" }
+        ]
+      },
+      "id": "routine_task_3", "position": { "x": 10, "y": 480 }, "version": 1,
+      "parameters": [
+        { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Assignees", "label": "Assignees", "menu": "", "value": "Loan Operations", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": false },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Task Summary", "label": "Task Summary", "menu": "", "value": "Document Verification — <%= @values['Borrower Name'] %> (<%= @submission['Handle'] %>)", "required": false }
+      ],
+      "definitionId": "routine_task"
+    },
+    {
+      "configured": true, "defers": true, "deferrable": true, "visible": true,
+      "name": "Credit Assessment", "messages": [],
+      "dependents": {
+        "task": [
+          { "label": "Approved", "type": "Complete", "value": "@results['Credit Assessment']['Approval Decision'] != \"Denied\"", "content": "routine_approval_5" },
+          { "label": "Denied", "type": "Complete", "value": "@results['Credit Assessment']['Approval Decision'] == \"Denied\"", "content": "system_tree_return_v1_30" }
+        ]
+      },
+      "id": "routine_approval_4", "position": { "x": 10, "y": 700 }, "version": 1,
+      "parameters": [
+        { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approvers", "label": "Approvers", "menu": "", "value": "Credit Officers", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approval Summary", "label": "Approval Summary", "menu": "", "value": "Credit Assessment — <%= @values['Borrower Name'] %> (Amount: <%= @values['Loan Amount'] %>)", "required": true }
+      ],
+      "definitionId": "routine_approval"
+    },
+    {
+      "configured": true, "defers": true, "deferrable": true, "visible": true,
+      "name": "Loan Approval", "messages": [],
+      "dependents": {
+        "task": [
+          { "label": "", "type": "Complete", "value": "", "content": "system_tree_return_v1_30" }
+        ]
+      },
+      "id": "routine_approval_5", "position": { "x": 10, "y": 920 }, "version": 1,
+      "parameters": [
+        { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approvers", "label": "Approvers", "menu": "", "value": "Credit Officers", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": true },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approval Summary", "label": "Approval Summary", "menu": "", "value": "Final Loan Approval — <%= @values['Borrower Name'] %> requesting <%= @values['Loan Amount'] %> (<%= @values['Loan Type'] %>)", "required": true }
+      ],
+      "definitionId": "routine_approval"
+    },
+    {
+      "configured": true, "defers": false, "deferrable": false, "visible": false,
+      "name": "Return", "messages": [], "dependents": "",
+      "id": "system_tree_return_v1_30", "position": { "x": 10, "y": 1140 }, "version": 1,
+      "parameters": [
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "status", "label": "Status", "menu": "", "value": "Complete", "required": false },
+        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "description", "label": "Description", "menu": "", "value": "Loan application workflow completed", "required": false }
+      ],
+      "definitionId": "system_tree_return_v1"
+    }
+  ]
+}

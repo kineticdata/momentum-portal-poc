@@ -1,0 +1,235 @@
+{
+  "anonymous": false,
+  "attributes": [],
+  "bridgedResources": [],
+  "categorizations": [],
+  "customHeadContent": null,
+  "description": "Commercial loan application form for the Kinetic Lending POC.",
+  "indexDefinitions": [
+    {
+      "name": "closedBy",
+      "parts": [
+        "closedBy"
+      ],
+      "unique": false
+    },
+    {
+      "name": "createdBy",
+      "parts": [
+        "createdBy"
+      ],
+      "unique": false
+    },
+    {
+      "name": "handle",
+      "parts": [
+        "handle"
+      ],
+      "unique": false
+    },
+    {
+      "name": "submittedBy",
+      "parts": [
+        "submittedBy"
+      ],
+      "unique": false
+    },
+    {
+      "name": "updatedBy",
+      "parts": [
+        "updatedBy"
+      ],
+      "unique": false
+    },
+    {
+      "name": "values[Loan Type]",
+      "parts": [
+        "values[Loan Type]"
+      ],
+      "unique": false
+    },
+    {
+      "name": "values[Stage]",
+      "parts": [
+        "values[Stage]"
+      ],
+      "unique": false
+    }
+  ],
+  "integrations": [],
+  "name": "Loan Application",
+  "notes": null,
+  "pages": [
+    {
+      "advanceCondition": null,
+      "displayCondition": null,
+      "displayPage": null,
+      "elements": [
+        {
+          "enabled": true,
+          "dataType": "string",
+          "defaultDataSource": "none",
+          "requiredMessage": null,
+          "name": "Borrower Name",
+          "choicesResourceName": null,
+          "omitWhenHidden": null,
+          "renderAttributes": {},
+          "renderType": "text",
+          "pattern": null,
+          "defaultValue": null,
+          "visible": true,
+          "choices": [],
+          "label": "Borrower Name",
+          "choicesResourceProperty": null,
+          "required": true,
+          "initiallyInvisible": false,
+          "renderHint": "text",
+          "disabled": false
+        },
+        {
+          "enabled": true,
+          "dataType": "string",
+          "defaultDataSource": "none",
+          "requiredMessage": null,
+          "name": "Company Name",
+          "choicesResourceName": null,
+          "omitWhenHidden": null,
+          "renderAttributes": {},
+          "renderType": "text",
+          "pattern": null,
+          "defaultValue": null,
+          "visible": true,
+          "choices": [],
+          "label": "Company Name",
+          "choicesResourceProperty": null,
+          "required": false,
+          "initiallyInvisible": false,
+          "renderHint": "text",
+          "disabled": false
+        },
+        {
+          "enabled": true,
+          "dataType": "string",
+          "defaultDataSource": "none",
+          "requiredMessage": null,
+          "name": "Loan Amount",
+          "choicesResourceName": null,
+          "omitWhenHidden": null,
+          "renderAttributes": {},
+          "renderType": "text",
+          "pattern": null,
+          "defaultValue": null,
+          "visible": true,
+          "choices": [],
+          "label": "Loan Amount",
+          "choicesResourceProperty": null,
+          "required": true,
+          "initiallyInvisible": false,
+          "renderHint": "text",
+          "disabled": false
+        },
+        {
+          "enabled": true,
+          "dataType": "string",
+          "defaultDataSource": "none",
+          "requiredMessage": null,
+          "name": "Loan Type",
+          "choicesResourceName": null,
+          "omitWhenHidden": null,
+          "renderAttributes": {},
+          "renderType": "dropdown",
+          "pattern": null,
+          "defaultValue": null,
+          "visible": true,
+          "choices": [
+            {
+              "label": "Term Loan",
+              "value": "Term Loan"
+            },
+            {
+              "label": "Working Capital",
+              "value": "Working Capital"
+            },
+            {
+              "label": "Equipment Financing",
+              "value": "Equipment Financing"
+            },
+            {
+              "label": "Commercial Real Estate",
+              "value": "Commercial Real Estate"
+            }
+          ],
+          "label": "Loan Type",
+          "choicesResourceProperty": null,
+          "required": true,
+          "initiallyInvisible": false,
+          "renderHint": "dropdown",
+          "disabled": false
+        },
+        {
+          "enabled": true,
+          "dataType": "string",
+          "defaultDataSource": "none",
+          "requiredMessage": null,
+          "name": "Stage",
+          "choicesResourceName": null,
+          "omitWhenHidden": null,
+          "renderAttributes": {},
+          "renderType": "text",
+          "pattern": null,
+          "defaultValue": "Pre-Screening",
+          "visible": false,
+          "choices": [],
+          "label": "Stage",
+          "choicesResourceProperty": null,
+          "required": false,
+          "initiallyInvisible": true,
+          "renderHint": "text",
+          "disabled": false
+        },
+        {
+          "enabled": true,
+          "dataType": "string",
+          "defaultDataSource": "none",
+          "requiredMessage": null,
+          "name": "Risk Level",
+          "choicesResourceName": null,
+          "omitWhenHidden": null,
+          "renderAttributes": {},
+          "renderType": "dropdown",
+          "pattern": null,
+          "defaultValue": "Medium",
+          "visible": false,
+          "choices": [
+            {
+              "label": "Low",
+              "value": "Low"
+            },
+            {
+              "label": "Medium",
+              "value": "Medium"
+            },
+            {
+              "label": "High",
+              "value": "High"
+            }
+          ],
+          "label": "Risk Level",
+          "choicesResourceProperty": null,
+          "required": false,
+          "initiallyInvisible": true,
+          "renderHint": "dropdown",
+          "disabled": false
+        }
+      ],
+      "name": "Page 1",
+      "pageType": "default",
+      "renderType": "submittable"
+    }
+  ],
+  "securityPolicies": [],
+  "slug": "loan-application",
+  "status": "Active",
+  "submissionLabelExpression": "concat(values('Loan Type'), ' - ', values('Borrower Name'))",
+  "type": "Service"
+}

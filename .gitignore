@@ -39,3 +39,6 @@ dist-ssr
 .env.test.local
 .env.production.local
 frontend-testing/.env
+run-install.rb
+scripts/install.config.json
+.mcp.json

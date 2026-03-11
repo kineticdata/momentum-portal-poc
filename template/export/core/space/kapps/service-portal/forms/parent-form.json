@@ -54,6 +54,13 @@
         "values[Related Submission Ids]"
       ],
       "unique": false
+    },
+    {
+      "name": "values[Requested For]",
+      "parts": [
+        "values[Requested For]"
+      ],
+      "unique": false
     }
   ],
   "integrations": [],

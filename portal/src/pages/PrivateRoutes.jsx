@@ -9,6 +9,11 @@ import { SettingsRouting } from './settings/index.jsx';
 import { Header } from '../components/header/Header.jsx';
 import { SearchModal } from '../components/search/SearchModal.jsx';
 import { Theme } from './theme/index.jsx';
+import { LendingDashboard } from './lending/LendingDashboard.jsx';
+import { Pipeline } from './lending/Pipeline.jsx';
+import { ApplicationDetail } from './lending/ApplicationDetail.jsx';
+import { MyQueue } from './lending/MyQueue.jsx';
+import { NewApplication } from './lending/NewApplication.jsx';
 
 const Redirect = ({ to }) => {
   const params = useParams();
@@ -55,6 +60,12 @@ export const PrivateRoutes = () => {
               {/* Canonical route for kapps */}
               <Route path="/kapps/:kappSlug" element={<Redirect to="/" />} />
 
+              {/* Lending routes */}
+              <Route path="/pipeline" element={<Pipeline />} />
+              <Route path="/applications/:id" element={<ApplicationDetail />} />
+              <Route path="/queue" element={<MyQueue />} />
+              <Route path="/apply" element={<NewApplication />} />
+
               {/* Portal routes */}
               <Route path="/actions/*" element={<Actions />} />
               <Route path="/requests/*" element={<Requests />} />
@@ -65,7 +76,7 @@ export const PrivateRoutes = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings/*" element={<SettingsRouting />} />
               <Route path="/login" element={<Navigate to="/" />} />
-              <Route path="/*" element={<Home />} />
+              <Route path="/*" element={<LendingDashboard />} />
             </Routes>
 
             {/* Global search modal */}

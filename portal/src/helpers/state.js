@@ -48,7 +48,7 @@ export const appActions = regRedux(
         state.kappSlug = getAttributeValue(
           space,
           'Service Portal Kapp Slug',
-          'service-portal',
+          'commercial-lending',
         );
       }
     },
