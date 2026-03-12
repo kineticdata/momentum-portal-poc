@@ -88,11 +88,10 @@
       "id": "routine_task_2", "position": { "x": 10, "y": 260 }, "version": 1,
       "parameters": [
         { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
-        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Assignees", "label": "Assignees", "menu": "", "value": "Relationship Managers", "required": true },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": false },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Task Summary", "label": "Task Summary", "menu": "", "value": "Pre-Screening Review — <%= @values['Borrower Name'] %> (<%= @submission['Handle'] %>)", "required": false }
       ],
-      "definitionId": "routine_task"
+      "definitionId": "routine_lending_pre_screening"
     },
     {
       "configured": true, "defers": true, "deferrable": true, "visible": true,
@@ -106,11 +105,10 @@
       "id": "routine_task_3", "position": { "x": 10, "y": 480 }, "version": 1,
       "parameters": [
         { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
-        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Assignees", "label": "Assignees", "menu": "", "value": "Loan Operations", "required": true },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": false },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Task Summary", "label": "Task Summary", "menu": "", "value": "Document Verification — <%= @values['Borrower Name'] %> (<%= @submission['Handle'] %>)", "required": false }
       ],
-      "definitionId": "routine_task"
+      "definitionId": "routine_lending_document_verification"
     },
     {
       "configured": true, "defers": true, "deferrable": true, "visible": true,
@@ -124,11 +122,10 @@
       "id": "routine_approval_4", "position": { "x": 10, "y": 700 }, "version": 1,
       "parameters": [
         { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
-        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approvers", "label": "Approvers", "menu": "", "value": "Credit Officers", "required": true },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": true },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approval Summary", "label": "Approval Summary", "menu": "", "value": "Credit Assessment — <%= @values['Borrower Name'] %> (Amount: <%= @values['Loan Amount'] %>)", "required": true }
       ],
-      "definitionId": "routine_approval"
+      "definitionId": "routine_lending_credit_assessment"
     },
     {
       "configured": true, "defers": true, "deferrable": true, "visible": true,
@@ -141,11 +138,10 @@
       "id": "routine_approval_5", "position": { "x": 10, "y": 920 }, "version": 1,
       "parameters": [
         { "dependsOnId": "", "dependsOnValue": "", "description": "The Submission Id of the Originating Submission", "id": "Originating Submission Id", "label": "Originating Submission Id", "menu": "", "value": "<%= @submission['Id'] %>", "required": true },
-        { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approvers", "label": "Approvers", "menu": "", "value": "Credit Officers", "required": true },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Submission Details", "label": "Submission Details", "menu": "", "value": "<%= @results['Build Submission Details']['output'] %>", "required": true },
         { "dependsOnId": "", "dependsOnValue": "", "description": "", "id": "Approval Summary", "label": "Approval Summary", "menu": "", "value": "Final Loan Approval — <%= @values['Borrower Name'] %> requesting <%= @values['Loan Amount'] %> (<%= @values['Loan Type'] %>)", "required": true }
       ],
-      "definitionId": "routine_approval"
+      "definitionId": "routine_lending_loan_approval"
     },
     {
       "configured": true, "defers": false, "deferrable": false, "visible": false,

@@ -112,6 +112,8 @@ function systemFields(prefix = 'f9', extras = []) {
 // Common index definitions for task-like forms
 function taskIndexes() {
   return [
+    { name: 'type,values[Assigned Individual]', parts: ['type', 'values[Assigned Individual]'], unique: false },
+    { name: 'type,values[Assigned Team]', parts: ['type', 'values[Assigned Team]'], unique: false },
     { name: 'values[Loan Application ID]', parts: ['values[Loan Application ID]'], unique: false },
     { name: 'values[Assigned Individual]', parts: ['values[Assigned Individual]'], unique: false },
     { name: 'values[Assigned Team]', parts: ['values[Assigned Team]'], unique: false },
@@ -132,6 +134,8 @@ const forms = [
     submissionLabelExpression: "${values('Loan Type')} - ${values('Borrower Name')} - ${values('Loan Amount')}",
     attributes: [{ name: 'Icon', values: ['building-bank'] }, { name: 'Assigned Team', values: ['Commercial Lending::Relationship Managers'] }],
     indexDefinitions: [
+      { name: 'coreState', parts: ['coreState'], unique: false },
+      { name: 'coreState,values[Loan Type]', parts: ['coreState', 'values[Loan Type]'], unique: false },
       { name: 'createdBy', parts: ['createdBy'], unique: false },
       { name: 'submittedBy', parts: ['submittedBy'], unique: false },
       { name: 'values[Status]', parts: ['values[Status]'], unique: false },
